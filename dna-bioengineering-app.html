@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA Technology & Human Genome | DNA生物工程教育平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #0D1B3E;
+            --teal: #006B7D;
+            --gold: #B8860B;
+            --light-bg: #F9F7F4;
+            --border-color: #E8E4E0;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --warning: #f39c12;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft JhengHei', 'PingFang SC', sans-serif;
+            background-color: white;
+            color: var(--navy);
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-bottom: 4px solid var(--gold);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        /* Navigation Tabs */
+        .tab-navigation {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: var(--light-bg);
+            border-bottom: 2px solid var(--border-color);
+            gap: 0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 1rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: var(--navy);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Microsoft JhengHei', sans-serif;
+        }
+
+        .tab-btn:hover {
+            background-color: white;
+            border-bottom-color: var(--gold);
+        }
+
+        .tab-btn.active {
+            background-color: white;
+            border-bottom-color: var(--teal);
+            color: var(--teal);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--navy);
+            margin: 2rem 0 1.5rem 0;
+            padding-bottom: 0.8rem;
+            border-bottom: 3px solid var(--gold);
+            font-weight: 700;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--teal);
+            box-shadow: 0 4px 16px rgba(0,27,62,0.1);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+            color: white;
+            padding: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .card-header:hover {
+            background: linear-gradient(135deg, #1a2a4d 0%, #00838b 100%);
+        }
+
+        .card-toggle {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card.open .card-toggle {
+            transform: rotate(180deg);
+        }
+
+        .card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 1.2rem;
+        }
+
+        .card.open .card-content {
+            max-height: 2000px;
+            padding: 1.2rem;
+        }
+
+        .bilingual-text {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .bilingual-text > div {
+            padding: 1rem;
+            background-color: var(--light-bg);
+            border-radius: 4px;
+        }
+
+        .zh-text {
+            border-left: 4px solid var(--gold);
+        }
+
+        .en-text {
+            border-left: 4px solid var(--teal);
+        }
+
+        .lang-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .en-text .lang-label {
+            color: var(--teal);
+        }
+
+        .content-text {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--navy);
+        }
+
+        /* TTS Button */
+        .tts-btn {
+            background-color: var(--teal);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .tts-btn:hover {
+            background-color: #005a67;
+            transform: translateY(-2px);
+        }
+
+        .tts-btn:active {
+            transform: translateY(0);
+        }
+
+        /* List Styles */
+        .content-text ul, .content-text ol {
+            margin-left: 1.5rem;
+            margin-top: 0.8rem;
+        }
+
+        .content-text li {
+            margin-bottom: 0.6rem;
+        }
+
+        /* Question Bank Styles */
+        .quiz-container {
+            background-color: var(--light-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .quiz-progress {
+            background: white;
+            padding: 1rem;
+            border-radius: 4px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--teal), var(--gold));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .question-card.answered {
+            border-color: var(--teal);
+            background-color: #f0f8f9;
+        }
+
+        .question-number {
+            font-size: 0.9rem;
+            color: var(--teal);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--navy);
+        }
+
+        .question-text.zh {
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--light-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .option:hover {
+            border-color: var(--teal);
+            background-color: white;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 1rem;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .option.selected {
+            border-color: var(--teal);
+            background-color: #e8f4f5;
+        }
+
+        .option.correct {
+            border-color: var(--success);
+            background-color: #e8f8f1;
+        }
+
+        .option.incorrect {
+            border-color: var(--error);
+            background-color: #fadbd8;
+        }
+
+        .option-label {
+            flex: 1;
+        }
+
+        .explanation {
+            background-color: #fffbea;
+            border-left: 4px solid var(--gold);
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .explanation.correct-box {
+            background-color: #e8f8f1;
+            border-left-color: var(--success);
+        }
+
+        .explanation.incorrect-box {
+            background-color: #fadbd8;
+            border-left-color: var(--error);
+        }
+
+        .quiz-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--teal);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #005a67;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--border-color);
+            color: var(--navy);
+        }
+
+        .btn-secondary:hover {
+            background-color: #ddd;
+        }
+
+        .quiz-results {
+            background: white;
+            border: 2px solid var(--teal);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--teal);
+            margin-bottom: 1rem;
+        }
+
+        .score-text {
+            font-size: 1.2rem;
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+
+        .result-message {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .result-stat {
+            background-color: var(--light-bg);
+            padding: 1rem;
+            border-radius: 4px;
+        }
+
+        .result-stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--teal);
+        }
+
+        .result-stat-label {
+            font-size: 0.9rem;
+            color: var(--navy);
+            margin-top: 0.5rem;
+        }
+
+        .filter-controls {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background-color: var(--teal);
+            color: white;
+            border-color: var(--teal);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--teal);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--navy);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .tab-btn {
+                min-width: 80px;
+                padding: 0.8rem 0.5rem;
+                font-size: 0.8rem;
+            }
+
+            .bilingual-text {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .tab-content {
+                padding: 1rem;
+            }
+
+            .quiz-header {
+                flex-direction: column;
+            }
+
+            .result-details {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+            }
+
+            .filter-btn {
+                width: 100%;
+            }
+        }
+
+        /* Accessibility */
+        .tts-btn:focus,
+        .tab-btn:focus,
+        .btn:focus {
+            outline: 2px solid var(--gold);
+            outline-offset: 2px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .key-points {
+            background: linear-gradient(135deg, rgba(0,27,62,0.05) 0%, rgba(0,107,125,0.05) 100%);
+            border-left: 4px solid var(--gold);
+            padding: 1.2rem;
+            margin: 1.2rem 0;
+            border-radius: 4px;
+        }
+
+        .key-points h4 {
+            color: var(--navy);
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        .key-points ul {
+            margin-left: 1.5rem;
+        }
+
+        .key-points li {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🧬 DNA Technology and Human Genome</h1>
+        <div class="subtitle">DNA生物工程教育平台 | Comprehensive Lecture Guide + Question Bank</div>
+    </header>
+
+    <div class="tab-navigation">
+        <button class="tab-btn active" onclick="switchTab(event, 'overview')">Overview 概述</button>
+        <button class="tab-btn" onclick="switchTab(event, 'bacteria')">Bacteria 細菌</button>
+        <button class="tab-btn" onclick="switchTab(event, 'techniques')">Techniques 技術</button>
+        <button class="tab-btn" onclick="switchTab(event, 'genome')">Genome 基因組</button>
+        <button class="tab-btn" onclick="switchTab(event, 'applications')">Applications 應用</button>
+        <button class="tab-btn" onclick="switchTab(event, 'crispr')">CRISPR & CAR-T</button>
+        <button class="tab-btn" onclick="switchTab(event, 'ethics')">Ethics 倫理</button>
+        <button class="tab-btn" onclick="switchTab(event, 'questions')">📝 Question Bank 題庫</button>
+    </div>
+
+    <!-- Tab 1: Overview -->
+    <div id="overview" class="tab-content active">
+        <h2 class="section-title">Clinical Setting & Introduction</h2>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>🌡️ Cancer Vaccines: HPV Example</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p><strong>HPV疫苗</strong>是一個重要的臨床應用實例。它展示了DNA技術如何用於開發預防性疫苗。HPV（人乳頭瘤病毒）與多種癌症有關，特別是子宮頸癌。</p>
+                            <p style="margin-top: 0.8rem;">DNA技術使科學家能夠製造針對特定病毒蛋白的疫苗，預防感染。</p>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p><strong>HPV vaccine</strong> is a key clinical application example. It demonstrates how DNA technology is used to develop preventive vaccines. HPV (human papillomavirus) is associated with various cancers, particularly cervical cancer.</p>
+                            <p style="margin-top: 0.8rem;">DNA technology enables scientists to manufacture vaccines targeting specific viral proteins to prevent infection.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('HPV vaccine is a key clinical application example.')">🔊 Speak English</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>🔬 From E. coli to Gene Mapping</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p><strong>E. coli研究的發現：</strong></p>
+                            <ul>
+                                <li>研究發現大腸桿菌具有性機制，可以實現<strong>基因轉移</strong></li>
+                                <li>這種轉移將兩個不同細胞的基因結合在一起</li>
+                                <li>這個發現導致了<strong>重組DNA技術</strong>的開發</li>
+                            </ul>
+                            <p style="margin-top: 0.8rem;"><strong>重組DNA技術</strong>是從不同來源組合基因的一套技術集合。</p>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p><strong>Key findings from E. coli research:</strong></p>
+                            <ul>
+                                <li>Research revealed that these bacteria have a <strong>sexual mechanism</strong> for gene transfer</li>
+                                <li>This transfer combines genes from two different cells</li>
+                                <li>This discovery led to the development of <strong>recombinant DNA technology</strong></li>
+                            </ul>
+                            <p style="margin-top: 0.8rem;"><strong>Recombinant DNA technology</strong> is a set of techniques for combining genes from different sources.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('Recombinant DNA technology is a set of techniques for combining genes from different sources.')">🔊 Speak English</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 2: Bacteria (簡化版) -->
+    <div id="bacteria" class="tab-content">
+        <h2 class="section-title">Bacteria as Tools for DNA Manipulation</h2>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>🦠 Three Ways of DNA Transfer in Bacteria</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="key-points">
+                    <h4>在自然界中，細菌可以通過三種方式轉移DNA | Three ways bacteria transfer DNA</h4>
+                </div>
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p><strong>1. 轉化 (Transformation)</strong> - 細菌吸收環境中來自其他細菌細胞的DNA片段</p>
+                            <p style="margin-top: 0.8rem;"><strong>2. 轉導 (Transduction)</strong> - 噬菌體（病毒）轉移來自另一個細菌細胞的基因片段</p>
+                            <p style="margin-top: 0.8rem;"><strong>3. 接合 (Conjugation)</strong> - 細胞的聯合和它們之間的DNA轉移，涉及性菌毛形成橋梁</p>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p><strong>1. Transformation</strong> - Taking up of DNA from the fluid surrounding the cell</p>
+                            <p style="margin-top: 0.8rem;"><strong>2. Transduction</strong> - Transfer of genes by a phage (virus)</p>
+                            <p style="margin-top: 0.8rem;"><strong>3. Conjugation</strong> - Union of cells and DNA transfer via mating bridge formed by sex pili</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('Bacteria can transfer DNA through transformation, transduction, and conjugation.')">🔊 Speak English</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>🔄 Plasmids as Gene Carriers</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p><strong>質粒定義：</strong> 與細菌染色體分離的小型環形DNA分子</p>
+                            <p style="margin-top: 0.8rem;"><strong>用途：</strong></p>
+                            <ul>
+                                <li>質粒是DNA技術的關鍵工具</li>
+                                <li>研究人員使用質粒將基因插入細菌</li>
+                                <li>細菌繁殖並複製攜帶的基因</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p><strong>Plasmid Definition:</strong> A small circular DNA molecule separate from the bacterial chromosome</p>
+                            <p style="margin-top: 0.8rem;"><strong>Applications:</strong></p>
+                            <ul>
+                                <li>Plasmids are key tools for DNA technology</li>
+                                <li>Researchers use plasmids to insert genes into bacteria</li>
+                                <li>Bacteria reproduce and copy the genes they carry</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('Plasmids are key tools for DNA technology.')">🔊 Speak English</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 3: Techniques (簡化版) -->
+    <div id="techniques" class="tab-content">
+        <h2 class="section-title">Molecular Techniques</h2>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>✂️ Restriction Enzymes & DNA Ligase</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p><strong>限制酶：</strong></p>
+                            <ul>
+                                <li>在特定位點切割DNA</li>
+                                <li>產生"粘性末端"（sticky ends）</li>
+                            </ul>
+                            <p style="margin-top: 0.8rem;"><strong>DNA連接酶：</strong></p>
+                            <ul>
+                                <li>將DNA片段粘合在一起</li>
+                                <li>共價結合DNA鏈</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p><strong>Restriction Enzymes:</strong></p>
+                            <ul>
+                                <li>Cut DNA at specific recognition sequences</li>
+                                <li>Produce "sticky ends" that allow DNA fragments to bind</li>
+                            </ul>
+                            <p style="margin-top: 0.8rem;"><strong>DNA Ligase:</strong></p>
+                            <ul>
+                                <li>Pastes DNA fragments together</li>
+                                <li>Forms covalent bonds between DNA strands</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('Restriction enzymes cut DNA at specific points. DNA ligase pastes DNA fragments together.')">🔊 Speak English</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>🔬 PCR - Polymerase Chain Reaction</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p><strong>PCR方法：</strong> 聚合酶鏈反應可以快速複製測試管中的小DNA樣本。</p>
+                            <p style="margin-top: 0.8rem;"><strong>三個關鍵步驟（每個循環）：</strong></p>
+                            <ul>
+                                <li>變性（95°C）：DNA鏈分離</li>
+                                <li>退火（55°C）：引物與模板結合</li>
+                                <li>延伸（72°C）：Taq聚合酶合成新DNA鏈</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p><strong>PCR Method:</strong> Polymerase chain reaction can quickly clone a small DNA sample in a test tube.</p>
+                            <p style="margin-top: 0.8rem;"><strong>Three Key Steps (per cycle):</strong></p>
+                            <ul>
+                                <li>Denaturing (95°C): DNA strands separate</li>
+                                <li>Annealing (55°C): Primers bind to template</li>
+                                <li>Extension (72°C): Taq polymerase synthesizes new DNA strand</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('PCR can quickly clone a small DNA sample through repeated cycles of denaturation, annealing, and extension.')">🔊 Speak English</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>🧲 Gel Electrophoresis</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p><strong>凝膠電泳：</strong></p>
+                            <ul>
+                                <li>根據大小對DNA分子進行分類</li>
+                                <li>帶負電的DNA在電場中移動</li>
+                                <li>較短的分子移動更快</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p><strong>Gel Electrophoresis:</strong></p>
+                            <ul>
+                                <li>Sorts DNA molecules by size</li>
+                                <li>Negatively charged DNA moves through gel in electric field</li>
+                                <li>Shorter molecules move faster</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('Gel electrophoresis sorts DNA molecules by size.')">🔊 Speak English</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 4: Genome -->
+    <div id="genome" class="tab-content">
+        <h2 class="section-title">Human Genome Project & Challenges</h2>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>🧬 The Human Genome</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p><strong>基本事實：</strong></p>
+                            <ul>
+                                <li>人類基因組包含 23 條染色體（單倍體）</li>
+                                <li>估計約 35,000 個基因</li>
+                                <li>大量非編碼 DNA（不編碼蛋白質）</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p><strong>Key Facts:</strong></p>
+                            <ul>
+                                <li>Human genome contains 23 chromosomes (haploid)</li>
+                                <li>Estimated to include about 35,000 genes</li>
+                                <li>Large amount of noncoding DNA</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('The human genome contains 23 chromosomes estimated to include about 35000 genes.')">🔊 Speak English</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>👨‍🔬 Barbara McClintock & Jumping Genes</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p>Barbara McClintock 發現了稱為<strong>轉座子</strong>（跳躍基因）的DNA片段可以在細胞基因組內移動。</p>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p>Barbara McClintock discovered that segments of DNA called <strong>transposons (jumping genes)</strong> can move about within a cell's genome.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('Transposons or jumping genes can move about within a cell genome.')">🔊 Speak English</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 5: Applications -->
+    <div id="applications" class="tab-content">
+        <h2 class="section-title">Applications of DNA Technology</h2>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>🔬 Recombinant Protein Production</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p><strong>重組細胞和生物體可以大規模生產基因產物</strong></p>
+                            <p style="margin-top: 0.8rem;"><strong>常見產品：</strong> 人類胰島素、生長激素、肝炎B疫苗、組織纖溶酶激活物</p>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p><strong>Recombinant cells can mass-produce gene products</strong></p>
+                            <p style="margin-top: 0.8rem;"><strong>Common products:</strong> Human insulin, growth hormone, hepatitis B vaccine, tissue plasminogen activator</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('Recombinant cells are used to manufacture useful proteins like human insulin and vaccines.')">🔊 Speak English</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>🔍 DNA Fingerprinting</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p><strong>DNA指紋識別：</strong> DNA技術在法庭中使用幫助解決犯罪。通過比較被告的DNA與犯罪現場的DNA樣本。</p>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p><strong>DNA Fingerprinting:</strong> Used in courts to help solve crimes by comparing a defendant's DNA with crime scene evidence.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('DNA fingerprinting can help solve crimes by comparing DNA samples.')">🔊 Speak English</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>🌾 GMOs in Agriculture</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p><strong>遺傳改造生物 (GMO) 正在改變農業</strong></p>
+                            <p style="margin-top: 0.8rem;">例如：金水稻經過遺傳修改以含有β-胡蘿蔔素，可以幫助預防維生素A缺乏。</p>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p><strong>Genetically modified organisms (GMOs) are transforming agriculture</strong></p>
+                            <p style="margin-top: 0.8rem;">Example: Golden rice contains beta-carotene to help prevent vitamin A deficiency.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('GMOs are transforming agriculture. Golden rice contains beta-carotene.')">🔊 Speak English</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 6: CRISPR & CAR-T -->
+    <div id="crispr" class="tab-content">
+        <h2 class="section-title">Advanced Techniques: CRISPR & CAR-T</h2>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>✂️ CRISPR System: Gene Editing Revolution</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p><strong>CRISPR是什麼：</strong> 一個精確的基因編輯工具，允許科學家在特定位置切割和修改DNA。</p>
+                            <p style="margin-top: 0.8rem;"><strong>工作原理：</strong> 引導RNA指向特定DNA序列，Cas9在目標位置產生雙鏈斷裂，細胞通過NHEJ或HDR進行修復。</p>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p><strong>What is CRISPR:</strong> A precise gene-editing tool allowing scientists to cut and modify DNA at specific locations.</p>
+                            <p style="margin-top: 0.8rem;"><strong>How it works:</strong> Guide RNA directs Cas9 to target sequence, creates double-strand break, cell repairs via NHEJ or HDR.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('CRISPR is a precise gene-editing tool.')">🔊 Speak English</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>💊 CAR-T Cell Therapy</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p><strong>CAR-T療法定義：</strong> 癌症免疫療法，患者的T細胞在遺傳上改造以更好地識別和攻擊癌細胞。</p>
+                            <p style="margin-top: 0.8rem;"><strong>步驟：</strong> 從患者血液取出T細胞 → 遺傳修改 → 擴展數量 → 輸回患者</p>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p><strong>CAR-T Definition:</strong> Cancer immunotherapy where patient's T-cells are genetically modified to recognize and attack cancer cells.</p>
+                            <p style="margin-top: 0.8rem;"><strong>Steps:</strong> Remove T cells → Genetically modify → Expand → Infuse back into patient</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('CAR-T therapy modifies T cells to recognize and kill cancer cells.')">🔊 Speak English</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 7: Ethics -->
+    <div id="ethics" class="tab-content">
+        <h2 class="section-title">Risks & Ethical Questions</h2>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <span>⚠️ Risks and Ethical Issues</span>
+                <span class="card-toggle">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="bilingual-text">
+                    <div class="zh-text">
+                        <div class="lang-label">中文</div>
+                        <div class="content-text">
+                            <p><strong>主要倫理問題：</strong></p>
+                            <ul>
+                                <li>🧬 隱私權：誰可以訪問我們的遺傳信息？</li>
+                                <li>💼 就業和保險：基於遺傳信息的歧視</li>
+                                <li>🔀 設計者嬰兒：應該改變人類特性嗎？</li>
+                                <li>🌍 環境風險：GM生物對生態系統的影響</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="en-text">
+                        <div class="lang-label">English</div>
+                        <div class="content-text">
+                            <p><strong>Major Ethical Issues:</strong></p>
+                            <ul>
+                                <li>🧬 Privacy: Who can access genetic information?</li>
+                                <li>💼 Employment and insurance: Discrimination based on genetics</li>
+                                <li>🔀 Designer babies: Should we modify human traits?</li>
+                                <li>🌍 Environmental risks: GM organism impacts on ecosystems</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button class="tts-btn" onclick="speakText('Major ethical issues include privacy, discrimination, designer babies, and environmental risks.')">🔊 Speak English</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 8: Question Bank -->
+    <div id="questions" class="tab-content">
+        <h2 class="section-title">📝 Question Bank - 題庫</h2>
+
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <div class="quiz-progress" id="quizProgress" style="display:none;">
+                    <div>已作答 | Answered: <span id="answeredCount">0</span> / 50</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="startQuiz()">開始測試 | Start Quiz</button>
+                    <button class="btn btn-secondary" onclick="expandAllQuestions()" style="display:none;" id="expandAllBtn">全部展開 | Expand All</button>
+                    <button class="btn btn-secondary" onclick="collapseAllQuestions()" style="display:none;" id="collapseAllBtn">全部摺疊 | Collapse All</button>
+                    <button class="btn btn-secondary" onclick="resetQuiz()" style="display:none;" id="resetBtn">重設 | Reset</button>
+                </div>
+            </div>
+
+            <div id="quizResults" class="quiz-results" style="display:none;">
+                <div class="score-display" id="scoreDisplay">0/50</div>
+                <div class="score-text" id="scorePercentage">0%</div>
+                <div class="result-message" id="resultMessage"></div>
+                <div class="result-details">
+                    <div class="result-stat">
+                        <div class="result-stat-number" id="correctCount">0</div>
+                        <div class="result-stat-label">Correct 正確</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="result-stat-number" id="incorrectCount">0</div>
+                        <div class="result-stat-label">Incorrect 錯誤</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="result-stat-number" id="skippedCount">0</div>
+                        <div class="result-stat-label">Skipped 未答</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="resetQuiz()" style="margin-top: 1.5rem;">再試一次 | Try Again</button>
+            </div>
+
+            <div id="questionsContainer"></div>
+
+            <div id="quizButtonsContainer" style="display:none;">
+                <div class="quiz-controls">
+                    <button class="btn btn-primary" onclick="submitQuiz()">提交答案 | Submit Answers</button>
+                    <button class="btn btn-secondary" onclick="resetQuiz()">重設 | Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>💡 DNA Technology & Human Genome Educational Platform | DNA生物工程教育平台</p>
+        <p>Complete Lecture + Comprehensive Question Bank | 完整講義 + 全面題庫</p>
+        <p>All content available in Traditional Chinese (中文) and English | 所有內容提供繁體中文和英文版本</p>
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                type: "multiple",
+                zh: "HPV疫苗是什麼類型的臨床應用？",
+                en: "What type of clinical application is the HPV vaccine?",
+                options: [
+                    { zh: "治療性疫苗", en: "Therapeutic vaccine", correct: false },
+                    { zh: "預防性疫苗", en: "Preventive vaccine", correct: true },
+                    { zh: "診斷工具", en: "Diagnostic tool", correct: false },
+                    { zh: "基因療法", en: "Gene therapy", correct: false }
+                ],
+                explanation: { zh: "HPV疫苗是預防性疫苗，用於預防病毒感染。", en: "HPV vaccine is a preventive vaccine used to prevent viral infection." }
+            },
+            {
+                id: 2,
+                type: "multiple",
+                zh: "大腸桿菌的哪個發現導致了重組DNA技術的開發？",
+                en: "Which discovery about E. coli led to the development of recombinant DNA technology?",
+                options: [
+                    { zh: "能夠進行光合作用", en: "Ability to photosynthesize", correct: false },
+                    { zh: "具有性機制進行基因轉移", en: "Has sexual mechanism for gene transfer", correct: true },
+                    { zh: "能夠產生抗生素", en: "Ability to produce antibiotics", correct: false },
+                    { zh: "能夠生存在高溫環境", en: "Ability to survive in high temperature", correct: false }
+                ],
+                explanation: { zh: "大腸桿菌具有通過接合、轉化和轉導進行基因轉移的機制。", en: "E. coli has mechanisms for gene transfer through conjugation, transformation, and transduction." }
+            },
+            {
+                id: 3,
+                type: "multiple",
+                zh: "細菌DNA轉移的三種方式中，哪一種涉及病毒？",
+                en: "Which of the three ways of bacterial DNA transfer involves a virus?",
+                options: [
+                    { zh: "轉化", en: "Transformation", correct: false },
+                    { zh: "轉導", en: "Transduction", correct: true },
+                    { zh: "接合", en: "Conjugation", correct: false },
+                    { zh: "融合", en: "Fusion", correct: false }
+                ],
+                explanation: { zh: "轉導是由噬菌體（病毒）介導的基因轉移。", en: "Transduction is gene transfer mediated by phage (virus)." }
+            },
+            {
+                id: 4,
+                type: "multiple",
+                zh: "質粒是什麼？",
+                en: "What is a plasmid?",
+                options: [
+                    { zh: "大型線性DNA分子", en: "Large linear DNA molecule", correct: false },
+                    { zh: "與細菌染色體分離的小型環形DNA分子", en: "Small circular DNA molecule separate from bacterial chromosome", correct: true },
+                    { zh: "存在於核膜中的蛋白質", en: "Protein found in nuclear membrane", correct: false },
+                    { zh: "病毒的遺傳物質", en: "Genetic material of virus", correct: false }
+                ],
+                explanation: { zh: "質粒是與細菌染色體分離的自我複製環形DNA分子。", en: "Plasmids are self-replicating circular DNA molecules separate from the bacterial chromosome." }
+            },
+            {
+                id: 5,
+                type: "true_false",
+                zh: "限制酶在DNA的隨機位置切割。",
+                en: "Restriction enzymes cut DNA at random positions.",
+                correct: false,
+                explanation: { zh: "限制酶在特定的識別序列處切割DNA。", en: "Restriction enzymes cut DNA at specific recognition sequences." }
+            },
+            {
+                id: 6,
+                type: "multiple",
+                zh: "DNA連接酶的作用是什麼？",
+                en: "What is the function of DNA ligase?",
+                options: [
+                    { zh: "切割DNA", en: "Cut DNA", correct: false },
+                    { zh: "複製DNA", en: "Replicate DNA", correct: false },
+                    { zh: "將DNA片段粘合在一起", en: "Paste DNA fragments together", correct: true },
+                    { zh: "轉錄DNA", en: "Transcribe DNA", correct: false }
+                ],
+                explanation: { zh: "DNA連接酶形成磷酸二酯鍵，將DNA片段共價連接。", en: "DNA ligase forms phosphodiester bonds, covalently linking DNA fragments." }
+            },
+            {
+                id: 7,
+                type: "multiple",
+                zh: "PCR（聚合酶鏈反應）有幾個關鍵步驟？",
+                en: "How many key steps does PCR (Polymerase Chain Reaction) have?",
+                options: [
+                    { zh: "2", en: "2", correct: false },
+                    { zh: "3", en: "3", correct: true },
+                    { zh: "4", en: "4", correct: false },
+                    { zh: "5", en: "5", correct: false }
+                ],
+                explanation: { zh: "PCR的三個關鍵步驟是：變性(95°C)、退火(55°C)、延伸(72°C)。", en: "The three key steps of PCR are: denaturing (95°C), annealing (55°C), extension (72°C)." }
+            },
+            {
+                id: 8,
+                type: "true_false",
+                zh: "PCR中的Taq聚合酶是從深海極端環境微生物中提取的。",
+                en: "Taq polymerase in PCR is extracted from deep-sea extremophile microorganisms.",
+                correct: false,
+                explanation: { zh: "Taq聚合酶是從嗜熱性細菌Thermus aquaticus中提取的。", en: "Taq polymerase is extracted from thermophilic bacterium Thermus aquaticus." }
+            },
+            {
+                id: 9,
+                type: "multiple",
+                zh: "凝膠電泳的主要用途是什麼？",
+                en: "What is the main purpose of gel electrophoresis?",
+                options: [
+                    { zh: "複製DNA", en: "Replicate DNA", correct: false },
+                    { zh: "根據大小對DNA分子進行分類", en: "Sort DNA molecules by size", correct: true },
+                    { zh: "切割DNA", en: "Cut DNA", correct: false },
+                    { zh: "轉錄DNA", en: "Transcribe DNA", correct: false }
+                ],
+                explanation: { zh: "凝膠電泳利用電場使帶負電的DNA根據大小遷移。", en: "Gel electrophoresis uses electric field to move negatively charged DNA by size." }
+            },
+            {
+                id: 10,
+                type: "multiple",
+                zh: "人類基因組包含多少條染色體（單倍體）？",
+                en: "How many chromosomes does the human genome contain (haploid)?",
+                options: [
+                    { zh: "21", en: "21", correct: false },
+                    { zh: "23", en: "23", correct: true },
+                    { zh: "25", en: "25", correct: false },
+                    { zh: "46", en: "46", correct: false }
+                ],
+                explanation: { zh: "人類單倍體基因組包含23條染色體。", en: "The human haploid genome contains 23 chromosomes." }
+            },
+            {
+                id: 11,
+                type: "multiple",
+                zh: "人類基因組估計包含多少個基因？",
+                en: "Approximately how many genes does the human genome contain?",
+                options: [
+                    { zh: "10,000", en: "10,000", correct: false },
+                    { zh: "25,000", en: "25,000", correct: false },
+                    { zh: "35,000", en: "35,000", correct: true },
+                    { zh: "50,000", en: "50,000", correct: false }
+                ],
+                explanation: { zh: "人類基因組估計包含約35,000個基因。", en: "The human genome is estimated to contain approximately 35,000 genes." }
+            },
+            {
+                id: 12,
+                type: "true_false",
+                zh: "人類基因組的大部分是編碼蛋白質的基因。",
+                en: "Most of the human genome consists of genes that code for proteins.",
+                correct: false,
+                explanation: { zh: "大多數人類基因組是非編碼DNA，不編碼蛋白質。", en: "Most of the human genome is noncoding DNA that does not code for proteins." }
+            },
+            {
+                id: 13,
+                type: "multiple",
+                zh: "Barbara McClintock發現了什麼？",
+                en: "What did Barbara McClintock discover?",
+                options: [
+                    { zh: "DNA雙螺旋結構", en: "DNA double helix structure", correct: false },
+                    { zh: "轉座子（跳躍基因）", en: "Transposons (jumping genes)", correct: true },
+                    { zh: "PCR技術", en: "PCR technique", correct: false },
+                    { zh: "限制酶", en: "Restriction enzymes", correct: false }
+                ],
+                explanation: { zh: "Barbara McClintock發現了能在基因組內移動的轉座子。", en: "Barbara McClintock discovered transposons that can move within the genome." }
+            },
+            {
+                id: 14,
+                type: "multiple",
+                zh: "人類胰島素可以使用哪種生物體製造？",
+                en: "Which organism can be used to produce human insulin?",
+                options: [
+                    { zh: "大腸桿菌 (E. coli)", en: "E. coli", correct: true },
+                    { zh: "病毒", en: "Virus", correct: false },
+                    { zh: "真菌", en: "Fungus", correct: false },
+                    { zh: "藻類", en: "Algae", correct: false }
+                ],
+                explanation: { zh: "人類胰島素通常在大腸桿菌中通過重組DNA技術製造。", en: "Human insulin is typically produced in E. coli using recombinant DNA technology." }
+            },
+            {
+                id: 15,
+                type: "true_false",
+                zh: "DNA指紋識別可以用於法庭證據中。",
+                en: "DNA fingerprinting can be used as evidence in court.",
+                correct: true,
+                explanation: { zh: "DNA指紋識別是一種強大的法醫工具，可用於識別個體。", en: "DNA fingerprinting is a powerful forensic tool used to identify individuals." }
+            },
+            {
+                id: 16,
+                type: "multiple",
+                zh: "金水稻被改造為含有什麼成分？",
+                en: "Golden rice has been modified to contain what?",
+                options: [
+                    { zh: "維生素C", en: "Vitamin C", correct: false },
+                    { zh: "β-胡蘿蔔素", en: "Beta-carotene", correct: true },
+                    { zh: "鐵", en: "Iron", correct: false },
+                    { zh: "鈣", en: "Calcium", correct: false }
+                ],
+                explanation: { zh: "金水稻含有β-胡蘿蔔素，有助於預防維生素A缺乏。", en: "Golden rice contains beta-carotene, which helps prevent vitamin A deficiency." }
+            },
+            {
+                id: 17,
+                type: "multiple",
+                zh: "CRISPR-Cas9中，Cas9的作用是什麼？",
+                en: "In CRISPR-Cas9, what is the role of Cas9?",
+                options: [
+                    { zh: "識別DNA序列", en: "Recognize DNA sequence", correct: false },
+                    { zh: "在目標位置切割DNA", en: "Cut DNA at target location", correct: true },
+                    { zh: "複製DNA", en: "Replicate DNA", correct: false },
+                    { zh: "轉運基因", en: "Transport genes", correct: false }
+                ],
+                explanation: { zh: "Cas9蛋白酶在引導RNA指向的位置切割DNA。", en: "Cas9 nuclease cuts DNA at the location directed by guide RNA." }
+            },
+            {
+                id: 18,
+                type: "true_false",
+                zh: "CRISPR系統最初是從病毒中發現的。",
+                en: "The CRISPR system was originally discovered from viruses.",
+                correct: false,
+                explanation: { zh: "CRISPR最初是在細菌中作為免疫機制發現的。", en: "CRISPR was originally discovered in bacteria as an immune mechanism." }
+            },
+            {
+                id: 19,
+                type: "multiple",
+                zh: "CAR-T細胞療法的目標是什麼？",
+                en: "What is the goal of CAR-T cell therapy?",
+                options: [
+                    { zh: "增加患者的紅細胞數量", en: "Increase patient's red blood cell count", correct: false },
+                    { zh: "使T細胞更好地識別和攻擊癌細胞", en: "Make T cells better recognize and attack cancer cells", correct: true },
+                    { zh: "替換患者的免疫系統", en: "Replace patient's immune system", correct: false },
+                    { zh: "增強T細胞的代謝", en: "Enhance T cell metabolism", correct: false }
+                ],
+                explanation: { zh: "CAR-T療法通過遺傳改造使T細胞表達嵌合抗原受體來攻擊癌細胞。", en: "CAR-T therapy genetically modifies T cells to express chimeric antigen receptors to attack cancer." }
+            },
+            {
+                id: 20,
+                type: "multiple",
+                zh: "轉基因生物（GMO）在農業中最主要的應用是什麼？",
+                en: "What is the primary application of genetically modified organisms (GMOs) in agriculture?",
+                options: [
+                    { zh: "生產更多食物", en: "Produce more food", correct: true },
+                    { zh: "消除所有病蟲害", en: "Eliminate all pests", correct: false },
+                    { zh: "改變食物的味道", en: "Change taste of food", correct: false },
+                    { zh: "減少水分需求", en: "Reduce water requirements", correct: false }
+                ],
+                explanation: { zh: "GMO主要用於提高作物產量和抗性。", en: "GMOs are primarily used to increase crop yield and disease resistance." }
+            },
+            {
+                id: 21,
+                type: "true_false",
+                zh: "DNA隱私是DNA技術的主要倫理問題之一。",
+                en: "DNA privacy is one of the major ethical issues of DNA technology.",
+                correct: true,
+                explanation: { zh: "誰可以訪問和如何使用遺傳信息是重要的倫理考慮。", en: "Who can access and how genetic information is used are important ethical considerations." }
+            },
+            {
+                id: 22,
+                type: "multiple",
+                zh: "限制酶識別哪種DNA序列？",
+                en: "What type of DNA sequence do restriction enzymes recognize?",
+                options: [
+                    { zh: "任何DNA序列", en: "Any DNA sequence", correct: false },
+                    { zh: "特定的、通常是回文的序列", en: "Specific, usually palindromic sequences", correct: true },
+                    { zh: "只有A-T富集序列", en: "Only A-T rich sequences", correct: false },
+                    { zh: "只有G-C富集序列", en: "Only G-C rich sequences", correct: false }
+                ],
+                explanation: { zh: "限制酶識別特定的通常是回文的DNA序列。", en: "Restriction enzymes recognize specific, usually palindromic DNA sequences." }
+            },
+            {
+                id: 23,
+                type: "multiple",
+                zh: "PCR需要多少輪循環才能產生明顯的DNA量？",
+                en: "How many PCR cycles are typically needed to produce a detectable amount of DNA?",
+                options: [
+                    { zh: "5-10", en: "5-10", correct: false },
+                    { zh: "20-30", en: "20-30", correct: true },
+                    { zh: "50-100", en: "50-100", correct: false },
+                    { zh: "1000+", en: "1000+", correct: false }
+                ],
+                explanation: { zh: "通常需要20-30個PCR循環來產生可檢測的DNA量。", en: "Typically 20-30 PCR cycles are needed to produce detectable amount of DNA." }
+            },
+            {
+                id: 24,
+                type: "true_false",
+                zh: "DNA微陣列一次只能測試一個基因的表達。",
+                en: "DNA microarray can test the expression of only one gene at a time.",
+                correct: false,
+                explanation: { zh: "DNA微陣列可以同時測試許多基因的表達。", en: "DNA microarray can test the expression of many genes at the same time." }
+            },
+            {
+                id: 25,
+                type: "multiple",
+                zh: "質粒在植物遺傳改造中通過什麼載體進入植物細胞？",
+                en: "Through which vector do plasmids enter plant cells in genetic modification?",
+                options: [
+                    { zh: "病毒", en: "Virus", correct: false },
+                    { zh: "土壤農桿菌 (Agrobacterium tumefaciens)", en: "Agrobacterium tumefaciens", correct: true },
+                    { zh: "質粒", en: "Plasmid", correct: false },
+                    { zh: "微粒體", en: "Microparticles", correct: false }
+                ],
+                explanation: { zh: "土壤農桿菌攜帶Ti質粒進入植物細胞。", en: "Agrobacterium tumefaciens carries Ti plasmid into plant cells." }
+            },
+            {
+                id: 26,
+                type: "true_false",
+                zh: "基因療法已經被廣泛用於治療所有類型的遺傳疾病。",
+                en: "Gene therapy has been widely used to treat all types of genetic diseases.",
+                correct: false,
+                explanation: { zh: "基因療法仍在發展階段，進展緩慢，尚未廣泛應用。", en: "Gene therapy is still in development with slow progress and not widely applied yet." }
+            },
+            {
+                id: 27,
+                type: "multiple",
+                zh: "DNA指紋識別中使用什麼技術來識別個體？",
+                en: "What technique is used in DNA fingerprinting to identify individuals?",
+                options: [
+                    { zh: "限制酶切割分析", en: "Restriction fragment analysis", correct: true },
+                    { zh: "DNA合成", en: "DNA synthesis", correct: false },
+                    { zh: "基因轉移", en: "Gene transfer", correct: false },
+                    { zh: "基因表達", en: "Gene expression", correct: false }
+                ],
+                explanation: { zh: "限制酶切割分析通過限制片段多態性識別個體。", en: "Restriction fragment analysis identifies individuals through restriction fragment polymorphism." }
+            },
+            {
+                id: 28,
+                type: "multiple",
+                zh: "轉基因作物的主要優勢是什麼？",
+                en: "What are the main advantages of transgenic crops?",
+                options: [
+                    { zh: "更便宜且更美味", en: "Cheaper and more delicious", correct: false },
+                    { zh: "提高產量和抗性", en: "Increased yield and resistance", correct: true },
+                    { zh: "消除所有營養缺陷", en: "Eliminate all nutritional deficiencies", correct: false },
+                    { zh: "改變作物的颜色", en: "Change crop color", correct: false }
+                ],
+                explanation: { zh: "轉基因作物主要優勢是提高產量、抗病蟲害和環境耐受性。", en: "Main advantages of transgenic crops are increased yield, pest resistance and environmental tolerance." }
+            },
+            {
+                id: 29,
+                type: "true_false",
+                zh: "CRISPR技術可以精確地編輯DNA序列。",
+                en: "CRISPR technology can precisely edit DNA sequences.",
+                correct: true,
+                explanation: { zh: "CRISPR-Cas9是一種精確的基因編輯工具。", en: "CRISPR-Cas9 is a precise gene-editing tool." }
+            },
+            {
+                id: 30,
+                type: "multiple",
+                zh: "CAR-T療法的哪一步涉及基因改造？",
+                en: "Which step of CAR-T therapy involves genetic modification?",
+                options: [
+                    { zh: "從患者血液中取出T細胞", en: "Remove T cells from patient blood", correct: false },
+                    { zh: "遺傳改造以表達嵌合抗原受體", en: "Genetic modification to express chimeric antigen receptor", correct: true },
+                    { zh: "將細胞輸回患者", en: "Infuse cells back into patient", correct: false },
+                    { zh: "監測患者恢復", en: "Monitor patient recovery", correct: false }
+                ],
+                explanation: { zh: "CAR-T細胞在實驗室中進行基因改造以表達CAR。", en: "CAR-T cells are genetically modified in the lab to express CAR." }
+            },
+            {
+                id: 31,
+                type: "multiple",
+                zh: "轉座子是什麼？",
+                en: "What are transposons?",
+                options: [
+                    { zh: "運輸蛋白質", en: "Transport proteins", correct: false },
+                    { zh: "能在基因組內移動的DNA片段", en: "DNA segments that can move within genome", correct: true },
+                    { zh: "病毒顆粒", en: "Viral particles", correct: false },
+                    { zh: "細菌代謝產物", en: "Bacterial metabolic products", correct: false }
+                ],
+                explanation: { zh: "轉座子是能在基因組內改變位置的自我複製DNA元素。", en: "Transposons are self-replicating DNA elements that can change position within genome." }
+            },
+            {
+                id: 32,
+                type: "true_false",
+                zh: "所有限制酶都在相同的DNA位置切割。",
+                en: "All restriction enzymes cut DNA at the same location.",
+                correct: false,
+                explanation: { zh: "不同的限制酶識別不同的序列並在不同位置切割。", en: "Different restriction enzymes recognize different sequences and cut at different locations." }
+            },
+            {
+                id: 33,
+                type: "multiple",
+                zh: "基因組庫包含什麼？",
+                en: "What does a genomic library contain?",
+                options: [
+                    { zh: "一個生物體的所有基因", en: "All genes of an organism", correct: true },
+                    { zh: "只有表達的基因", en: "Only expressed genes", correct: false },
+                    { zh: "只有蛋白質編碼基因", en: "Only protein-coding genes", correct: false },
+                    { zh: "只有重複DNA", en: "Only repetitive DNA", correct: false }
+                ],
+                explanation: { zh: "基因組庫包含生物體所有基因組DNA的片段。", en: "A genomic library contains fragments of all genomic DNA of an organism." }
+            },
+            {
+                id: 34,
+                type: "true_false",
+                zh: "cDNA庫包含與基因組庫相同的所有基因。",
+                en: "cDNA library contains all the same genes as a genomic library.",
+                correct: false,
+                explanation: { zh: "cDNA庫只包含在特定細胞類型中轉錄的基因。", en: "cDNA library contains only genes transcribed in a specific cell type." }
+            },
+            {
+                id: 35,
+                type: "multiple",
+                zh: "反轉錄酶的作用是什麼？",
+                en: "What is the function of reverse transcriptase?",
+                options: [
+                    { zh: "將DNA合成為RNA", en: "Synthesize RNA from DNA", correct: false },
+                    { zh: "將RNA合成為DNA", en: "Synthesize DNA from RNA", correct: true },
+                    { zh: "轉錄基因", en: "Transcribe genes", correct: false },
+                    { zh: "翻譯蛋白質", en: "Translate proteins", correct: false }
+                ],
+                explanation: { zh: "反轉錄酶使用RNA模板合成互補DNA（cDNA）。", en: "Reverse transcriptase synthesizes complementary DNA (cDNA) using RNA as template." }
+            },
+            {
+                id: 36,
+                type: "true_false",
+                zh: "PCR可以在生活中複製DNA，不需要任何機器。",
+                en: "PCR can replicate DNA in living organisms without any machine.",
+                correct: false,
+                explanation: { zh: "PCR是體外過程，需要熱循環儀和特定的酶與試劑。", en: "PCR is an in vitro process that requires thermal cycler and specific enzymes and reagents." }
+            },
+            {
+                id: 37,
+                type: "multiple",
+                zh: "DNA微陣列可以檢測什麼？",
+                en: "What can DNA microarray detect?",
+                options: [
+                    { zh: "單個基因的表達", en: "Expression of single gene", correct: false },
+                    { zh: "許多基因同時的表達模式", en: "Expression patterns of many genes simultaneously", correct: true },
+                    { zh: "DNA序列", en: "DNA sequences", correct: false },
+                    { zh: "蛋白質結構", en: "Protein structures", correct: false }
+                ],
+                explanation: { zh: "DNA微陣列可以檢測數千個基因在不同樣本中的表達水平。", en: "DNA microarray can detect expression levels of thousands of genes in different samples." }
+            },
+            {
+                id: 38,
+                type: "true_false",
+                zh: "人類基因組中超過90%是編碼蛋白質的基因。",
+                en: "Over 90% of the human genome codes for proteins.",
+                correct: false,
+                explanation: { zh: "人類基因組中只有約2%編碼蛋白質，其餘大部分是非編碼DNA。", en: "Only about 2% of human genome codes for proteins, with most being noncoding DNA." }
+            },
+            {
+                id: 39,
+                type: "multiple",
+                zh: "限制酶通常識別什麼類型的DNA序列？",
+                en: "What type of DNA sequences do restriction enzymes typically recognize?",
+                options: [
+                    { zh: "隨機序列", en: "Random sequences", correct: false },
+                    { zh: "回文序列", en: "Palindromic sequences", correct: true },
+                    { zh: "只有腺嘌呤", en: "Only adenine", correct: false },
+                    { zh: "只有鳥嘌呤", en: "Only guanine", correct: false }
+                ],
+                explanation: { zh: "限制酶通常識別回文序列，在两股上都可以讀到相同的序列。", en: "Restriction enzymes typically recognize palindromic sequences that read the same on both strands." }
+            },
+            {
+                id: 40,
+                type: "multiple",
+                zh: "在基因療法中，修改的基因如何進入患者的細胞？",
+                en: "How does the modified gene enter the patient's cells in gene therapy?",
+                options: [
+                    { zh: "直接注射", en: "Direct injection", correct: false },
+                    { zh: "通過病毒或其他載體", en: "Through virus or other vector", correct: true },
+                    { zh: "通過食物", en: "Through food", correct: false },
+                    { zh: "通過皮膚吸收", en: "Through skin absorption", correct: false }
+                ],
+                explanation: { zh: "基因通常通過病毒載體進入細胞，病毒將DNA整合到染色體中。", en: "Genes typically enter cells via viral vectors that integrate DNA into chromosomes." }
+            },
+            {
+                id: 41,
+                type: "true_false",
+                zh: "CRISPR是唯一的基因編輯技術。",
+                en: "CRISPR is the only gene-editing technology.",
+                correct: false,
+                explanation: { zh: "還有其他基因編輯技術如TALENs和鋅指核酶，但CRISPR是最常用的。", en: "There are other gene-editing technologies like TALENs and zinc-finger nucleases, but CRISPR is most popular." }
+            },
+            {
+                id: 42,
+                type: "multiple",
+                zh: "遺傳改造生物對環境的主要風險是什麼？",
+                en: "What is the main environmental risk of genetically modified organisms?",
+                options: [
+                    { zh: "增加空氣污染", en: "Increase air pollution", correct: false },
+                    { zh: "花粉轉移到野生物種", en: "Pollen transfer to wild species", correct: true },
+                    { zh: "增加土壤酸性", en: "Increase soil acidity", correct: false },
+                    { zh: "減少水供應", en: "Reduce water supply", correct: false }
+                ],
+                explanation: { zh: "主要風險是轉基因花粉與野生作物雜交，可能產生意外後果。", en: "Main risk is transgenic pollen cross-breeding with wild crops, potentially causing unintended consequences." }
+            },
+            {
+                id: 43,
+                type: "true_false",
+                zh: "DNA指紋技術對每個個體都是獨特的。",
+                en: "DNA fingerprinting is unique for every individual.",
+                correct: true,
+                explanation: { zh: "每個人的DNA指紋都不同，除了同卵雙胞胎。", en: "Every person's DNA fingerprint is different except for identical twins." }
+            },
+            {
+                id: 44,
+                type: "multiple",
+                zh: "土壤農桿菌如何將基因轉移到植物細胞中？",
+                en: "How does Agrobacterium tumefaciens transfer genes into plant cells?",
+                options: [
+                    { zh: "通過根部傷口", en: "Through root wounds", correct: true },
+                    { zh: "通過葉片", en: "Through leaves", correct: false },
+                    { zh: "通過花粉", en: "Through pollen", correct: false },
+                    { zh: "通過種子", en: "Through seeds", correct: false }
+                ],
+                explanation: { zh: "土壤農桿菌通常進入植物的傷口，並通過Ti質粒轉移基因。", en: "Agrobacterium tumefaciens typically enters through plant wounds and transfers genes via Ti plasmid." }
+            },
+            {
+                id: 45,
+                type: "true_false",
+                zh: "基因療法對所有遺傳疾病都有相同的效果。",
+                en: "Gene therapy has the same effect on all genetic diseases.",
+                correct: false,
+                explanation: { zh: "基因療法的效果取決於疾病類型和基因修改的成功率。", en: "Effectiveness of gene therapy depends on disease type and success rate of gene modification." }
+            },
+            {
+                id: 46,
+                type: "multiple",
+                zh: "CRISPR中的guide RNA的功能是什麼？",
+                en: "What is the function of guide RNA in CRISPR?",
+                options: [
+                    { zh: "切割DNA", en: "Cut DNA", correct: false },
+                    { zh: "指導Cas9到特定DNA序列", en: "Guide Cas9 to specific DNA sequence", correct: true },
+                    { zh: "複製DNA", en: "Replicate DNA", correct: false },
+                    { zh: "轉錄DNA", en: "Transcribe DNA", correct: false }
+                ],
+                explanation: { zh: "guide RNA與Cas9結合，引導其到要編輯的目標DNA序列。", en: "Guide RNA combines with Cas9 to direct it to the target DNA sequence to edit." }
+            },
+            {
+                id: 47,
+                type: "true_false",
+                zh: "CAR-T細胞療法已經成為治療所有癌症類型的標准治療。",
+                en: "CAR-T cell therapy has become standard treatment for all cancer types.",
+                correct: false,
+                explanation: { zh: "CAR-T療法目前主要用於血液惡性腫瘤，對實體瘤效果有限。", en: "CAR-T therapy is currently mainly used for hematologic malignancies with limited effect on solid tumors." }
+            },
+            {
+                id: 48,
+                type: "multiple",
+                zh: "F因子在細菌中的主要作用是什麼？",
+                en: "What is the main function of the F factor in bacteria?",
+                options: [
+                    { zh: "提供能量", en: "Provide energy", correct: false },
+                    { zh: "使接合成為可能", en: "Enable conjugation", correct: true },
+                    { zh: "保護免受抗生素", en: "Protect from antibiotics", correct: false },
+                    { zh: "進行光合作用", en: "Perform photosynthesis", correct: false }
+                ],
+                explanation: { zh: "F因子是一個質粒，使細菌能夠進行接合基因轉移。", en: "F factor is a plasmid that enables bacteria to perform conjugation for gene transfer." }
+            },
+            {
+                id: 49,
+                type: "true_false",
+                zh: "質粒可以在細菌之間自由轉移。",
+                en: "Plasmids can be freely transferred between bacteria.",
+                correct: true,
+                explanation: { zh: "質粒可以通過接合、轉化和轉導進行轉移。", en: "Plasmids can be transferred through conjugation, transformation, and transduction." }
+            },
+            {
+                id: 50,
+                type: "multiple",
+                zh: "基因組學最可能的醫學應用是什麼？",
+                en: "What is the most likely medical application of genomics?",
+                options: [
+                    { zh: "預防疾病", en: "Prevent diseases", correct: false },
+                    { zh: "個性化醫療和精准診斷", en: "Personalized medicine and precise diagnosis", correct: true },
+                    { zh: "完全消除所有疾病", en: "Completely eliminate all diseases", correct: false },
+                    { zh: "延長人類壽命至500歲", en: "Extend human life to 500 years", correct: false }
+                ],
+                explanation: { zh: "基因組學使得個性化醫療和精准診斷成為可能。", en: "Genomics enables personalized medicine and precise diagnosis based on individual genetic profiles." }
+            }
+        ];
+
+        let userAnswers = {};
+        let quizStarted = false;
+
+        function startQuiz() {
+            quizStarted = true;
+            userAnswers = {};
+            document.getElementById('quizProgress').style.display = 'block';
+            document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('questionsContainer').innerHTML = '';
+            document.getElementById('quizButtonsContainer').style.display = 'block';
+            document.getElementById('expandAllBtn').style.display = 'inline-block';
+            document.getElementById('collapseAllBtn').style.display = 'none';
+            const navElement = document.querySelector('.tab-navigation');
+            if (navElement) {
+                navElement.style.display = 'none';
+            }
+            renderQuestions();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = `question-card ${userAnswers[q.id] ? 'answered' : ''}`;
+                questionDiv.id = `question-${q.id}`;
+
+                let optionsHTML = '';
+                if (q.type === 'multiple') {
+                    optionsHTML = q.options.map((opt, optIndex) => `
+                        <label class="option" onclick="selectAnswer(${q.id}, ${optIndex})">
+                            <input type="radio" name="question-${q.id}" value="${optIndex}" ${userAnswers[q.id] === optIndex ? 'checked' : ''}>
+                            <div class="option-label">
+                                <div>${opt.zh}</div>
+                                <div style="font-size:0.9rem;color:#666;margin-top:0.3rem;">${opt.en}</div>
+                            </div>
+                        </label>
+                    `).join('');
+                } else {
+                    optionsHTML = `
+                        <label class="option" onclick="selectAnswer(${q.id}, 'true')">
+                            <input type="radio" name="question-${q.id}" value="true" ${userAnswers[q.id] === 'true' ? 'checked' : ''}>
+                            <div class="option-label">正確 (True)</div>
+                        </label>
+                        <label class="option" onclick="selectAnswer(${q.id}, 'false')">
+                            <input type="radio" name="question-${q.id}" value="false" ${userAnswers[q.id] === 'false' ? 'checked' : ''}>
+                            <div class="option-label">錯誤 (False)</div>
+                        </label>
+                    `;
+                }
+
+                questionDiv.innerHTML = `
+                    <div class="question-number">第 ${index + 1} 題 | Question ${index + 1}</div>
+                    <div class="question-text zh">${q.zh}</div>
+                    <div class="question-text">${q.en}</div>
+                    <div class="options">${optionsHTML}</div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+
+            updateProgress();
+        }
+
+        function selectAnswer(questionId, answer) {
+            userAnswers[questionId] = answer;
+            document.getElementById(`question-${questionId}`).classList.add('answered');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(userAnswers).length;
+            document.getElementById('answeredCount').textContent = answered;
+            const percent = (answered / questions.length) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+
+        function expandAllQuestions() {
+            const questionCards = document.querySelectorAll('.question-card');
+            questionCards.forEach(card => {
+                const optionsDiv = card.querySelector('.options');
+                if (optionsDiv) {
+                    optionsDiv.style.maxHeight = '2000px';
+                    optionsDiv.style.overflow = 'visible';
+                }
+            });
+            document.getElementById('expandAllBtn').style.display = 'none';
+            document.getElementById('collapseAllBtn').style.display = 'inline-block';
+        }
+
+        function collapseAllQuestions() {
+            const questionCards = document.querySelectorAll('.question-card');
+            questionCards.forEach(card => {
+                const optionsDiv = card.querySelector('.options');
+                if (optionsDiv) {
+                    optionsDiv.style.maxHeight = '0';
+                    optionsDiv.style.overflow = 'hidden';
+                }
+            });
+            document.getElementById('collapseAllBtn').style.display = 'none';
+            document.getElementById('expandAllBtn').style.display = 'inline-block';
+        }
+
+        function submitQuiz() {
+            let correct = 0, incorrect = 0, skipped = 0;
+
+            questions.forEach(q => {
+                const questionDiv = document.getElementById(`question-${q.id}`);
+                const answer = userAnswers[q.id];
+
+                if (!answer && answer !== 0) {
+                    skipped++;
+                    return;
+                }
+
+                let isCorrect = false;
+                if (q.type === 'multiple') {
+                    isCorrect = q.options[answer].correct;
+                } else {
+                    isCorrect = (answer === 'true' && q.correct) || (answer === 'false' && !q.correct);
+                }
+
+                if (isCorrect) {
+                    correct++;
+                    questionDiv.classList.add('correct');
+                } else {
+                    incorrect++;
+                    questionDiv.classList.add('incorrect');
+                }
+
+                // Add explanation
+                const optionsDiv = questionDiv.querySelector('.options');
+                const explanation = document.createElement('div');
+                explanation.className = isCorrect ? 'explanation correct-box' : 'explanation incorrect-box';
+                explanation.innerHTML = `<strong>${isCorrect ? '正確！Correct!' : '錯誤 Incorrect'}</strong><br>中文: ${q.explanation.zh}<br>English: ${q.explanation.en}`;
+                optionsDiv.parentElement.appendChild(explanation);
+            });
+
+            const total = questions.length;
+            const score = correct;
+            const percentage = Math.round((score / total) * 100);
+
+            document.getElementById('scoreDisplay').textContent = `${score}/${total}`;
+            document.getElementById('scorePercentage').textContent = `${percentage}%`;
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('incorrectCount').textContent = incorrect;
+            document.getElementById('skippedCount').textContent = skipped;
+
+            let message = '';
+            if (percentage >= 90) {
+                message = '🌟 優秀! Excellent!';
+            } else if (percentage >= 80) {
+                message = '👍 很好! Very Good!';
+            } else if (percentage >= 70) {
+                message = '✅ 及格! Passed!';
+            } else {
+                message = '📚 需要加油! Keep Studying!';
+            }
+            document.getElementById('resultMessage').textContent = message;
+
+            document.getElementById('quizProgress').style.display = 'none';
+            document.getElementById('quizResults').style.display = 'block';
+            document.getElementById('quizButtonsContainer').style.display = 'none';
+            document.getElementById('resetBtn').style.display = 'inline-block';
+
+            window.scrollTo(0, 0);
+        }
+
+        function resetQuiz() {
+            quizStarted = false;
+            userAnswers = {};
+            document.getElementById('questionsContainer').innerHTML = '';
+            document.getElementById('quizProgress').style.display = 'none';
+            document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('quizButtonsContainer').style.display = 'none';
+            document.getElementById('resetBtn').style.display = 'none';
+            document.getElementById('expandAllBtn').style.display = 'none';
+            document.getElementById('collapseAllBtn').style.display = 'none';
+
+            const quizContainer = document.querySelector('.tab-content.active .quiz-container');
+            if (quizContainer) {
+                const startBtn = quizContainer.querySelector('button:first-of-type');
+                if (startBtn) {
+                    startBtn.style.display = 'inline-block';
+                }
+            }
+        }
+
+        function switchTab(event, tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName !== 'questions') {
+                resetQuiz();
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        function toggleCard(headerElement) {
+            const card = headerElement.closest('.card');
+            card.classList.toggle('open');
+        }
+
+        function speakText(text) {
+            speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>
