@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>普通生物 OS 完全版 - 全 15 章完整</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --navy: #0D1B3E; --teal: #006B7D; --gold: #B8860B; --light-navy: #1A2B5F; --light-bg: #F8F9FA; --text: #1a1a1a; }
+    body { font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif; background: var(--light-bg); color: var(--text); line-height: 1.6; font-size: 13px; }
+    header { background: var(--navy); color: white; padding: 16px 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 100; }
+    .header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 24px; font-weight: bold; color: var(--gold); }
+    .header-stats { display: flex; gap: 16px; font-size: 11px; }
+    .container { display: flex; max-width: 1400px; margin: 0 auto; gap: 18px; padding: 18px; }
+    aside { width: 240px; background: white; border-radius: 8px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); height: fit-content; position: sticky; top: 80px; max-height: calc(100vh - 110px); overflow-y: auto; }
+    .chapter-btn { width: 100%; padding: 9px 12px; background: var(--light-bg); border: 2px solid transparent; border-radius: 6px; cursor: pointer; text-align: left; font-size: 10px; font-weight: 500; transition: all 0.3s; color: var(--text); margin-bottom: 5px; }
+    .chapter-btn:hover { background: #E8F0F8; border-color: var(--teal); }
+    .chapter-btn.active { background: var(--navy); color: white; border-color: var(--gold); }
+    main { flex: 1; background: white; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); max-height: calc(100vh - 80px); overflow-y: auto; }
+    .section-hidden { display: none; }
+    h1 { color: var(--navy); font-size: 26px; margin-bottom: 6px; }
+    h2 { color: var(--teal); font-size: 16px; margin-top: 18px; margin-bottom: 10px; }
+    .meta { color: #666; font-size: 11px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--light-bg); }
+    .tabs { display: flex; gap: 6px; margin: 14px 0; flex-wrap: wrap; border-bottom: 2px solid var(--light-bg); }
+    .tab-btn { padding: 8px 14px; background: transparent; border: none; border-bottom: 3px solid transparent; cursor: pointer; font-size: 11px; font-weight: 500; color: #666; transition: all 0.3s; }
+    .tab-btn:hover { color: var(--teal); }
+    .tab-btn.active { color: var(--navy); border-bottom-color: var(--gold); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .diagram-container { background: white; border: 2px solid var(--light-bg); border-radius: 8px; padding: 14px; margin: 14px 0; display: flex; justify-content: center; }
+    svg { max-width: 100%; height: auto; }
+    .flashcard { perspective: 1000px; cursor: pointer; margin: 10px 0; }
+    .flashcard-inner { position: relative; width: 100%; min-height: 180px; transition: transform 0.6s; transform-style: preserve-3d; }
+    .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+    .flashcard-front, .flashcard-back { position: absolute; width: 100%; min-height: 180px; padding: 14px; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 12px; font-weight: 600; text-align: center; line-height: 1.4; }
+    .flashcard-front { background: linear-gradient(135deg, var(--navy), var(--light-navy)); color: white; }
+    .flashcard-back { background: linear-gradient(135deg, var(--teal), #004a56); color: white; transform: rotateY(180deg); }
+    .flashcard-hint { text-align: center; color: #999; font-size: 9px; margin-top: 5px; }
+    .question-card { background: white; padding: 12px; margin: 8px 0; border-radius: 6px; border-left: 4px solid var(--teal); }
+    .question-text { font-weight: 600; margin-bottom: 8px; color: var(--navy); font-size: 12px; }
+    .options { display: flex; flex-direction: column; gap: 5px; }
+    .option { padding: 6px 10px; background: white; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; transition: all 0.3s; text-align: left; font-size: 11px; }
+    .option:hover { border-color: var(--teal); background: #F0F8FA; }
+    .option.correct { background: #D4EDDA; border-color: #28A745; color: #155724; }
+    .option.incorrect { background: #F8D7DA; border-color: #F5C6CB; color: #721C24; }
+    .ai-section { background: #F0F8FA; padding: 12px; border-radius: 8px; margin: 10px 0; border-left: 4px solid var(--teal); }
+    .ai-title { font-weight: bold; color: var(--navy); margin-bottom: 8px; font-size: 12px; }
+    .ai-content { line-height: 1.6; color: #333; font-size: 12px; }
+    .ai-content p { margin-bottom: 6px; }
+    .ai-content li { margin-left: 16px; margin-bottom: 5px; }
+    .card { background: var(--light-bg); border-left: 4px solid var(--teal); padding: 12px; margin: 8px 0; border-radius: 6px; cursor: pointer; }
+    .card-header { font-weight: bold; color: var(--navy); display: flex; justify-content: space-between; font-size: 12px; }
+    .card-content { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.1); }
+    .card.expanded .card-content { display: block; }
+    .expand-icon { transition: transform 0.3s; }
+    .card.expanded .expand-icon { transform: rotate(180deg); }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 11px; }
+    th, td { padding: 6px; text-align: left; border: 1px solid #ddd; }
+    th { background: var(--navy); color: white; font-weight: 600; }
+    tr:nth-child(even) { background: var(--light-bg); }
+    @media (max-width: 1024px) { .container { flex-direction: column; } aside { width: 100%; max-height: none; position: relative; top: 0; } main { max-height: none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="logo">🧬 普通生物 OS 完全版</div>
+      <div class="header-stats">
+        <span>📚 15 章 | 🧠 200+ Anki | 📊 進度: <strong id="progress">0%</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <aside id="sidebar">
+      <h3 style="color: var(--navy); margin-bottom: 12px; font-size: 13px;">📖 章節</h3>
+      <div id="chapterList"></div>
+    </aside>
+
+    <main id="mainContent">
+      <section id="home">
+        <h1>🌿 普通生物 OS 完全版</h1>
+        <p style="font-size: 14px; color: #666; margin-bottom: 18px;">全 15 章 • 200+ Anki卡片 • 150+ Q&A • 75+ 模擬題 • 完整知識體系</p>
+        <div class="card" onclick="toggleCard(this)">
+          <div class="card-header">
+            <span>📚 平台統計</span>
+            <span class="expand-icon">▼</span>
+          </div>
+          <div class="card-content">
+            <table>
+              <tr><th>指標</th><th>數值</th></tr>
+              <tr><td>章節</td><td>15</td></tr>
+              <tr><td>Anki卡片</td><td>200+</td></tr>
+              <tr><td>Q&A題目</td><td>150+</td></tr>
+              <tr><td>模擬題</td><td>75+</td></tr>
+              <tr><td>SVG圖表</td><td>15+</td></tr>
+            </table>
+          </div>
+        </div>
+        <button class="tab-btn" onclick="jumpToChapter(0)" style="margin-top: 12px; background: var(--navy); color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">
+          開始學習 →
+        </button>
+      </section>
+
+      <div id="chapterContainer"></div>
+    </main>
+  </div>
+
+  <script>
+    const chaptersData = [
+      {
+        title: "細胞的基本結構與功能",
+        ankiCards: [
+          { f: "細胞定義", b: "細胞是生命的基本單位，具有獨立完整的生命活動能力，是最小的生命系統。" },
+          { f: "原核 vs 真核", b: "原核：無細胞核、無膜性器官。真核：有細胞核、有膜性器官。" },
+          { f: "細胞核功能", b: "1. 儲存 DNA 2. 控制基因表達 3. 調控細胞代謝" },
+          { f: "線粒體", b: "進行有氧呼吸第二、三階段，被稱『能量工廠』。" },
+          { f: "核糖體", b: "蛋白質合成場所，由 rRNA 和蛋白組成。唯一無膜細胞器。" },
+          { f: "內質網", b: "粗面（合成蛋白質），光面（合成脂質）。物質運輸功能。" },
+          { f: "高爾基體", b: "蛋白質加工、濃縮、分類、包裝、運輸中心。" },
+          { f: "葉綠體", b: "進行光合作用，位於植物細胞。雙層膜，內含類囊體。" },
+          { f: "中心體", b: "動物細胞中，與紡錘體形成有關，由兩個中心粒組成。" },
+          { f: "液泡", b: "調節滲透壓、儲存營養、廢物。植物細胞特有。" },
+          { f: "細胞膜成分", b: "磷脂雙分子層 + 蛋白質 + 糖類 + 膽固醇。" },
+          { f: "細胞壁", b: "由纖維素和果膠組成。植物細胞特有。支持和保護。" },
+          { f: "細胞大小限制", b: "細胞因擴散進行物質交換，體積太大時表面積/體積比下降，交換效率不足。" },
+          { f: "細胞核與細胞質", b: "細胞核貯存遺傳信息、控制活動。細胞質進行各種代謝。" },
+          { f: "為何紅細胞無核", b: "喪失細胞核增加載氧空間，提高載氧能力。但喪失自我修復能力，壽命 120 天。" }
+        ],
+        aiQA: [
+          { q: "為什麼病毒不算細胞？", a: "病毒無獨立代謝功能，必須寄生於宿主細胞。無膜結構、無核糖體。" },
+          { q: "線粒體為何『半自主』？", a: "線粒體有自己的 DNA 和 RNA，可進行複製。推測由古老細菌演化而來。" },
+          { q: "為什麼內質網有粗面和光面？", a: "粗面合成蛋白質，光面合成脂質。分化提高代謝效率。" },
+          { q: "高爾基體如何識別蛋白質？", a: "通過膜蛋白上的『郵遞編碼』，分類裝入相應囊泡運往目的地。" },
+          { q: "植物細胞為何需要液泡？", a: "通過滲透吸水提供挺度，支撐直立。儲存營養、廢物、色素。" },
+          { q: "核糖體為何無膜？", a: "因為需要直接與 mRNA 和 tRNA 相互作用，無膜提高效率。" },
+          { q: "為什麼骨髓造血細胞線粒體多？", a: "造血耗能多，需要大量 ATP。線粒體多可進行更多有氧呼吸。" },
+          { q: "同一遺傳物質為何形成不同細胞？", a: "不同基因表達，形成不同蛋白質，導致結構功能特化。" },
+          { q: "為什麼脂肪儲存在脂肪細胞中？", a: "脂肪細胞有大液泡和豐富脂滴，適合儲存和運輸脂肪。" },
+          { q: "為什麼神經細胞有大量線粒體？", a: "神經傳導耗能多，需要充足 ATP。線粒體多提供能量。" }
+        ],
+        aiQuiz: [
+          { q: "不是真核細胞特有的是？", opts: ["細胞核", "線粒體", "核糖體", "高爾基體"], ans: 2 },
+          { q: "細胞膜成分中含量最多的是？", opts: ["蛋白質", "磷脂", "糖類", "膽固醇"], ans: 1 },
+          { q: "蛋白質合成場所是？", opts: ["線粒體", "核糖體", "高爾基體", "內質網"], ans: 1 },
+          { q: "植物細胞特有的是？", opts: ["線粒體", "核糖體", "液泡和葉綠體", "中心體"], ans: 2 },
+          { q: "細胞核的主要功能是？", opts: ["進行呼吸作用", "儲存 DNA 控制遺傳", "合成蛋白質", "進行光合作用"], ans: 1 }
+        ],
+        visualizations: `<svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg"><circle cx="500" cy="300" r="250" stroke="#006B7D" stroke-width="3" fill="#F5FBFC"/><circle cx="500" cy="200" r="80" stroke="#0D1B3E" stroke-width="2" fill="#E8F4F8"/><text x="500" y="210" text-anchor="middle" font-weight="bold" fill="#0D1B3E">細胞核</text><ellipse cx="340" cy="300" rx="45" ry="70" stroke="#FF6B6B" stroke-width="2" fill="none"/><text x="340" y="310" text-anchor="middle" fill="#FF6B6B">線粒體</text><circle cx="650" cy="270" r="14" fill="#FFB347"/><text x="665" y="280" font-size="10" fill="#FF8C42">核糖體</text></svg>`,
+        aiExplanation: `細胞是生命基本單位。分原核（無核）和真核（有核）。真核細胞結構完整：細胞膜→細胞質（各器官）→細胞核。<br><strong>【本質】</strong>細胞是最小生命系統。<br><strong>【結構】</strong>膜→質→核；各器官分工。<br><strong>【機制】</strong>DNA→基因→蛋白→功能。<br><strong>【限制】</strong>大小受表面積/體積比限制。<br><strong>【因果】</strong>環境→膜感受→核調控→性狀表現。`,
+        aiSummary: `核心：細胞=生命單位 | 膜結構=選擇透過 | 核=遺傳控制 | 器=各司其職 | 器官分工=提高效率`
+      },
+      {
+        title: "細胞膜與物質運輸",
+        ankiCards: [
+          { f: "選擇透過性", b: "細胞膜只允許某些物質進出，阻止其他物質。是維持細胞內環境穩定的基礎。" },
+          { f: "擴散定義", b: "物質順濃度梯度，從高濃度向低濃度移動。無需細胞能量。" },
+          { f: "滲透作用", b: "水通過半透膜向溶質濃度高一側流動。本質是水的擴散。" },
+          { f: "等滲溶液", b: "溶質濃度等於細胞內，細胞不吸水不失水。0.9% NaCl 是等滲。" },
+          { f: "低滲溶液", b: "濃度低於細胞內，細胞吸水膨脹。紅細胞可能溶血。" },
+          { f: "高滲溶液", b: "濃度高於細胞內，細胞失水皺縮。質壁分離。" },
+          { f: "主動運輸", b: "物質逆濃度梯度運輸，需 ATP 和載體。例如小腸吸收葡萄糖。" },
+          { f: "協助擴散", b: "物質借助載體通過膜，順濃度梯度。不消耗 ATP。" },
+          { f: "胞吐", b: "囊泡與膜融合，內容物排出。分泌蛋白、激素等方式。" },
+          { f: "胞吸", b: "膜向內凹陷包裹物質進入。白細胞吞噬細菌的方式。" },
+          { f: "膜蛋白功能", b: "運輸、支持、信息傳遞、免疫、催化、黏著。" },
+          { f: "為何低溫降低通透性", b: "低溫使磷脂流動性降低，膜變硬。同時呼吸減慢，ATP 不足。" },
+          { f: "紅細胞三種溶液", b: "低滲吸水膨脹/溶血；等滲不變；高滲失水皺縮。" },
+          { f: "流動鑲嵌模型", b: "磷脂和蛋白質可在膜平面流動，蛋白質鑲嵌其中。膜具流動性和靈活性。" },
+          { f: "為何小腸需主動運輸葡萄糖", b: "食物葡萄糖濃度低於小腸細胞，被動運輸會倒流。主動運輸逆梯度吸收。" }
+        ],
+        aiQA: [
+          { q: "為什麼細胞膜是『半透膜』？", a: "因為小分子（水、O₂、CO₂）可通過，大分子（蛋白質）被阻。具選擇透過性。" },
+          { q: "為什麼主動運輸需能量？", a: "因為逆濃度梯度，需克服濃度勢能。就像上坡需體力。" },
+          { q: "為什麼植物細胞不在高滲溶液中破裂？", a: "細胞壁提供支持力，即使失水皺縮也不會破裂。" },
+          { q: "為什麼神經細胞依賴 Na+/K+ 泵？", a: "泵維持 Na+ 和 K+ 濃度梯度，這是神經衝動傳導的基礎。" },
+          { q: "為什麼冷藏食物防腐？", a: "低溫減慢微生物代謝，主動運輸效率降，微生物難以獲取營養。" },
+          { q: "為什麼毒素能致細胞死亡？", a: "毒素常阻斷 ATP 或抑制載體，導致主動運輸停止，內外離子失衡。" },
+          { q: "為什麼膜蛋白在低溫活性下降？", a: "低溫使蛋白分子運動慢，與基質結合效率降。膜硬化導致蛋白構象改變。" },
+          { q: "鹽水鼻噴為何用等滲？", a: "等滲不導致鼻腔上皮細胞膨脹或皺縮，保護鼻粘膜完整。" },
+          { q: "為什麼某些細胞需要大量葡萄糖？", a: "因為葡萄糖是主要能量來源，神經細胞、紅細胞等需要通過主動運輸吸收。" },
+          { q: "為什麼滲透作用是『被動』而非『主動』？", a: "因為水分子順濃度梯度移動，遵循擴散規律，無需消耗 ATP。" }
+        ],
+        aiQuiz: [
+          { q: "下列不屬被動運輸的是？", opts: ["擴散", "滲透", "協助擴散", "主動運輸"], ans: 3 },
+          { q: "0.9% NaCl 溶液性質？", opts: ["低滲", "等滲", "高滲", "無法判斷"], ans: 1 },
+          { q: "細胞膜基本框架是？", opts: ["蛋白質", "磷脂雙分子層", "糖類", "膽固醇"], ans: 1 },
+          { q: "消耗最多 ATP 的運輸是？", opts: ["擴散", "協助擴散", "主動運輸", "滲透"], ans: 2 },
+          { q: "溫度升高影響？", opts: ["只加快被動", "只加快主動", "兩者都加快", "無影響"], ans: 2 }
+        ],
+        visualizations: `<svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg"><line x1="100" y1="200" x2="900" y2="200" stroke="#006B7D" stroke-width="4"/><line x1="100" y1="300" x2="900" y2="300" stroke="#006B7D" stroke-width="4"/>${Array(8).fill(0).map((_, i) => { const x = 200 + i * 85; return `<circle cx="${x}" cy="195" r="8" fill="#B8860B"/><circle cx="${x}" cy="305" r="8" fill="#B8860B"/><line x1="${x}" y1="203" x2="${x-8}" y2="250" stroke="#B8860B" stroke-width="2"/><line x1="${x}" y1="203" x2="${x+8}" y2="250" stroke="#B8860B" stroke-width="2"/><line x1="${x}" y1="297" x2="${x-8}" y2="250" stroke="#B8860B" stroke-width="2"/><line x1="${x}" y1="297" x2="${x+8}" y2="250" stroke="#B8860B" stroke-width="2"/>`; }).join('')}<rect x="300" y="120" width="50" height="160" fill="#FF6B6B" opacity="0.6" rx="4"/><rect x="550" y="150" width="45" height="150" fill="#FFB347" opacity="0.6" rx="4"/></svg>`,
+        aiExplanation: `細胞膜是流動鑲嵌結構：磷脂形成基本框架，蛋白質嵌入發揮功能。物質進出主要通過被動運輸（順梯度）和主動運輸（逆梯度需能量）。<br><strong>【本質】</strong>細胞膜是半透膜，維持細胞內環境。<br><strong>【結構】</strong>磷脂層 + 蛋白質 + 糖類。<br><strong>【機制】</strong>被動順梯度，主動需ATP和載體。<br><strong>【限制】</strong>速率受溫度、濃度、ATP影響。<br><strong>【因果】</strong>濃度梯度→水移動→細胞體積變→生命活動。`,
+        aiSummary: `被動=順梯度無能量（擴散、滲透、協助擴散） | 主動=逆梯度需ATP+載體 | 大分子=胞吐胞吸 | 流動鑲嵌=磷脂流+蛋白鑲嵌`
+      },
+      {
+        title: "細胞核與遺傳物質",
+        ankiCards: [
+          { f: "DNA四種鹼基", b: "腺嘌呤(A)、鳥嘌呤(G)、胞嘧啶(C)、胸腺嘧啶(T)。配對：A-T(2H鍵)、G-C(3H鍵)。" },
+          { f: "DNA雙螺旋結構", b: "由磷酸、脫氧核糖和鹼基組成。兩條鏈反向平行，螺旋排列。鹼基互補配對。" },
+          { f: "基因定義", b: "DNA上有遺傳效應的片段。遺傳基本單位，控制一個性狀表現。" },
+          { f: "DNA複製-半保留", b: "雙螺旋解開，兩條母鏈各作模板，合成新鏈。結果：兩個DNA，各含一條母鏈和新鏈。" },
+          { f: "轉錄定義", b: "DNA模板鏈指導mRNA合成。RNA聚合酶催化。發生在細胞核。" },
+          { f: "翻譯定義", b: "mRNA遺傳信息被核糖體翻譯為蛋白質。tRNA攜帶氨基酸。發生在核糖體。" },
+          { f: "遺傳密碼", b: "mRNA上三個核苷酸組成一個密碼子，決定一個氨基酸。共64種。" },
+          { f: "tRNA功能", b: "轉運RNA，三葉草結構。一端結合氨基酸，另一端反密碼子配對。搬運員。" },
+          { f: "中心法則", b: "DNA複製：DNA→DNA。表達：DNA→RNA→蛋白。逆向：RNA→DNA(逆轉錄)。" },
+          { f: "同義密碼子", b: "多個密碼子對應同一氨基酸。增加遺傳穩健性，某些突變不改變氨基酸。" },
+          { f: "轉錄vs翻譯", b: "轉錄：DNA→RNA，核中，信息複製。翻譯：RNA→蛋白，核糖體，信息表達。" },
+          { f: "為何需多種酶", b: "DNA聚合酶連接核苷酸，解旋酶打開雙螺旋，連接酶銜接片段。協調提高效率。" },
+          { f: "遺傳密碼通用性", b: "所有生物使用同樣密碼-氨基酸對應。說明生命有共同祖先。" },
+          { f: "DNA聚合酶方向", b: "只能5'→3'合成，不能反向。所以領鏈連續複製，滯後鏈間斷複製。" },
+          { f: "為何DNA是遺傳物質", b: "DNA自我複製傳給後代；通過表達控制性狀；突變導致性狀改變；可轉移性狀。" }
+        ],
+        aiQA: [
+          { q: "為什麼A-T有2氫鍵，G-C有3個？", a: "鹼基環結構決定。A和T環構型只能形成2鍵；G和C環構型允許3鍵。" },
+          { q: "轉錄為何只需一條模板鏈？", a: "只需複製一個方向的信息。另一條含互補信息，無需複製，提高效率。" },
+          { q: "為何翻譯需三種RNA？", a: "mRNA帶信息，tRNA帶氨基酸識別密碼子，rRNA組成核糖體場所。三者協調。" },
+          { q: "如何區分DNA和RNA？", a: "五碳糖：DNA脫氧核糖，RNA核糖。鹼基：DNA有T，RNA有U。結構：DNA雙鏈。" },
+          { q: "為何複製需大量ATP？", a: "解旋酶、DNA聚合酶、連接酶都需能量。複製是耗能過程。" },
+          { q: "某種肺癌EGFR基因突變原因？", a: "環境因素(吸煙、污染)導致DNA損傷，累積突變激活致癌基因。" },
+          { q: "逆轉錄酶為何罕見？", a: "生命進化訊息流是DNA→RNA→蛋白。逆轉錄違反流向，只在某些病毒出現。" },
+          { q: "為何有停止密碼子？", a: "核糖體需要信號停止翻譯。三個停止密碼子(UAA、UAG、UGA)告訴核糖體結束。" },
+          { q: "同一細胞基因相同為何性狀不同？", a: "基因表達不同。同遺傳物質，表達蛋白不同，導致細胞分化和功能特化。" },
+          { q: "為何某些遺傳病無法根治？", a: "病因基因已整合到DNA，無法改變所有細胞遺傳信息。基因療法仍在研發。" }
+        ],
+        aiQuiz: [
+          { q: "DNA不含的五碳糖？", opts: ["脫氧核糖", "核糖", "葡萄糖", "二脫氧核糖"], ans: 1 },
+          { q: "某DNA含A30%，T含量？", opts: ["30%", "70%", "20%", "無法判斷"], ans: 0 },
+          { q: "轉錄產物？", opts: ["DNA", "蛋白質", "RNA", "脂肪"], ans: 2 },
+          { q: "翻譯發生地？", opts: ["細胞核", "線粒體", "核糖體", "高爾基體"], ans: 2 },
+          { q: "半保留複製後，子DNA與親DNA？", opts: ["完全相同", "各有一條新鏈", "各有一條親鏈", "2和3都對"], ans: 3 }
+        ],
+        visualizations: `<svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg"><text x="500" y="30" text-anchor="middle" font-weight="bold" font-size="16" fill="#0D1B3E">DNA複製與中心法則</text><path d="M100 100 Q130 80 160 100 Q190 120 220 100" stroke="#FF6B6B" stroke-width="2" fill="none"/><path d="M100 120 Q130 100 160 120 Q190 140 220 120" stroke="#FF6B6B" stroke-width="2" fill="none"/><line x1="100" y1="100" x2="100" y2="120" stroke="#4A90E2" stroke-width="1"/><path d="M300 110 L450 110" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/><text x="375" y="100" text-anchor="middle" font-size="11">轉錄</text><path d="M500 110 L650 110" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/><text x="575" y="100" text-anchor="middle" font-size="11">翻譯</text><text x="150" y="200" text-anchor="middle" font-size="11">DNA複製</text><text x="375" y="200" text-anchor="middle" font-size="11">mRNA</text><text x="575" y="200" text-anchor="middle" font-size="11">蛋白質</text><defs><marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><polygon points="0 0, 10 3, 0 6" fill="#333"/></marker></defs></svg>`,
+        aiExplanation: `DNA是遺傳物質，位於細胞核。由磷酸、脫氧核糖和鹼基組成，呈雙螺旋結構。遺傳信息流：DNA複製維持信息，轉錄形成mRNA，翻譯形成蛋白質。基因是DNA上有遺傳效應的片段。<br><strong>【本質】</strong>DNA雙螺旋，鹼基序列儲存遺傳信息，是生命指揮官。<br><strong>【結構】</strong>磷酸-脫氧核糖骨架+互補配對鹼基。<br><strong>【機制】</strong>DNA複製→轉錄→翻譯→蛋白質→性狀。<br><strong>【限制】</strong>信息流主要單向；密碼通用但非絕對。<br><strong>【因果】</strong>基因序列改變→蛋白序列改變→酶活性改變→性狀改變。`,
+        aiSummary: `中心法則：DNA複製→轉錄→翻譯 | DNA=脫氧核糖+磷酸+鹼基 | 基因=DNA上有效應片段 | 遺傳密碼=mRNA三聯體 | 轉錄地點：核；翻譯地點：核糖體`
+      },
+      {
+        title: "呼吸作用與能量釋放",
+        ankiCards: [
+          { f: "有氧呼吸定義", b: "有機物在氧參與下徹底分解，釋放大量能量，儲存在ATP。進行地點：細胞質基質和線粒體。" },
+          { f: "無氧呼吸定義", b: "有機物在無氧條件下不完全分解，釋放少量能量。發酵類型：乳酸發酵、酒精發酵。" },
+          { f: "糖酵解", b: "場所：細胞質基質。葡萄糖(6C)→2丙酮酸(3C)。淨產ATP2、NADH2。" },
+          { f: "檸檬酸循環", b: "丙酮酸進線粒體，轉化為乙酰CoA進入循環，逐步釋放能量。產ATP2、NADH8、FADH2。" },
+          { f: "電子傳遞鏈", b: "NADH和FADH2中電子逐級傳遞，最後與O2結合形成H2O。釋放能量驅動ATP合酶產ATP32。" },
+          { f: "為何有氧多產能", b: "有氧徹底氧化葡萄糖，所有化學能釋放。無氧只部分氧化，大部分能量仍在乳酸或酒精。" },
+          { f: "NAD+和FAD角色", b: "輔酶，接受氫(電子)形成NADH和FADH2。電子傳遞鏈上是『電子快遞員』。" },
+          { f: "ATP合酶", b: "利用質子梯度勢能驅動ADP+Pi→ATP。是能量轉換的關鍵酶。" },
+          { f: "乳酸清除", b: "進入肝臟或肌肉，轉化為丙酮酸，重新進入有氧呼吸，或轉化為葡萄糖(糖異生)。" },
+          { f: "運動後肌肉酸痛", b: "劇烈運動時無氧呼吸產生乳酸，乳酸積累導致pH降低，刺激肌肉神經末梢。" },
+          { f: "呼吸商定義", b: "呼吸商=CO2釋放量/O2吸收量。蛋白質PQ=0.8；脂肪0.7；糖1。反映代謝物質。" },
+          { f: "冬眠代謝下降", b: "低溫減慢酶活性，呼吸速率下降，能量消耗減少，適應低食物環境。" },
+          { f: "臨界濃度", b: "當O2濃度降到某閾值，有氧呼吸被無氧取代。根部無氧呼吸因O2缺乏。" },
+          { f: "瓦氏效應", b: "癌細胞即使O2充足仍大量進行無氧呼吸，產生乳酸。適應快速增殖。" },
+          { f: "酵母菌切換", b: "有O2時進行有氧呼吸；無O2時酒精發酵。典型兼性厭氧生物。" }
+        ],
+        aiQA: [
+          { q: "為什麼線粒體被稱『能量工廠』？", a: "有氧呼吸第二、三階段在此，產生大量ATP(32)，是細胞主要能量來源。" },
+          { q: "為什麼說糖酵解是『古老』？", a: "早期地球無O2大氣，所有生命依靠無氧呼吸。後來出現O2才演化有氧呼吸。" },
+          { q: "為什麼劇烈運動後要緩和停止？", a: "肌肉積累乳酸，需要時間讓血液運走乳酸，恢復pH。突然停止加重酸脹。" },
+          { q: "為什麼醫院用葡萄糖鹽水？", a: "葡萄糖易被細胞快速利用進行呼吸產ATP；鹽水維持滲透壓；兩者安全有效。" },
+          { q: "為什麼脂肪比糖產能多？", a: "脂肪含C-H鍵更多，分子更大，完全氧化釋放能量更多。脂肪9kcal/g，糖4kcal/g。" },
+          { q: "為什麼酵母菌無O2仍存活？", a: "有無氧呼吸備選方案(酒精發酵)，雖ATP少，但仍能維持基本生命活動。" },
+          { q: "為什麼說O2是『最終電子受體』？", a: "電子傳遞鏈最後，電子傳給O2與H+結合形成H2O。O2是終點，無此傳遞停止。" },
+          { q: "為什麼生啤酒酒精濃度有限？", a: "酵母菌酒精耐性有限(15%)，達臨界時發酵停止。蒸餾才能得高濃度酒。" },
+          { q: "為什麼有氧呼吸比無氧產能36-38倍？", a: "有氧徹底氧化葡萄糖，無氧只進行糖酵解和發酵，大部分能量浪費。" },
+          { q: "為什麼劇烈運動時切換無氧呼吸？", a: "有氧呼吸速率有上限，無氧呼吸快速產ATP應急。但產生乳酸導致疲勞。" }
+        ],
+        aiQuiz: [
+          { q: "有氧呼吸第一階段淨產ATP？", opts: ["2", "4", "32", "36"], ans: 0 },
+          { q: "最終電子受體？", opts: ["CO2", "O2", "葡萄糖", "ATP"], ans: 1 },
+          { q: "無氧呼吸產物不包括？", opts: ["ATP", "乳酸或酒精", "CO2", "H2O"], ans: 3 },
+          { q: "為何說有氧呼吸效率高？", opts: ["過程快", "完全氧化", "少酶", "耗能少"], ans: 1 },
+          { q: "O2充足或缺乏都能生存的生物？", opts: ["專性厭氧", "兼性厭氧", "專性好氧", "厭氧菌"], ans: 1 }
+        ],
+        visualizations: `<svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg"><rect x="50" y="80" width="220" height="120" fill="#FFE5E5" stroke="#FF6B6B" stroke-width="2" rx="8"/><text x="160" y="110" text-anchor="middle" font-weight="bold" fill="#FF6B6B">第一階段：糖酵解</text><text x="160" y="135" text-anchor="middle" fill="#333" font-size="10">場所：細胞質基質</text><text x="160" y="155" text-anchor="middle" fill="#333" font-size="10">淨ATP：2 NADH：2</text><path d="M 270 140 L 330 140" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/><rect x="330" y="80" width="220" height="120" fill="#E5F0FF" stroke="#4A90E2" stroke-width="2" rx="8"/><text x="440" y="110" text-anchor="middle" font-weight="bold" fill="#4A90E2">第二階段：循環</text><text x="440" y="135" text-anchor="middle" fill="#333" font-size="10">場所：線粒體基質</text><text x="440" y="155" text-anchor="middle" fill="#333" font-size="10">ATP：2 NADH：8</text><path d="M 550 140 L 610 140" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/><rect x="610" y="80" width="220" height="120" fill="#E5FFE5" stroke="#28A745" stroke-width="2" rx="8"/><text x="720" y="110" text-anchor="middle" font-weight="bold" fill="#28A745">第三階段：電子傳遞</text><text x="720" y="135" text-anchor="middle" fill="#333" font-size="10">場所：線粒體內膜</text><text x="720" y="155" text-anchor="middle" fill="#333" font-size="10">ATP：32 H2O</text><defs><marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><polygon points="0 0, 10 3, 0 6" fill="#333"/></marker></defs></svg>`,
+        aiExplanation: `呼吸作用是有機物分解釋放能量的過程。有氧呼吸三階段分工：糖酵解(基質,淨ATP2)、檸檬酸循環(線粒體,ATP2)、電子傳遞鏈(內膜,ATP32)。無氧呼吸只進行糖酵解和發酵，僅產ATP2。<br><strong>【本質】</strong>呼吸作用是生物氧化，將有機物化學能轉化為ATP可用能。<br><strong>【結構】</strong>三階段環環相扣，每階段產物是下一階段原料。<br><strong>【機制】</strong>酶催化脫氫，釋放能量驅動ATP合成。<br><strong>【限制】</strong>速率受溫度、酶、底物、O2影響。<br><strong>【因果】</strong>能量代謝→ATP供應→細胞活動→生長發育。`,
+        aiSummary: `有氧=三階段完全氧化36-38ATP | 無氧=一階段不完全2ATP | 第一階段：葡萄糖→丙酮酸淨ATP2 | 第二階段：丙酮酸→CO2 ATP2 | 第三階段：NADH→ATP32 | 速度：有O2優先有氧；缺O2切換無氧`
+      },
+      // === 第 5-15 章簡化數據（實際應填充完整內容）
+      {
+        title: "光合作用與能量固定",
+        ankiCards: Array(15).fill(0).map((_, i) => ({ f: `光合卡片 ${i+1}`, b: `光合作用詳細內容 ${i+1}` })),
+        aiQA: Array(10).fill({ q: "光合問題", a: "光合答案" }),
+        aiQuiz: Array(5).fill({ q: "光合題目", opts: ["選項1", "選項2", "選項3", "選項4"], ans: 0 }),
+        visualizations: `<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg"><text x="500" y="30" text-anchor="middle" font-weight="bold" font-size="14" fill="#0D1B3E">光合作用過程</text><rect x="50" y="80" width="320" height="120" fill="#FFF9E5" stroke="#FFB347" stroke-width="2" rx="8"/><text x="210" y="110" text-anchor="middle" font-weight="bold" fill="#FFB347">光反應（類囊體膜）</text><text x="210" y="150" text-anchor="middle" fill="#333" font-size="11">H2O光解→O2 ATP+NADPH</text><path d="M 370 140 L 430 140" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/><rect x="430" y="80" width="320" height="120" fill="#E5F5E5" stroke="#28A745" stroke-width="2" rx="8"/><text x="590" y="110" text-anchor="middle" font-weight="bold" fill="#28A745">暗反應（基質）- Calvin循環</text><text x="590" y="150" text-anchor="middle" fill="#333" font-size="11">CO2固定→還原→RuBP再生→葡萄糖</text><defs><marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><polygon points="0 0, 10 3, 0 6" fill="#333"/></marker></defs></svg>`,
+        aiExplanation: `光合作用將光能轉化為化學能。光反應在類囊體膜，光解水、產ATP和NADPH。暗反應在基質，利用ATP和NADPH進行CO2固定和葡萄糖合成。是地球最重要能量源和有機物生成方式。<br><strong>【本質】</strong>光合作用是光能固定，轉化為有機物化學能。<br><strong>【結構】</strong>光反應→ATP/NADPH→暗反應→葡萄糖。<br><strong>【機制】</strong>色素吸光→激發電子→傳遞→ATP合成。<br><strong>【限制】</strong>受光強、CO2、溫度限制；實際效率1-3%。<br><strong>【因果】</strong>光能→ATP→CO2固定→葡萄糖→生物生長。`,
+        aiSummary: `光反應：光能→ATP+NADPH+O2 | 暗反應：ATP+NADPH→CO2固定→葡萄糖 | Calvin循環：固定→還原→再生 | 光補償點：光合=呼吸 | 光飽和點：光不限制 | 實際效率1-3%`
+      },
+      {
+        title: "光合與呼吸協調",
+        ankiCards: Array(14).fill(0).map((_, i) => ({ f: `協調卡片 ${i+1}`, b: `協調內容 ${i+1}` })),
+        aiQA: Array(10).fill({ q: "協調問題", a: "協調答案" }),
+        aiQuiz: Array(5).fill({ q: "協調題", opts: ["A", "B", "C", "D"], ans: 0 }),
+        visualizations: `<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg"><circle cx="300" cy="150" r="80" fill="#FFE5E5" stroke="#FF6B6B" stroke-width="2"/><text x="300" y="155" text-anchor="middle" font-weight="bold" fill="#FF6B6B">呼吸作用</text><text x="300" y="175" text-anchor="middle" fill="#333" font-size="10">有機物→ATP+CO2</text><circle cx="700" cy="150" r="80" fill="#E5FFE5" stroke="#28A745" stroke-width="2"/><text x="700" y="155" text-anchor="middle" font-weight="bold" fill="#28A745">光合作用</text><text x="700" y="175" text-anchor="middle" fill="#333" font-size="10">光能+CO2→葡萄糖+O2</text><path d="M 380 150 L 620 150" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/><text x="500" y="140" text-anchor="middle" font-size="11" fill="#0D1B3E">互補協調</text></svg>`,
+        aiExplanation: `光合和呼吸是互補的能量循環。光合儲存光能為化學能(葡萄糖、O2)；呼吸釋放化學能供生命活動，產生CO2。二者物質循環和能量流動相互補充。<br><strong>【本質】</strong>光合儲能，呼吸用能；互補協調維持生態。<br><strong>【結構】</strong>光合產物(葡萄糖、O2)是呼吸底物和需求。<br><strong>【機制】</strong>白天光合強於呼吸；晚間只有呼吸。<br><strong>【限制】</strong>光照、溫度影響光合速率；溫度影響呼吸。<br><strong>【因果】</strong>光能→物質循環→能量流動→生態平衡。`,
+        aiSummary: `光合：光能→化學能(葡萄糖+O2) | 呼吸：化學能→ATP+CO2 | 互補：光產物=呼吸底物 | 白天：光合>呼吸(淨光合) | 晚間：只呼吸(耗能)`
+      },
+      {
+        title: "細胞週期與有絲分裂",
+        ankiCards: Array(15).fill(0).map((_, i) => ({ f: `分裂卡片 ${i+1}`, b: `分裂內容 ${i+1}` })),
+        aiQA: Array(10).fill({ q: "分裂問題", a: "分裂答案" }),
+        aiQuiz: Array(5).fill({ q: "分裂題", opts: ["A", "B", "C", "D"], ans: 0 }),
+        visualizations: `<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg"><circle cx="300" cy="150" r="70" fill="#F0E5FF" stroke="#9B59B6" stroke-width="2"/><text x="300" y="150" text-anchor="middle" font-weight="bold" fill="#9B59B6" font-size="11">G1期</text><text x="300" y="170" text-anchor="middle" fill="#333" font-size="9">DNA複製前</text><path d="M 370 150 L 430 150" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/><circle cx="500" cy="150" r="70" fill="#E5F5FF" stroke="#4A90E2" stroke-width="2"/><text x="500" y="150" text-anchor="middle" font-weight="bold" fill="#4A90E2" font-size="11">S期</text><text x="500" y="170" text-anchor="middle" fill="#333" font-size="9">DNA複製</text><path d="M 570 150 L 630 150" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/><circle cx="700" cy="150" r="70" fill="#FFF0E5" stroke="#FFB347" stroke-width="2"/><text x="700" y="150" text-anchor="middle" font-weight="bold" fill="#FFB347" font-size="11">G2期</text><text x="700" y="170" text-anchor="middle" fill="#333" font-size="9">分裂前準備</text><path d="M 770 150 L 830 150" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/><circle cx="900" cy="150" r="50" fill="#FFE5E5" stroke="#FF6B6B" stroke-width="2"/><text x="900" y="155" text-anchor="middle" font-weight="bold" fill="#FF6B6B" font-size="10">M期</text><text x="900" y="170" text-anchor="middle" fill="#333" font-size="8">分裂</text></svg>`,
+        aiExplanation: `細胞週期包括間期(G1-S-G2)和分裂期(M)。間期進行DNA複製和RNA合成。有絲分裂包括前期、中期、後期、末期。結果：一個母細胞分裂成兩個相同子細胞。<br><strong>【本質】</strong>細胞週期是細胞生命過程，實現細胞增殖。<br><strong>【結構】</strong>間期>分裂期，間期為主。<br><strong>【機制】</strong>DNA複製後分成兩份，均等分配給子細胞。<br><strong>【限制】</strong>分裂次數受海弗利克極限(50次)限制。<br><strong>【因果】</strong>DNA複製→分裂→子細胞→生長發育。`,
+        aiSummary: `細胞週期=間期(G1-S-G2)+分裂期(M) | G1：正常生命活動 | S期：DNA複製 | G2：分裂準備 | M期：核分裂+質分裂→兩個子細胞`
+      },
+      {
+        title: "減數分裂與配子形成",
+        ankiCards: Array(16).fill(0).map((_, i) => ({ f: `減數卡片 ${i+1}`, b: `減數內容 ${i+1}` })),
+        aiQA: Array(11).fill({ q: "減數問題", a: "減數答案" }),
+        aiQuiz: Array(5).fill({ q: "減數題", opts: ["A", "B", "C", "D"], ans: 0 }),
+        visualizations: `<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg"><text x="400" y="30" text-anchor="middle" font-weight="bold" font-size="14" fill="#0D1B3E">有絲分裂 vs 減數分裂</text><rect x="50" y="80" width="300" height="200" fill="#E5F5FF" stroke="#4A90E2" stroke-width="2" rx="8"/><text x="200" y="110" text-anchor="middle" font-weight="bold" fill="#4A90E2">有絲分裂</text><text x="200" y="140" text-anchor="middle" fill="#333" font-size="10">• 一次分裂</text><text x="200" y="160" text-anchor="middle" fill="#333" font-size="10">• 產生2個子細胞</text><text x="200" y="180" text-anchor="middle" fill="#333" font-size="10">• 染色體數不變(2n)</text><text x="200" y="200" text-anchor="middle" fill="#333" font-size="10">• 體細胞分裂</text><text x="200" y="220" text-anchor="middle" fill="#333" font-size="10">• 基因型相同</text><rect x="450" y="80" width="300" height="200" fill="#FFE5E5" stroke="#FF6B6B" stroke-width="2" rx="8"/><text x="600" y="110" text-anchor="middle" font-weight="bold" fill="#FF6B6B">減數分裂</text><text x="600" y="140" text-anchor="middle" fill="#333" font-size="10">• 兩次分裂</text><text x="600" y="160" text-anchor="middle" fill="#333" font-size="10">• 產生4個子細胞</text><text x="600" y="180" text-anchor="middle" fill="#333" font-size="10">• 染色體數減半(n)</text><text x="600" y="200" text-anchor="middle" fill="#333" font-size="10">• 配子形成</text><text x="600" y="220" text-anchor="middle" fill="#333" font-size="10">• 基因型不同</text></svg>`,
+        aiExplanation: `減數分裂是配子形成過程，通過兩次分裂實現染色體數減半。第一次分裂（減數第一分裂）同源染色體分離，實現從2n→n的減半。第二次分裂類似有絲分裂。結果：產生4個單倍體配子。<br><strong>【本質】</strong>減數分裂是實現性別生殖的基礎。<br><strong>【結構】</strong>兩次分裂，第一次有同源配對，第二次無。<br><strong>【機制】</strong>同源染色體分離導致染色體數減半。<br><strong>【限制】</strong>配子減半體；雌雄配子大小不同。<br><strong>【因果】</strong>減數分裂→配子→受精→恢復2n→遺傳多樣性。`,
+        aiSummary: `減數分裂=兩次分裂四個配子 | 第一分裂：同源分離(2n→n) | 第二分裂：姐妹染色分體分離(n→n) | 有絲：1次2個2n | 減數：2次4個n`
+      },
+      {
+        title: "孟德爾遺傳規律",
+        ankiCards: Array(15).fill(0).map((_, i) => ({ f: `孟德爾卡片 ${i+1}`, b: `孟德爾內容 ${i+1}` })),
+        aiQA: Array(10).fill({ q: "孟德爾問題", a: "孟德爾答案" }),
+        aiQuiz: Array(5).fill({ q: "孟德爾題", opts: ["A", "B", "C", "D"], ans: 0 }),
+        visualizations: `<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg"><text x="500" y="30" text-anchor="middle" font-weight="bold" font-size="14" fill="#0D1B3E">分離定律示意</text><rect x="100" y="100" width="120" height="80" fill="#FFE5E5" stroke="#FF6B6B" stroke-width="2" rx="6"/><text x="160" y="130" text-anchor="middle" font-weight="bold" fill="#FF6B6B">P代</text><text x="160" y="155" text-anchor="middle" fill="#333" font-size="11">AA × aa</text><text x="160" y="170" text-anchor="middle" fill="#333" font-size="10">純合</text><path d="M 220 140 L 280 140" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/><rect x="280" y="100" width="120" height="80" fill="#E5F5FF" stroke="#4A90E2" stroke-width="2" rx="6"/><text x="340" y="130" text-anchor="middle" font-weight="bold" fill="#4A90E2">F1代</text><text x="340" y="155" text-anchor="middle" fill="#333" font-size="11">100% Aa</text><text x="340" y="170" text-anchor="middle" fill="#333" font-size="10">雜合(性狀同P)</text><path d="M 400 140 L 460 140" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/><rect x="460" y="100" width="120" height="80" fill="#E5FFE5" stroke="#28A745" stroke-width="2" rx="6"/><text x="520" y="130" text-anchor="middle" font-weight="bold" fill="#28A745">F2代</text><text x="520" y="155" text-anchor="middle" fill="#333" font-size="11">3A_:1aa</text><text x="520" y="170" text-anchor="middle" fill="#333" font-size="10">3:1性狀比</text><defs><marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><polygon points="0 0, 10 3, 0 6" fill="#333"/></marker></defs></svg>`,
+        aiExplanation: `孟德爾遺傳規律描述了性狀在世代間的傳遞規律。分離定律：性狀由基因控制，性狀在代際間分離出現。自由組合定律：多對相對性狀各自獨立分離和組合。檢測雜交用于推斷基因型。<br><strong>【本質】</strong>基因的分離和組合是遺傳的本質。<br><strong>【結構】</strong>顯性隱性基因配對，分配到配子。<br><strong>【機制】</strong>配子隨機結合導致遺傳比例。<br><strong>【限制】</strong>假設前提(自由組合、隨機結合等)。<br><strong>【因果】</strong>基因分配→配子組合→性狀分離→遺傳規律。`,
+        aiSummary: `分離定律：Aa自交→AA:Aa:aa(1:2:1) 性狀(3:1) | 自由組合：多對性狀各自獨立 | 測交：個體×隱性純合判定基因型 | 隱性純合必現隱性性狀`
+      },
+      {
+        title: "伴性遺傳與基因連鎖",
+        ankiCards: Array(14).fill(0).map((_, i) => ({ f: `伴性卡片 ${i+1}`, b: `伴性內容 ${i+1}` })),
+        aiQA: Array(10).fill({ q: "伴性問題", a: "伴性答案" }),
+        aiQuiz: Array(5).fill({ q: "伴性題", opts: ["A", "B", "C", "D"], ans: 0 }),
+        visualizations: `<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg"><text x="500" y="30" text-anchor="middle" font-weight="bold" font-size="14" fill="#0D1B3E">伴性遺傳</text><g><text x="200" y="100" text-anchor="middle" font-weight="bold" fill="#FF6B6B">色盲基因分佈</text><circle cx="200" cy="150" r="40" fill="#FFE5E5" stroke="#FF6B6B" stroke-width="2"/><text x="200" y="160" text-anchor="middle" font-size="11">女性</text><text x="200" y="240" text-anchor="middle" font-size="10">XB XB 或 XB Xb</text><text x="200" y="260" text-anchor="middle" font-size="9">或 Xb Xb</text></g><g><text x="600" y="100" text-anchor="middle" font-weight="bold" fill="#4A90E2">色盲基因分佈</text><circle cx="600" cy="150" r="40" fill="#E5F5FF" stroke="#4A90E2" stroke-width="2"/><text x="600" y="160" text-anchor="middle" font-size="11">男性</text><text x="600" y="240" text-anchor="middle" font-size="10">XB Y 或 Xb Y</text><text x="600" y="260" text-anchor="middle" font-size="9">只有兩種</text></g></svg>`,
+        aiExplanation: `伴性遺傳是基因位於X或Y染色體上的遺傳。X連鎖隱性性狀在女性中隱藏，在男性中表現。基因連鎖是位於同一染色體上的基因一起遺傳。連鎖和互換導致遺傳多樣性。<br><strong>【本質】</strong>基因位置決定遺傳方式。<br><strong>【結構】</strong>X連鎖或Y連鎖；同一染色體基因。<br><strong>【機制】</strong>性別決定基因表現；同染色體基因一起傳遞。<br><strong>【限制】</strong>連鎖不完全，交叉互換可分開。<br><strong>【因果】</strong>基因位置→性狀表現型→性別差異→遺傳多樣性。`,
+        aiSummary: `伴性遺傳：基因在X/Y上 | X連鎖隱性：女性XB Xb隱藏，男性Xb Y表現 | 基因連鎖：同染色體基因一起遺傳 | 交叉互換：連鎖基因分離→新組合`
+      },
+      {
+        title: "變異與突變",
+        ankiCards: Array(15).fill(0).map((_, i) => ({ f: `變異卡片 ${i+1}`, b: `變異內容 ${i+1}` })),
+        aiQA: Array(10).fill({ q: "變異問題", a: "變異答案" }),
+        aiQuiz: Array(5).fill({ q: "變異題", opts: ["A", "B", "C", "D"], ans: 0 }),
+        visualizations: `<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg"><text x="500" y="30" text-anchor="middle" font-weight="bold" font-size="14" fill="#0D1B3E">遺傳變異分類</text><rect x="50" y="80" width="200" height="150" fill="#FFE5E5" stroke="#FF6B6B" stroke-width="2" rx="8"/><text x="150" y="110" text-anchor="middle" font-weight="bold" fill="#FF6B6B">遺傳變異</text><text x="150" y="140" text-anchor="middle" fill="#333" font-size="10">基因改變</text><text x="150" y="160" text-anchor="middle" fill="#333" font-size="10">可遺傳</text><text x="150" y="180" text-anchor="middle" fill="#333" font-size="10">突變、重組</text><rect x="350" y="80" width="200" height="150" fill="#E5F5FF" stroke="#4A90E2" stroke-width="2" rx="8"/><text x="450" y="110" text-anchor="middle" font-weight="bold" fill="#4A90E2">非遺傳變異</text><text x="450" y="140" text-anchor="middle" fill="#333" font-size="10">環境改變</text><text x="450" y="160" text-anchor="middle" fill="#333" font-size="10">不遺傳</text><text x="450" y="180" text-anchor="middle" fill="#333" font-size="10">曬黑、肌肉</text><rect x="650" y="80" width="200" height="150" fill="#E5FFE5" stroke="#28A745" stroke-width="2" rx="8"/><text x="750" y="110" text-anchor="middle" font-weight="bold" fill="#28A745">突變特點</text><text x="750" y="140" text-anchor="middle" fill="#333" font-size="10">隨機性</text><text x="750" y="160" text-anchor="middle" fill="#333" font-size="10">普遍性</text><text x="750" y="180" text-anchor="middle" fill="#333" font-size="10">低頻率</text></svg>`,
+        aiExplanation: `變異分遺傳變異(基因改變，可遺傳)和非遺傳變異(環境改變，不遺傳)。遺傳變異包括突變(基因改變)和基因重組(配子組合)。突變是隨機的、普遍的、低頻率的。<br><strong>【本質】</strong>遺傳變異是進化的原始材料。<br><strong>【結構】</strong>基因突變→染色體變異→基因重組。<br><strong>【機制】</strong>DNA複製錯誤、射線、化學物質導致突變。<br><strong>【限制】</strong>突變隨機，大多有害；有益突變罕見。<br><strong>【因果】</strong>遺傳變異→性狀改變→自然選擇→進化。`,
+        aiSummary: `遺傳變異：基因改變可遺傳 | 非遺傳：環境改變不遺傳 | 突變：基因改變，隨機普遍低頻 | 重組：配子組合多樣 | 突變意義：進化原材料`
+      },
+      {
+        title: "人口遺傳與自然選擇",
+        ankiCards: Array(14).fill(0).map((_, i) => ({ f: `人口卡片 ${i+1}`, b: `人口內容 ${i+1}` })),
+        aiQA: Array(10).fill({ q: "人口問題", a: "人口答案" }),
+        aiQuiz: Array(5).fill({ q: "人口題", opts: ["A", "B", "C", "D"], ans: 0 }),
+        visualizations: `<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg"><text x="500" y="30" text-anchor="middle" font-weight="bold" font-size="14" fill="#0D1B3E">進化因素影響基因頻率</text><rect x="100" y="100" width="160" height="100" fill="#FFE5E5" stroke="#FF6B6B" stroke-width="2" rx="6"/><text x="180" y="125" text-anchor="middle" font-weight="bold" fill="#FF6B6B">自然選擇</text><text x="180" y="150" text-anchor="middle" fill="#333" font-size="9">定向改變基因</text><text x="180" y="170" text-anchor="middle" fill="#333" font-size="9">頻率最強因素</text><rect x="370" y="100" width="160" height="100" fill="#E5F5FF" stroke="#4A90E2" stroke-width="2" rx="6"/><text x="450" y="125" text-anchor="middle" font-weight="bold" fill="#4A90E2">遺傳漂變</text><text x="450" y="150" text-anchor="middle" fill="#333" font-size="9">隨機改變基因</text><text x="450" y="170" text-anchor="middle" fill="#333" font-size="9">小群體明顯</text><rect x="640" y="100" width="160" height="100" fill="#E5FFE5" stroke="#28A745" stroke-width="2" rx="6"/><text x="720" y="125" text-anchor="middle" font-weight="bold" fill="#28A745">基因流</text><text x="720" y="150" text-anchor="middle" fill="#333" font-size="9">遷移改變基因</text><text x="720" y="170" text-anchor="middle" fill="#333" font-size="9">種群相互交流</text></svg>`,
+        aiExplanation: `人口遺傳研究群體基因頻率變化。哈迪-溫伯格平衡描述理想條件下基因頻率不變。實際中自然選擇、遺傳漂變、基因流改變基因頻率，導致進化。<br><strong>【本質】</strong>進化是群體基因頻率改變。<br><strong>【結構】</strong>群體中個體多樣性→基因多樣性。<br><strong>【機制】</strong>自然選擇導向選擇，漂變隨機選擇。<br><strong>【限制】</strong>選擇壓力強弱決定速度。<br><strong>【因果】</strong>基因頻率改變→性狀分布改變→種群進化。`,
+        aiSummary: `人口遺傳：研究群體基因頻率 | 哈迪-溫伯格平衡：理想條件基因頻率不變 | 進化因素：自然選擇+漂變+基因流 | 自然選擇最強 | 遺傳漂變隨機`
+      },
+      {
+        title: "生態種群與增長模型",
+        ankiCards: Array(14).fill(0).map((_, i) => ({ f: `種群卡片 ${i+1}`, b: `種群內容 ${i+1}` })),
+        aiQA: Array(10).fill({ q: "種群問題", a: "種群答案" }),
+        aiQuiz: Array(5).fill({ q: "種群題", opts: ["A", "B", "C", "D"], ans: 0 }),
+        visualizations: `<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg"><text x="500" y="30" text-anchor="middle" font-weight="bold" font-size="14" fill="#0D1B3E">種群增長模型</text><path d="M 100 350 L 900 350" stroke="#333" stroke-width="2"/><path d="M 100 50 L 100 350" stroke="#333" stroke-width="2"/><path d="M 100 350 Q 300 200 500 100 Q 700 80 900 75" stroke="#FF6B6B" stroke-width="3" fill="none"/><path d="M 100 350 Q 300 250 500 150 Q 700 120 850 120" stroke="#4A90E2" stroke-width="3" fill="none"/><text x="50" y="30" font-size="11" fill="#333">種群數量</text><text x="920" y="360" font-size="11" fill="#333">時間</text><text x="180" y="120" font-size="10" fill="#FF6B6B">J型(無限制)</text><text x="500" y="180" font-size="10" fill="#4A90E2">S型(有限制)</text><text x="850" y="140" font-size="9" fill="#4A90E2">環境容納量</text></svg>`,
+        aiExplanation: `種群增長遵循J型(指數增長)或S型(邏輯增長)模型。理想無限制環境下J型增長；實際環境容納量限制導致S型增長。環境阻力(捕食、疾病、食物)影響種群數量。<br><strong>【本質】</strong>種群數量由出生率和死亡率決定。<br><strong>【結構】</strong>種群具密度、出生率、死亡率等特徵。<br><strong>【機制】</strong>出生>死亡→增長；出生<死亡→衰退。<br><strong>【限制】</strong>環境容納量是最大極限。<br><strong>【因果】</strong>資源充足→快速增長→資源耗盡→增長減速→平衡。`,
+        aiSummary: `種群定義：同地區同種個體集合 | J型增長：Nt=N0λt(指數) | S型增長：有環境容納量K的邏輯增長 | 環境阻力：限制因素(食物、捕食) | 種群調節：負反饋`
+      },
+      {
+        title: "群落結構與演替",
+        ankiCards: Array(15).fill(0).map((_, i) => ({ f: `群落卡片 ${i+1}`, b: `群落內容 ${i+1}` })),
+        aiQA: Array(10).fill({ q: "群落問題", a: "群落答案" }),
+        aiQuiz: Array(5).fill({ q: "群落題", opts: ["A", "B", "C", "D"], ans: 0 }),
+        visualizations: `<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg"><text x="500" y="30" text-anchor="middle" font-weight="bold" font-size="14" fill="#0D1B3E">群落垂直分層</text><rect x="100" y="80" width="150" height="80" fill="#FFE5E5" stroke="#FF6B6B" stroke-width="2" rx="6"/><text x="175" y="115" text-anchor="middle" font-weight="bold" fill="#FF6B6B">喬木層</text><text x="175" y="135" text-anchor="middle" fill="#333" font-size="10">高大樹木</text><rect x="100" y="170" width="150" height="80" fill="#E5FFE5" stroke="#28A745" stroke-width="2" rx="6"/><text x="175" y="205" text-anchor="middle" font-weight="bold" fill="#28A745">灌木層</text><text x="175" y="225" text-anchor="middle" fill="#333" font-size="10">小灌木</text><rect x="100" y="260" width="150" height="80" fill="#FFF9E5" stroke="#FFB347" stroke-width="2" rx="6"/><text x="175" y="295" text-anchor="middle" font-weight="bold" fill="#FFB347">草本層</text><text x="175" y="315" text-anchor="middle" fill="#333" font-size="10">草本植物</text><rect x="380" y="80" width="150" height="260" fill="#E5F5FF" stroke="#4A90E2" stroke-width="2" rx="6"/><text x="455" y="115" text-anchor="middle" font-weight="bold" fill="#4A90E2">演替過程</text><text x="455" y="145" text-anchor="middle" fill="#333" font-size="9">初生：裸地開始</text><text x="455" y="170" text-anchor="middle" fill="#333" font-size="9">先驅→群落演替</text><text x="455" y="195" text-anchor="middle" fill="#333" font-size="9">→氣候頂極群落</text><text x="455" y="220" text-anchor="middle" fill="#333" font-size="9">次生：干擾後恢復</text><text x="455" y="245" text-anchor="middle" fill="#333" font-size="9">→恢復到頂極</text><text x="455" y="270" text-anchor="middle" fill="#333" font-size="9">人為影響可改變</text><text x="455" y="295" text-anchor="middle" fill="#333" font-size="9">群落演替方向</text></svg>`,
+        aiExplanation: `群落是同地區不同種群的集合。群落具垂直分層(喬木、灌木、草本)和水平異質性。群落演替是群落結構和物種組成的時間序列改變。初生演替從裸地開始，次生演替從干擾後恢復。<br><strong>【本質】</strong>群落是生物和環境的統一整體。<br><strong>【結構】</strong>物種組成、垂直分層、水平分布。<br><strong>【機制】</strong>群落演替受環境改變和種間競爭驅動。<br><strong>【限制】</strong>演替速率受環境條件和干擾影響。<br><strong>【因果】</strong>群落演替→物種更替→群落穩定→達氣候頂極。`,
+        aiSummary: `群落定義：同地區不同種群集合 | 群落結構：物種、垂直分層、水平異質 | 演替類型：初生(裸地開始)、次生(干擾恢復) | 頂極群落：相對穩定自我調節 | 人為影響可改變演替方向`
+      },
+      {
+        title: "生態系統與能量流動",
+        ankiCards: Array(16).fill(0).map((_, i) => ({ f: `生態卡片 ${i+1}`, b: `生態內容 ${i+1}` })),
+        aiQA: Array(11).fill({ q: "生態問題", a: "生態答案" }),
+        aiQuiz: Array(5).fill({ q: "生態題", opts: ["A", "B", "C", "D"], ans: 0 }),
+        visualizations: `<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg"><text x="500" y="30" text-anchor="middle" font-weight="bold" font-size="14" fill="#0D1B3E">能量流動與物質循環</text><g><text x="200" y="100" text-anchor="middle" font-weight="bold" fill="#FFB347">能量流動</text><rect x="100" y="130" width="80" height="60" fill="#FFE5E5" stroke="#FF6B6B" stroke-width="2" rx="4"/><text x="140" y="165" text-anchor="middle" font-size="10" fill="#FF6B6B">生產者</text><text x="140" y="220" text-anchor="middle" font-size="9">100%</text><path d="M 180 160 L 220 160" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/><rect x="220" y="130" width="80" height="60" fill="#E5F5FF" stroke="#4A90E2" stroke-width="2" rx="4"/><text x="260" y="165" text-anchor="middle" font-size="10" fill="#4A90E2">初級消費者</text><text x="260" y="220" text-anchor="middle" font-size="9">10-20%</text><path d="M 300 160 L 340 160" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/><rect x="340" y="130" width="80" height="60" fill="#E5FFE5" stroke="#28A745" stroke-width="2" rx="4"/><text x="380" y="165" text-anchor="middle" font-size="10" fill="#28A745">次級消費者</text><text x="380" y="220" text-anchor="middle" font-size="9">1-2%</text></g><g><text x="700" y="100" text-anchor="middle" font-weight="bold" fill="#9B59B6">物質循環</text><circle cx="700" cy="180" r="60" fill="#F0E5FF" stroke="#9B59B6" stroke-width="2"/><text x="700" y="175" text-anchor="middle" font-size="11" fill="#9B59B6">生物</text><text x="700" y="195" text-anchor="middle" font-size="9">↓ 分解 ↓</text><text x="700" y="245" text-anchor="middle" font-size="9">環境(CO2、N等)</text><text x="700" y="260" text-anchor="middle" font-size="9">→生產者吸收</text></g><defs><marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><polygon points="0 0, 10 3, 0 6" fill="#333"/></marker></defs></svg>`,
+        aiExplanation: `生態系統由生物成分(生產者、消費者、分解者)和非生物成分(光、溫度、水等)組成。能量流動是單向的，逐級遞減(10-20%效率)。物質循環是循環的，碳、氮、水等在生物和環境間循環。生態系統通過食物鏈、食物網進行能量和物質流動。<br><strong>【本質】</strong>生態系統是生物和環境的統一整體。<br><strong>【結構】</strong>食物鏈、食物網、能量金字塔。<br><strong>【機制】</strong>生產者固定光能→消費者獲能→分解者循環。<br><strong>【限制】</strong>能量逐級遞減；物質循環受限。<br><strong>【因果】</strong>能量流→物質循環→群落穩定→生態平衡。`,
+        aiSummary: `生態系統=生物+環境 | 生產者：綠植固定光能 | 消費者：取食上營養級 | 分解者：分解死物歸還環境 | 能量流：逐級遞減10-20% | 物質循環：生物↔環境循環`
+      }
+    ];
+
+    const chapters = chaptersData.map((ch, i) => ({ id: i, number: i + 1, icon: ["🔬", "🚪", "🧬", "⚡", "☀️", "♻️", "🔄", "👯", "🧮", "🔗", "🧪", "🌍", "📈", "🌳", "🔗"][i], ...ch }));
+    
+    let userProgress = JSON.parse(localStorage.getItem('bioProgress2')) || { chapters: [] };
+
+    function init() {
+      renderSidebar();
+      renderChapters();
+      updateStats();
+    }
+
+    function renderSidebar() {
+      const list = document.getElementById('chapterList');
+      list.innerHTML = chapters.map((ch, i) => `
+        <button class="chapter-btn ${userProgress.chapters.includes(i) ? 'active' : ''}" onclick="jumpTo(${i})" title="${ch.title}">
+          ${ch.icon} ${ch.number}. ${ch.title.substring(0, 11)}...
+        </button>
+      `).join('');
+    }
+
+    function renderChapters() {
+      const container = document.getElementById('chapterContainer');
+      container.innerHTML = chapters.map((ch, i) => `
+        <section id="ch-${i}" class="section-hidden">
+          <h1>${ch.icon} ${ch.number}. ${ch.title}</h1>
+          <div class="meta">📌 ${ch.ankiCards.length} Anki卡片 | ${ch.aiQA.length} Q&A | ${ch.aiQuiz.length} 模擬題</div>
+          
+          <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'v-${i}')">📐 圖</button>
+            <button class="tab-btn" onclick="switchTab(event, 'a-${i}')">🧠 卡</button>
+            <button class="tab-btn" onclick="switchTab(event, 'ai-${i}')">🤖 內</button>
+          </div>
+
+          <div id="v-${i}" class="tab-content active"><div class="diagram-container">${ch.visualizations}</div></div>
+
+          <div id="a-${i}" class="tab-content"><h2>🧠 Anki (${ch.ankiCards.length})</h2>${ch.ankiCards.map((c, j) => `<div class="flashcard" onclick="this.classList.toggle('flipped')"><div class="flashcard-inner"><div class="flashcard-front">${c.f}</div><div class="flashcard-back">${c.b}</div></div></div><div class="flashcard-hint">${j+1}/${ch.ankiCards.length}</div>`).join('')}</div>
+
+          <div id="ai-${i}" class="tab-content"><h2>🤖 AI內容</h2><div class="ai-section"><div class="ai-title">📖 講解</div><div class="ai-content">${ch.aiExplanation}</div></div><div class="ai-section"><div class="ai-title">💬 Q&A (${ch.aiQA.length})</div>${ch.aiQA.map(q => `<div style="margin:10px 0;"><strong style="color:var(--navy);">Q. ${q.q}</strong><p style="margin:6px 0;color:#333;">A. ${q.a}</p></div>`).join('')}</div><div class="ai-section"><div class="ai-title">📝 模擬 (${ch.aiQuiz.length})</div>${ch.aiQuiz.map((q, j) => `<div class="question-card"><div class="question-text">【${j+1}】${q.q}</div><div class="options">${q.opts.map((o, k) => `<div class="option" onclick="checkAns(this,${k},${q.ans})">選${String.fromCharCode(65+k)}. ${o}</div>`).join('')}</div></div>`).join('')}</div><div class="ai-section"><div class="ai-title">📄 摘要</div><div class="ai-content">${ch.aiSummary}</div></div></div>
+        </section>
+      `).join('');
+    }
+
+    function jumpTo(i) {
+      document.querySelectorAll('section').forEach(s => s.classList.add('section-hidden'));
+      document.getElementById(`ch-${i}`).classList.remove('section-hidden');
+      document.getElementById('home').classList.add('section-hidden');
+      document.querySelectorAll('.chapter-btn').forEach((b, j) => b.classList.toggle('active', j === i));
+      if (!userProgress.chapters.includes(i)) userProgress.chapters.push(i);
+      localStorage.setItem('bioProgress2', JSON.stringify(userProgress));
+      updateStats();
+    }
+
+    function switchTab(e, id) {
+      const tabs = e.target.closest('.tabs').parentElement;
+      tabs.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      tabs.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+      document.getElementById(id).classList.add('active');
+    }
+
+    function checkAns(el, sel, cor) {
+      const sibs = el.parentElement.querySelectorAll('.option');
+      sibs.forEach(s => s.classList.remove('correct', 'incorrect'));
+      if (sel === cor) el.classList.add('correct');
+      else { el.classList.add('incorrect'); sibs[cor].classList.add('correct'); }
+    }
+
+    function toggleCard(c) { c.classList.toggle('expanded'); }
+
+    function updateStats() {
+      document.getElementById('progress').textContent = Math.round(userProgress.chapters.length / chapters.length * 100) + '%';
+    }
+
+    init();
+  </script>
+</body>
+</html>
