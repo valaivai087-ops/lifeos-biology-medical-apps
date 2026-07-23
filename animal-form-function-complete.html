@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>普通生物學 - 動物基本構造與功能</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft JhengHei', 'Segoe UI', 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #0D1B3E 0%, #006B7D 50%, #B8860B 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        header .subtitle {
+            font-size: 20px;
+            opacity: 0.95;
+            font-weight: 300;
+            margin-bottom: 5px;
+        }
+        
+        header .professor {
+            font-size: 14px;
+            opacity: 0.85;
+            margin-top: 10px;
+        }
+        
+        nav {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 15px 20px;
+            background: linear-gradient(90deg, #f5f5f5 0%, #ffffff 100%);
+            border-bottom: 4px solid #B8860B;
+            position: sticky;
+            top: 140px;
+            z-index: 99;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .nav-btn {
+            padding: 12px 28px;
+            border: 2px solid #0D1B3E;
+            background-color: white;
+            color: #0D1B3E;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        
+        .nav-btn:hover {
+            background-color: #006B7D;
+            color: white;
+            border-color: #006B7D;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .nav-btn.active {
+            background: linear-gradient(135deg, #0D1B3E, #006B7D);
+            color: white;
+            border-color: #B8860B;
+            box-shadow: 0 6px 12px rgba(184,134,11,0.3);
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .chapter-title {
+            font-size: 32px;
+            color: #0D1B3E;
+            margin: 40px 0 25px 0;
+            padding: 15px 0 15px 20px;
+            border-left: 6px solid #B8860B;
+            border-bottom: 2px solid #006B7D;
+            font-weight: 700;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            color: #006B7D;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #B8860B;
+            font-weight: 600;
+        }
+        
+        .content-card {
+            background: white;
+            border-left: 5px solid #006B7D;
+            padding: 0;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .content-card:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+            transform: translateX(3px);
+        }
+        
+        .card-header {
+            background: linear-gradient(90deg, #f5f5f5, #ffffff);
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        
+        .card-header:hover {
+            background: linear-gradient(90deg, #e8e8e8, #f5f5f5);
+        }
+        
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0D1B3E;
+            margin: 0;
+        }
+        
+        .expand-icon {
+            font-size: 20px;
+            color: #006B7D;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+        
+        .content-card.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+        
+        .card-content {
+            display: none;
+            padding: 25px;
+            background-color: white;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 2000px;
+            }
+        }
+        
+        .content-card.expanded .card-content {
+            display: block;
+        }
+        
+        .bilingual-item {
+            margin: 18px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border-left: 4px solid #006B7D;
+        }
+        
+        .bilingual-item.highlight {
+            background-color: #fffef0;
+            border-left-color: #B8860B;
+        }
+        
+        .chinese-label {
+            font-weight: 600;
+            color: #0D1B3E;
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chinese-text {
+            color: #1a1a1a;
+            line-height: 1.8;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .english-label {
+            font-weight: 600;
+            color: #006B7D;
+            font-size: 15px;
+            margin-top: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .english-text {
+            color: #333;
+            font-style: italic;
+            margin-bottom: 0;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        
+        .speaker-icon {
+            display: inline-block;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            opacity: 0.7;
+        }
+        
+        .speaker-icon:hover {
+            opacity: 1;
+            transform: scale(1.2);
+            color: #B8860B;
+        }
+        
+        .speaker-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #006B7D, #0D1B3E);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 12px 8px 0 0;
+        }
+        
+        .speaker-btn:hover {
+            background: linear-gradient(135deg, #0D1B3E, #006B7D);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,107,125,0.3);
+        }
+        
+        .speaker-btn.playing {
+            background: linear-gradient(135deg, #B8860B, #8B6914);
+            box-shadow: 0 4px 12px rgba(184,134,11,0.4);
+        }
+        
+        .bullet-list {
+            margin-left: 25px;
+            margin-top: 12px;
+        }
+        
+        .bullet-list li {
+            margin: 12px 0;
+            font-size: 15px;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .sub-list {
+            margin-left: 35px;
+            margin-top: 10px;
+        }
+        
+        .sub-list li {
+            margin: 8px 0;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .comparison-table th {
+            background: linear-gradient(90deg, #0D1B3E, #006B7D);
+            color: white;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .comparison-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+        
+        .comparison-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #fffef0, #fffef5);
+            border-left: 4px solid #B8860B;
+            padding: 18px;
+            border-radius: 6px;
+            margin: 18px 0;
+            box-shadow: 0 2px 8px rgba(184,134,11,0.1);
+        }
+        
+        .highlight-box strong {
+            color: #0D1B3E;
+        }
+        
+        .question-card {
+            background: linear-gradient(135deg, #f0f7ff, #fff5f0);
+            border-left: 5px solid #0D1B3E;
+            padding: 0;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        
+        .question-header {
+            background: linear-gradient(90deg, #0D1B3E, #006B7D);
+            padding: 15px 20px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .question-number {
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .question-content {
+            display: none;
+            padding: 20px;
+        }
+        
+        .question-card.expanded .question-content {
+            display: block;
+        }
+        
+        .q-expand-icon {
+            transition: transform 0.3s ease;
+            font-size: 18px;
+        }
+        
+        .question-card.expanded .q-expand-icon {
+            transform: rotate(180deg);
+        }
+        
+        .question-text {
+            font-size: 16px;
+            margin-bottom: 18px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .question-text .english-part {
+            color: #006B7D;
+            font-style: italic;
+            font-weight: 600;
+        }
+        
+        .options {
+            margin-left: 20px;
+            margin-bottom: 18px;
+        }
+        
+        .option {
+            padding: 12px 15px;
+            margin: 10px 0;
+            background-color: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        .option:hover {
+            border-color: #B8860B;
+            background-color: #fffef0;
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            border-color: #B8860B;
+            background-color: #fffef0;
+            box-shadow: 0 2px 8px rgba(184,134,11,0.2);
+        }
+        
+        .answer-explanation {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            border-radius: 6px;
+            border-left: 4px solid #006B7D;
+            box-shadow: 0 2px 8px rgba(0,107,125,0.1);
+        }
+        
+        .question-card.answered .answer-explanation {
+            display: block;
+        }
+        
+        .answer-title {
+            font-weight: 700;
+            color: #0D1B3E;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        
+        .answer-text-zh {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        
+        .answer-text-en {
+            color: #006B7D;
+            font-style: italic;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-top: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #0D1B3E, #006B7D);
+            color: white;
+            margin-top: 60px;
+            font-size: 14px;
+            border-top: 4px solid #B8860B;
+        }
+        
+        footer p {
+            margin: 10px 0;
+        }
+        
+        footer .footer-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 28px;
+            }
+            
+            header .subtitle {
+                font-size: 16px;
+            }
+            
+            nav {
+                top: 120px;
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .nav-btn {
+                width: 100%;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .chapter-title {
+                font-size: 24px;
+                margin: 30px 0 20px 0;
+            }
+            
+            .section-title {
+                font-size: 20px;
+            }
+        }
+        
+        .print-hint {
+            text-align: center;
+            padding: 15px;
+            background-color: #fffef0;
+            border: 2px dashed #B8860B;
+            border-radius: 6px;
+            margin: 20px 0;
+            color: #0D1B3E;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🦁 普通生物學</h1>
+        <div class="subtitle">動物基本構造與功能</div>
+        <div class="subtitle">Animal Form and Function</div>
+        <div class="professor">台北醫學大學生理學科 | Taipei Medical University Department of Physiology</div>
+    </header>
+    
+    <nav>
+        <button class="nav-btn active" onclick="showSection('lecture')">📚 完整講義 Lecture</button>
+        <button class="nav-btn" onclick="showSection('questions')">✏️ 練習題 Practice Questions</button>
+    </nav>
+    
+    <div class="container">
+        <!-- 講義Section -->
+        <div id="lecture" class="section active">
+            <div class="print-hint">💡 提示：點擊卡片展開詳細內容 | Tip: Click cards to expand content</div>
+            
+            <!-- 第一章 -->
+            <div class="chapter-title">🔬 第一章：動物組織結構與功能<br>Chapter 1: Animal Tissues - Structure & Function</div>
+            
+            <!-- 學習目標 -->
+            <div class="content-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="card-title">📌 學習目標 | Learning Objectives</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-item highlight">
+                        <div class="chinese-label">✓ 學習目標 1</div>
+                        <div class="chinese-text">熟悉動物體的基本結構與功能</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('Understand the basic structure and function of animal bodies')">🔊</span> Learning Objective 1</div>
+                        <div class="english-text">Understand the basic structure and function of animal bodies</div>
+                    </div>
+                    
+                    <div class="bilingual-item highlight">
+                        <div class="chinese-label">✓ 學習目標 2</div>
+                        <div class="chinese-text">透過體溫與能量的調節，瞭解恆定對生物維持生命現象的重要性</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('Through temperature and energy regulation, understand the importance of homeostasis in maintaining life phenomena')">🔊</span> Learning Objective 2</div>
+                        <div class="english-text">Through temperature and energy regulation, understand the importance of homeostasis in maintaining life phenomena</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 基本概念 -->
+            <div class="content-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="card-title">🧬 基本概念 | Basic Concepts</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-item">
+                        <div class="chinese-label">📖 解剖學</div>
+                        <div class="chinese-text">解剖學（Anatomy）是研究動物的物理結構。</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('Anatomy is the study of an animals physical structure')">🔊</span> Anatomy</div>
+                        <div class="english-text">Anatomy is the study of an animal's physical structure.</div>
+                    </div>
+                    
+                    <div class="bilingual-item">
+                        <div class="chinese-label">📖 生理學</div>
+                        <div class="chinese-text">生理學（Physiology）是研究物理結構如何在生物體中發揮功能。</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('Physiology is the study of how physical structures function in an organism')">🔊</span> Physiology</div>
+                        <div class="english-text">Physiology is the study of how physical structures function in an organism.</div>
+                    </div>
+                    
+                    <div class="bilingual-item highlight">
+                        <div class="chinese-label">🔑 核心原理</div>
+                        <div class="chinese-text">比較性研究表明，形態和功能密切相關；不同的組織有不同的結構以適應其功能。</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('Comparative studies reveal that form and function are closely correlated; different tissues have different structures suited to their functions.')">🔊</span> Core Principle</div>
+                        <div class="english-text">Comparative studies reveal that form and function are closely correlated; different tissues have different structures suited to their functions.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 四種主要組織 -->
+            <div class="section-title">🧵 四種主要動物組織<br>Four Main Types of Animal Tissues</div>
+            
+            <!-- 上皮組織 -->
+            <div class="content-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="card-title">🛡️ 上皮組織 | Epithelial Tissue</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-item highlight">
+                        <div class="chinese-label">功能</div>
+                        <div class="chinese-text">覆蓋身體外部，並排列在身體內的器官和空腔內。</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('Covers the outside of the body and lines organs and cavities within the body')">🔊</span> Function</div>
+                        <div class="english-text">Covers the outside of the body and lines organs and cavities within the body.</div>
+                    </div>
+                    
+                    <div class="bilingual-item">
+                        <div class="chinese-label">🔷 細胞形狀</div>
+                        <div class="chinese-text">上皮細胞的形狀可分為三種：</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('The shape of epithelial cells can be classified into three types')">🔊</span> Cell Shape</div>
+                        <div class="english-text">The shape of epithelial cells can be classified into three types:</div>
+                        <ul class="bullet-list">
+                            <li><strong>立方型 | Cuboidal</strong> - 正方形排列 | Square arrangement</li>
+                            <li><strong>柱狀 | Columnar</strong> - 高柱形細胞 | Tall column-shaped cells</li>
+                            <li><strong>鱗狀 | Squamous</strong> - 扁平細胞 | Flattened cells</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bilingual-item">
+                        <div class="chinese-label">🏗️ 細胞排列方式</div>
+                        <div class="chinese-text">上皮細胞的排列方式可分為三種：</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('The arrangement of epithelial cells can be classified into three types')">🔊</span> Cell Arrangement</div>
+                        <div class="english-text">The arrangement of epithelial cells can be classified into three types:</div>
+                        <ul class="bullet-list">
+                            <li><strong>單層 | Simple</strong> - 單層細胞組成 | Single cell layer</li>
+                            <li><strong>多層 | Stratified</strong> - 多層細胞組成 | Multiple cell layers</li>
+                            <li><strong>假多層 | Pseudostratified</strong> - 看起來像多層但實際只有一層 | Appears multilayered but actually single layer</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bilingual-item highlight">
+                        <div class="chinese-label">⚙️ 結構特性</div>
+                        <div class="chinese-text">上皮細胞緊密相接，具有極性（分別面向體內和體外環境），並缺乏血管但有神經分佈。</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('Epithelial cells are tightly joined, have polarity facing internal and external environments, and lack blood vessels but have nerve distribution')">🔊</span> Structural Features</div>
+                        <div class="english-text">Epithelial cells are tightly joined, have polarity facing internal and external environments, and lack blood vessels but have nerve distribution.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 結締組織 -->
+            <div class="content-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="card-title">🔗 結締組織 | Connective Tissue</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-item highlight">
+                        <div class="chinese-label">功能</div>
+                        <div class="chinese-text">包含稀疏分散在結締組織基質中的細胞，主要用於綁定和支持。</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('Contains sparsely packed cells scattered throughout a matrix, mainly used for binding and support')">🔊</span> Function</div>
+                        <div class="english-text">Contains sparsely packed cells scattered throughout a matrix, mainly used for binding and support.</div>
+                    </div>
+                    
+                    <div class="bilingual-item">
+                        <div class="chinese-label">🧵 三種纖維類型</div>
+                        <div class="chinese-text">結締組織中的蛋白質纖維有三種：</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('There are three types of protein fibers in connective tissue')">🔊</span> Three Types of Fibers</div>
+                        <div class="english-text">There are three types of protein fibers in connective tissue:</div>
+                        <ul class="bullet-list">
+                            <li><strong>膠原纖維 | Collagenous Fibers</strong> - 含膠原蛋白，提供強度，未分支 | Contain collagen, provide strength, unbranched</li>
+                            <li><strong>網狀纖維 | Reticular Fibers</strong> - 細而高度分支，形成網絡 | Thin and highly branched, form networks</li>
+                            <li><strong>彈性纖維 | Elastic Fibers</strong> - 含彈性蛋白，具有彈性 | Contain elastin, provide elasticity</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bilingual-item">
+                        <div class="chinese-label">🏥 主要類型</div>
+                        <ul class="bullet-list">
+                            <li><strong>疏鬆結締組織 | Loose Connective Tissue</strong> - 綁定並支持其他組織</li>
+                            <li><strong>纖維結締組織 | Fibrous Connective Tissue</strong> - 肌腱和韌帶中發現</li>
+                            <li><strong>脂肪組織 | Adipose Tissue</strong> - 儲存能量並提供絕緣</li>
+                            <li><strong>軟骨 | Cartilage</strong> - 強韌且有彈性的支持材料</li>
+                            <li><strong>骨 | Bone</strong> - 最堅硬的結締組織，形成骨骼</li>
+                            <li><strong>血液 | Blood</strong> - 細胞嵌入液體基質中</li>
+                        </ul>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('The main types include loose connective tissue, fibrous connective tissue, adipose tissue, cartilage, bone, and blood')">🔊</span> Main Types</div>
+                    </li>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 肌肉組織 -->
+            <div class="content-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="card-title">💪 肌肉組織 | Muscle Tissue</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-item highlight">
+                        <div class="chinese-label">功能</div>
+                        <div class="chinese-text">由肌肉纖維組成，響應神經信號而收縮，在運動中發揮作用。</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('Consists of muscle fibers that contract in response to nerve signals and function in movement')">🔊</span> Function</div>
+                        <div class="english-text">Consists of muscle fibers that contract in response to nerve signals and function in movement.</div>
+                    </div>
+                    
+                    <div class="bilingual-item">
+                        <div class="chinese-label">🏋️ 三種肌肉類型</div>
+                        <ul class="bullet-list">
+                            <li><strong>骨骼肌 | Skeletal Muscle</strong><br>
+                                自主控制 | Voluntary control | 長條紋纖維 | Striated fibers | 附著在骨骼上 | Attached to bones</li>
+                            <li><strong>平滑肌 | Smooth Muscle</strong><br>
+                                非自主控制 | Involuntary control | 無紋理 | Non-striated | 位於血管和內臟 | Found in blood vessels and organs</li>
+                            <li><strong>心肌 | Cardiac Muscle</strong><br>
+                                非自主控制 | Involuntary control | 有紋理 | Striated | 形成心臟 | Forms the heart</li>
+                        </ul>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('There are three types of muscle: skeletal muscle which is voluntary and striated, smooth muscle which is involuntary and non-striated, and cardiac muscle which is involuntary and striated')">🔊</span> Three Types</div>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <strong>肌動蛋白和肌球蛋白</strong><br>
+                        骨骼肌細胞包含專門的蛋白質細絲。肌動蛋白（薄細絲）和肌球蛋白（厚細絲）相互作用以響應磷酸化而移動。<br><br>
+                        <strong style="color: #006B7D; display: block; margin-top: 12px;">🔊 <span class="speaker-icon" onclick="speakText('Actin and myosin - Skeletal muscle cells contain specialized protein filaments. Actin thin filaments and myosin thick filaments interact to move in response to phosphorylation')">🔊</span> Actin and Myosin:</strong><br>
+                        <span style="font-style: italic; color: #333;">Skeletal muscle cells contain specialized protein filaments. Actin thin filaments and myosin thick filaments interact to move in response to phosphorylation.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 神經組織 -->
+            <div class="content-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="card-title">🧠 神經組織 | Nervous Tissue</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-item highlight">
+                        <div class="chinese-label">功能</div>
+                        <div class="chinese-text">感知刺激並在全身傳導信號。</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('Senses stimuli and transmits signals throughout the animal body')">🔊</span> Function</div>
+                        <div class="english-text">Senses stimuli and transmits signals throughout the animal body.</div>
+                    </div>
+                    
+                    <div class="bilingual-item">
+                        <div class="chinese-label">🔌 主要組成</div>
+                        <div class="chinese-text">神經組織由神經元和神經支持細胞組成：</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('Nervous tissue consists of neurons and supporting cells')">🔊</span> Main Components</div>
+                        <div class="english-text">Nervous tissue consists of neurons and supporting cells:</div>
+                        <ul class="bullet-list">
+                            <li><strong>神經元 | Neurons</strong> - 傳輸神經脈衝的神經細胞
+                                <ul class="sub-list">
+                                    <li>樹突 | Dendrites - 接收信號 | Receive signals</li>
+                                    <li>胞體 | Cell body - 包含核 | Contains nucleus</li>
+                                    <li>軸突 | Axon - 發送信號 | Transmit signals</li>
+                                </ul>
+                            </li>
+                            <li><strong>神經支持細胞 | Support Cells</strong> - 支持和絕緣神經元</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <strong>突觸傳遞</strong><br>
+                        神經末梢和另一細胞膜之間的突觸間隙約50nm。當神經衝動到達軸突末端時，神經傳遞物質被釋放到突觸間隙中。<br><br>
+                        <strong style="color: #006B7D; display: block; margin-top: 12px;">🔊 <span class="speaker-icon" onclick="speakText('Synaptic transmission - The synaptic gap between an axon terminal and another cell membrane is about fifty nanometers. When a nerve impulse reaches the axon terminal, neurotransmitters are released into the synaptic gap')">🔊</span> Synaptic Transmission:</strong><br>
+                        <span style="font-style: italic; color: #333;">The synaptic gap between an axon terminal and another cell membrane is about fifty nanometers. When a nerve impulse reaches the axon terminal, neurotransmitters are released into the synaptic gap.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 體內平衡 -->
+            <div class="chapter-title">⚖️ 第二章：體內平衡與調節<br>Chapter 2: Homeostasis and Regulation</div>
+            
+            <div class="content-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="card-title">⚙️ 體內平衡 | Homeostasis</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-item highlight">
+                        <div class="chinese-label">定義</div>
+                        <div class="chinese-text">恆定是維持動物細胞、組織和器官的相對恆定的化學和物理條件或"穩定狀態"的維持。</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('Homeostasis is the maintenance of relatively constant chemical and physical conditions or steady state in an animals cells tissues and organs')">🔊</span> Definition</div>
+                        <div class="english-text">Homeostasis is the maintenance of relatively constant chemical and physical conditions or steady state in an animal's cells, tissues, and organs.</div>
+                    </div>
+                    
+                    <div class="bilingual-item">
+                        <div class="chinese-label">🔄 調節機制</div>
+                        <ul class="bullet-list">
+                            <li><strong>正反饋 | Positive Feedback</strong> - 放大信號或反應。例如：分娩期間子宮收縮增加 | Amplifies signal or response. Example: Increased uterine contractions during labor</li>
+                            <li><strong>負反饋 | Negative Feedback</strong> - 主要恆定機制，使變量接近設定值。例如：體溫調節 | Primary homeostatic mechanism, keeps variable near set point. Example: Temperature regulation</li>
+                        </ul>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('There are two main feedback mechanisms in homeostasis: positive feedback which amplifies responses, and negative feedback which is the primary mechanism that keeps variables near their set point')">🔊</span> Regulatory Mechanisms</div>
+                    </div>
+                    
+                    <div class="bilingual-item">
+                        <div class="chinese-label">🫀 器官系統對恆定的貢獻</div>
+                        <ul class="bullet-list">
+                            <li><strong>消化系統 | Digestive System</strong> - 食物處理（攝取、消化、吸收、排除）</li>
+                            <li><strong>呼吸系統 | Respiratory System</strong> - 氧氣/二氧化碳交換</li>
+                            <li><strong>肝臟 | Liver</strong> - 血糖/胰島素調節血糖水平</li>
+                            <li><strong>腎臟 | Kidneys</strong> - 滲透壓、pH調節</li>
+                        </ul>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('Organ systems contribute to homeostasis through various processes including digestion, respiration, blood glucose regulation, and osmoregulation')">🔊</span> Organ System Contributions</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 體溫調節 -->
+            <div class="content-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="card-title">🌡️ 體溫調節 | Thermoregulation</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-item highlight">
+                        <div class="chinese-label">🦎 動物分類</div>
+                        <div class="chinese-text"><strong>內溫動物（恆溫動物）</strong>保持恆定的體溫；<strong>外溫動物（變溫動物）</strong>經歷身體溫度隨環境變化。</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('Endotherms keep their body temperature constant; ectotherms experience changes in body temperature with their environment')">🔊</span> Animal Classification</div>
+                        <div class="english-text">Endotherms keep their body temperature constant; ectotherms experience changes in body temperature with their environment.</div>
+                    </div>
+                    
+                    <div class="bilingual-item">
+                        <div class="chinese-label">🛡️ 五種適應方式</div>
+                        <div class="chinese-text">幫助動物體溫調節的五種適應方式：</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('There are five main adaptations that help animals thermoregulate: insulation, evaporative cooling, circulatory adaptations, behavioral responses, and adjusting metabolic heat production')">🔊</span> Five Adaptations</div>
+                        <div class="english-text">There are five main adaptations that help animals thermoregulate:</div>
+                        <ul class="bullet-list">
+                            <li><strong>隔離（絕緣）| Insulation</strong> - 哺乳動物和鳥類通過皮膚、毛髮和羽毛進行隔離</li>
+                            <li><strong>蒸發冷卻 | Evaporative Heat Loss</strong> - 許多動物通過皮膚蒸發失去熱量</li>
+                            <li><strong>循環適應 | Circulatory Adaptations</strong> - 動物具有逆流熱交換器</li>
+                            <li><strong>行為反應 | Behavioral Responses</strong> - 内溫和外溫動物都使用行為反應</li>
+                            <li><strong>代謝熱生成 | Metabolic Heat Production</strong> - 肌肉活動或非顫抖產熱</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 動物大小和形態 -->
+            <div class="chapter-title">📐 第三章：動物大小、形態與進化<br>Chapter 3: Animal Size, Form and Evolution</div>
+            
+            <div class="content-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="card-title">📏 表面積與體積的關係 | Surface Area-to-Volume Ratio</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-item highlight">
+                        <div class="chinese-label">核心原理</div>
+                        <div class="chinese-text">隨著細胞變大，其體積增加速度遠快於其表面積。因此，當細胞變大時，跨越細胞膜發生的運輸過程必須支持不成比例地增加更多的細胞體積。</div>
+                        <div class="english-label">🔊 <span class="speaker-icon" onclick="speakText('As a cell gets larger, its volume increases much faster than its surface area. Transport processes across the cell membrane must support disproportionately more cell volume as cell size increases')">🔊</span> Core Principle</div>
+                        <div class="english-text">As a cell gets larger, its volume increases much faster than its surface area. Transport processes across the cell membrane must support disproportionately more cell volume as cell size increases.</div>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <strong>例子 | Example：</strong><br>
+                        鰓具有扁平的薄膜狀結構（鰓片），器官具有極高的表面積與體積比。擴散可以快速進行，足以跟上發育中魚類體積的增長。<br><br>
+                        <strong style="color: #006B7D; display: block; margin-top: 12px;">🔊 <span class="speaker-icon" onclick="speakText('Gills have flattened sheet-like structures that provide extremely high surface area to volume ratios. Diffusion can occur rapidly enough to keep up with volume growth in developing fish')">🔊</span> </strong><br>
+                        <span style="font-style: italic; color: #333;">Gills have flattened sheet-like structures that provide extremely high surface area to volume ratios. Diffusion can occur rapidly enough to keep up with volume growth in developing fish.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 練習題Section -->
+        <div id="questions" class="section">
+            <div class="print-hint">💡 提示：點擊題目展開選項 | Tip: Click questions to expand options | 🔊 點擊「說」按鈕聆聽英文 | Click speaker icons to hear English</div>
+            
+            <div class="chapter-title">✏️ 互動練習題<br>Practice Questions</div>
+            
+            <!-- 題目1 -->
+            <div class="question-card" onclick="toggleQuestion(this)" id="q1">
+                <div class="question-header">
+                    <div class="question-number">Question 1 | 題目 1</div>
+                    <span class="q-expand-icon">▼</span>
+                </div>
+                <div class="question-content">
+                    <div class="question-text">
+                        <strong>英文 | English：</strong><br>
+                        <span class="english-part">These data show that the organism tested can be categorized as an osmo ____ and a thermal ____</span><br><br>
+                        <strong>中文 | Chinese：</strong><br>
+                        這些數據表明被測試的生物可以分類為滲透 ____ 和熱 ____
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(event, 'q1', 'a')">
+                            <strong>A)</strong> Conformer; regulator | 順應者；調節者
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q1', 'b')">
+                            <strong>B)</strong> Regulator; conformer | 調節者；順應者
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q1', 'c')">
+                            <strong>C)</strong> Conformer; conformer | 順應者；順應者
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q1', 'd')">
+                            <strong>D)</strong> Regulator; regulator | 調節者；調節者
+                        </div>
+                    </div>
+                    <div class="answer-explanation">
+                        <div class="answer-title">✓ 正確答案 | Correct Answer: B) Regulator; conformer</div>
+                        <div class="answer-text-zh">根據圖表，該生物在鹽度變化時保持內部鹽度相對恆定（調節者），但在溫度變化時其內部溫度跟隨環境變化（順應者）。</div>
+                        <div class="answer-text-en">🔊 <span class="speaker-icon" onclick="speakText('Based on the graph, the organism maintains relatively constant internal salt levels when external salinity changes, making it an osmoregulator, but its internal temperature follows environmental changes, making it a thermal conformer')">🔊</span> Based on the graph, the organism maintains relatively constant internal salt levels when external salinity changes, making it an osmoregulator, but its internal temperature follows environmental changes, making it a thermal conformer.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 題目2 -->
+            <div class="question-card" onclick="toggleQuestion(this)" id="q2">
+                <div class="question-header">
+                    <div class="question-number">Question 2 | 題目 2</div>
+                    <span class="q-expand-icon">▼</span>
+                </div>
+                <div class="question-content">
+                    <div class="question-text">
+                        <strong>英文 | English：</strong><br>
+                        <span class="english-part">Which is the best interpretation of these data?</span><br><br>
+                        <strong>中文 | Chinese：</strong><br>
+                        以下哪個是對這些數據的最佳解釋？
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(event, 'q2', 'a')">
+                            <strong>A)</strong> Maia, the spider crab, is an osmoconformer in salt water but is capable of precise osmoregulation in fresh water
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q2', 'b')">
+                            <strong>B)</strong> Nereis, the clam worm, is an osmoconformer in fresh water and is capable of precise osmoregulation in brackish water
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q2', 'c')">
+                            <strong>C)</strong> Carcinus, the shore crab, is capable of precise osmoregulation in brackish water and fresh water
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q2', 'd')">
+                            <strong>D)</strong> All three crabs are precise osmoregulators in all three environments
+                        </div>
+                    </div>
+                    <div class="answer-explanation">
+                        <div class="answer-title">✓ 正確答案 | Correct Answer: C) Carcinus, the shore crab</div>
+                        <div class="answer-text-zh">根據圖表，岸蟹（Carcinus）在鹹水、半鹹水和淡水中都能保持相對恆定的滲透壓，表明它能在各種環境中精確調節。</div>
+                        <div class="answer-text-en">🔊 <span class="speaker-icon" onclick="speakText('Based on the graph, the shore crab maintains relatively constant osmotic pressure in salt water, brackish water, and fresh water, indicating it can regulate precisely in various environments')">🔊</span> Based on the graph, the shore crab maintains relatively constant osmotic pressure in salt water, brackish water, and fresh water, indicating it can regulate precisely in various environments.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 題目3 -->
+            <div class="question-card" onclick="toggleQuestion(this)" id="q3">
+                <div class="question-header">
+                    <div class="question-number">Question 3 | 題目 3</div>
+                    <span class="q-expand-icon">▼</span>
+                </div>
+                <div class="question-content">
+                    <div class="question-text">
+                        <strong>英文 | English：</strong><br>
+                        <span class="english-part">If thermoregulation is considered to be a secondary function of the large ears of jackrabbits, then the primary function of the ears is</span><br><br>
+                        <strong>中文 | Chinese：</strong><br>
+                        如果體溫調節被認為是大耳朵兔主要功能的次要功能，那麼耳朵的主要功能是
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(event, 'q3', 'a')">
+                            <strong>A)</strong> to optimize nutrient intake through the thin, permeable surfaces on the ears
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q3', 'b')">
+                            <strong>B)</strong> to protect against pathogens by having a thick, waxy surface on the ears
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q3', 'c')">
+                            <strong>C)</strong> to protect offspring from bright sunlight by positioning of the ears to cast the maximum shadows
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q3', 'd')">
+                            <strong>D)</strong> to detect predators by using the large size and flexible positioning of the external ears to channel sound waves into the ear canal | 通過使用大尺寸和靈活的外耳定位將聲波傳遞到耳道中來檢測捕食者
+                        </div>
+                    </div>
+                    <div class="answer-explanation">
+                        <div class="answer-title">✓ 正確答案 | Correct Answer: D) to detect predators</div>
+                        <div class="answer-text-zh">如果體溫調節是耳朵的次要功能，那麼主要功能應該是其原始設計目的——偵測掠食者和感知聲音。大型、靈活的耳朵設計完全適合這個目的。</div>
+                        <div class="answer-text-en">🔊 <span class="speaker-icon" onclick="speakText('If thermoregulation is the secondary function of jackrabbit ears, the primary function is their original design purpose: detecting predators and sensing sound. Large, flexible ears are perfectly designed for this purpose')">🔊</span> If thermoregulation is the secondary function of jackrabbit ears, the primary function is their original design purpose: detecting predators and sensing sound. Large, flexible ears are perfectly designed for this purpose.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 題目4 -->
+            <div class="question-card" onclick="toggleQuestion(this)" id="q4">
+                <div class="question-header">
+                    <div class="question-number">Question 4 | 題目 4</div>
+                    <span class="q-expand-icon">▼</span>
+                </div>
+                <div class="question-content">
+                    <div class="question-text">
+                        <strong>英文 | English：</strong><br>
+                        <span class="english-part">Which of the following is an example of a negative feedback response?</span><br><br>
+                        <strong>中文 | Chinese：</strong><br>
+                        以下哪一個是負反饋反應的例子？
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(event, 'q4', 'a')">
+                            <strong>A)</strong> As the uterus contracts in labor and delivery, more oxytocin is released to intensify uterine contractions until birth occurs | 隨著分娩期間子宮收縮，釋放更多催產素以加強子宮收縮直到分娩發生
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q4', 'b')">
+                            <strong>B)</strong> Meerkats bask in the sun in the cool mornings but avoid the sun during the heat of the day | 狐獴在涼爽的早晨在陽光下休息，但在白天炎熱時避免陽光
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q4', 'c')">
+                            <strong>C)</strong> Sexual stimulation leads to sexual arousal | 性刺激導致性喚起
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q4', 'd')">
+                            <strong>D)</strong> A nursing baby stimulates the release of oxytocin, which causes letdown of milk | 哺乳嬰兒刺激催產素的釋放，導致乳汁流出
+                        </div>
+                    </div>
+                    <div class="answer-explanation">
+                        <div class="answer-title">✓ 正確答案 | Correct Answer: D) A nursing baby stimulates the release of oxytocin</div>
+                        <div class="answer-text-zh">這是負反饋的例子。嬰兒吸奶刺激催產素的釋放，導致乳汁流出，然後當嬰兒獲得足夠的乳汁時，刺激停止。這種反應將系統恢復到平衡狀態。A 選項是正反饋。</div>
+                        <div class="answer-text-en">🔊 <span class="speaker-icon" onclick="speakText('This is an example of negative feedback. A nursing baby stimulates oxytocin release, causing milk letdown. When the baby receives sufficient milk, the stimulus stops, restoring the system to balance. Choice A is positive feedback')">🔊</span> This is an example of negative feedback. A nursing baby stimulates oxytocin release, causing milk letdown. When the baby receives sufficient milk, the stimulus stops, restoring the system to balance. Choice A is positive feedback.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 題目5 -->
+            <div class="question-card" onclick="toggleQuestion(this)" id="q5">
+                <div class="question-header">
+                    <div class="question-number">Question 5 | 題目 5</div>
+                    <span class="q-expand-icon">▼</span>
+                </div>
+                <div class="question-content">
+                    <div class="question-text">
+                        <strong>英文 | English：</strong><br>
+                        <span class="english-part">You measure body temperatures of desert animals at 7 AM and again at 2 PM. Which animal is most likely endothermic?</span><br><br>
+                        <strong>中文 | Chinese：</strong><br>
+                        你在上午7點和下午2點測量沙漠動物的體溫。哪種動物最可能是內溫動物？
+                    </div>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Animal | 動物</th>
+                            <th>7 AM | 上午7點</th>
+                            <th>2 PM | 下午2點</th>
+                        </tr>
+                        <tr>
+                            <td>Snake | 蛇</td>
+                            <td>77° F | 25° C</td>
+                            <td>87° F | 31° C</td>
+                        </tr>
+                        <tr>
+                            <td>Mouse | 小鼠</td>
+                            <td>100° F | 37.8° C</td>
+                            <td>99° F | 37.2° C</td>
+                        </tr>
+                        <tr>
+                            <td>Lizard | 蜥蜴</td>
+                            <td>80° F | 26.7° C</td>
+                            <td>105° F | 40.6° C</td>
+                        </tr>
+                        <tr>
+                            <td>Beetle | 甲蟲</td>
+                            <td>72° F | 22.2° C</td>
+                            <td>102° F | 38.9° C</td>
+                        </tr>
+                    </table>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(event, 'q5', 'a')">
+                            <strong>A)</strong> Snake | 蛇
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q5', 'b')">
+                            <strong>B)</strong> Mouse | 小鼠
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q5', 'c')">
+                            <strong>C)</strong> Lizard | 蜥蜴
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q5', 'd')">
+                            <strong>D)</strong> Beetle | 甲蟲
+                        </div>
+                    </div>
+                    <div class="answer-explanation">
+                        <div class="answer-title">✓ 正確答案 | Correct Answer: B) Mouse</div>
+                        <div class="answer-text-zh">小鼠的體溫在上午和下午之間保持相對恆定（100°F 到 99°F），這表明它是內溫動物（產生自己的熱量）。相比之下，蛇、蜥蜴和甲蟲的溫度隨著環境溫度的變化而變化，表明它們是外溫動物。</div>
+                        <div class="answer-text-en">🔊 <span class="speaker-icon" onclick="speakText('The mouse maintains relatively constant body temperature between morning and afternoon, which indicates it is an endotherm that produces its own heat. In contrast, the snake, lizard, and beetle show temperature changes following environmental temperature changes, indicating they are ectotherms')">🔊</span> The mouse maintains relatively constant body temperature between morning and afternoon, which indicates it is an endotherm that produces its own heat. In contrast, the snake, lizard, and beetle show temperature changes following environmental temperature changes, indicating they are ectotherms.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 題目6 -->
+            <div class="question-card" onclick="toggleQuestion(this)" id="q6">
+                <div class="question-header">
+                    <div class="question-number">Question 6 | 題目 6</div>
+                    <span class="q-expand-icon">▼</span>
+                </div>
+                <div class="question-content">
+                    <div class="question-text">
+                        <strong>英文 | English：</strong><br>
+                        <span class="english-part">The sea star Porcellanaester ceruleus is found exclusively in the deep sea where the water temperature is around 4° C year round. How would you classify this organism?</span><br><br>
+                        <strong>中文 | Chinese：</strong><br>
+                        海星Porcellanaester ceruleus專門生活在深海，全年水溫約為4°C。你如何分類這個生物？
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(event, 'q6', 'a')">
+                            <strong>A)</strong> Endothermic homeotherm | 內溫恆溫動物
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q6', 'b')">
+                            <strong>B)</strong> Endothermic poikilotherm | 內溫變溫動物
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q6', 'c')">
+                            <strong>C)</strong> Ectothermic homeotherm | 外溫恆溫動物
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q6', 'd')">
+                            <strong>D)</strong> Ectothermic poikilotherm | 外溫變溫動物
+                        </div>
+                    </div>
+                    <div class="answer-explanation">
+                        <div class="answer-title">✓ 正確答案 | Correct Answer: C) Ectothermic homeotherm</div>
+                        <div class="answer-text-zh">海星是外溫動物（不產生自己的熱量），但由於它生活在溫度全年穩定的深海中，它實際上是一個恆溫的生物。它無需調節就保持恆定的體溫，因為其環境溫度全年都很穩定。</div>
+                        <div class="answer-text-en">🔊 <span class="speaker-icon" onclick="speakText('Sea stars are ectothermic animals that do not produce their own heat, but because they live in the deep sea where temperature is stable year-round at 4 degrees Celsius, they are effectively homeothermic. They maintain constant body temperature without active regulation because their environment is already stable')">🔊</span> Sea stars are ectothermic animals that do not produce their own heat, but because they live in the deep sea where temperature is stable year-round at 4 degrees Celsius, they are effectively homeothermic. They maintain constant body temperature without active regulation because their environment is already stable.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 題目7 -->
+            <div class="question-card" onclick="toggleQuestion(this)" id="q7">
+                <div class="question-header">
+                    <div class="question-number">Question 7 | 題目 7</div>
+                    <span class="q-expand-icon">▼</span>
+                </div>
+                <div class="question-content">
+                    <div class="question-text">
+                        <strong>英文 | English：</strong><br>
+                        <span class="english-part">Naked mole rats have no fur, poorly developed subcutaneous fat, no sweat glands, and permeable skin. Body temperature stays only slightly above ambient over a range. How would you classify this mammal?</span><br><br>
+                        <strong>中文 | Chinese：</strong><br>
+                        裸鼴鼠沒有毛髮、皮下脂肪發育不良、沒有汗腺，皮膚可滲透。體溫在一定範圍內只略高於環境溫度。你如何分類這種哺乳動物？
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(event, 'q7', 'a')">
+                            <strong>A)</strong> Endothermic homeotherm | 內溫恆溫動物
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q7', 'b')">
+                            <strong>B)</strong> Ectothermic poikilotherm | 外溫變溫動物
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q7', 'c')">
+                            <strong>C)</strong> Ectothermic homeotherm | 外溫恆溫動物
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q7', 'd')">
+                            <strong>D)</strong> Endothermic poikilotherm | 內溫變溫動物
+                        </div>
+                    </div>
+                    <div class="answer-explanation">
+                        <div class="answer-title">✓ 正確答案 | Correct Answer: B) Ectothermic poikilotherm</div>
+                        <div class="answer-text-zh">儘管裸鼴鼠是哺乳動物，它們缺乏典型的哺乳動物的溫度調節特徵（毛皮、脂肪層、汗腺）。它們的體溫跟隨環境溫度變化，這使它們成為外溫生物和變溫動物。這是哺乳動物中的異常情況。</div>
+                        <div class="answer-text-en">🔊 <span class="speaker-icon" onclick="speakText('Although naked mole rats are mammals, they lack the typical mammalian features for temperature regulation: fur, subcutaneous fat, and sweat glands. Their body temperature follows environmental temperature changes, making them ectothermic poikilotherms - an unusual case among mammals')">🔊</span> Although naked mole rats are mammals, they lack the typical mammalian features for temperature regulation: fur, subcutaneous fat, and sweat glands. Their body temperature follows environmental temperature changes, making them ectothermic poikilotherms - an unusual case among mammals.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 題目8 -->
+            <div class="question-card" onclick="toggleQuestion(this)" id="q8">
+                <div class="question-header">
+                    <div class="question-number">Question 8 | 題目 8</div>
+                    <span class="q-expand-icon">▼</span>
+                </div>
+                <div class="question-content">
+                    <div class="question-text">
+                        <strong>英文 | English：</strong><br>
+                        <span class="english-part">The best time to measure basal metabolic rate is</span><br><br>
+                        <strong>中文 | Chinese：</strong><br>
+                        測量基礎代謝率的最佳時間是
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(event, 'q8', 'a')">
+                            <strong>A)</strong> Prior to a human baby's first meal of the day | 在人類嬰兒進食第一餐之前
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q8', 'b')">
+                            <strong>B)</strong> Just after a lizard's third meal of the day | 蜥蜴進食第三餐後
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q8', 'c')">
+                            <strong>C)</strong> While an adult human is watching TV after a meal | 成人在進食後看電視時
+                        </div>
+                        <div class="option" onclick="selectAnswer(event, 'q8', 'd')">
+                            <strong>D)</strong> Just after a cricket has escaped from a bird | 蟋蟀逃脫鳥後
+                        </div>
+                    </div>
+                    <div class="answer-explanation">
+                        <div class="answer-title">✓ 正確答案 | Correct Answer: A) Prior to a human baby's first meal</div>
+                        <div class="answer-text-zh">基礎代謝率應在個體處於完全休息、禁食狀態時測量，以消除進食和活動對代謝測量的影響。</div>
+                        <div class="answer-text-en">🔊 <span class="speaker-icon" onclick="speakText('Basal metabolic rate should be measured when an individual is completely at rest and in a fasted state to eliminate the effects of food intake and activity on metabolic measurements')">🔊</span> Basal metabolic rate should be measured when an individual is completely at rest and in a fasted state to eliminate the effects of food intake and activity on metabolic measurements.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-title">🎓 普通生物學 - 動物基本構造與功能學習平台</div>
+        <p>Biology Learning Platform - Animal Form and Function</p>
+        <p>台北醫學大學 | Taipei Medical University</p>
+        <p>💡 提示：點擊卡片展開內容 | 🔊 點擊「說」圖標聆聽英文發音</p>
+        <p>💡 Click cards to expand | 🔊 Click speaker icons for English pronunciation</p>
+    </footer>
+    
+    <script>
+        // 切換card
+        function toggleCard(header) {
+            const card = header.closest('.content-card');
+            card.classList.toggle('expanded');
+        }
+        
+        // 切換問題
+        function toggleQuestion(card) {
+            card.classList.toggle('expanded');
+        }
+        
+        // 切換section
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            const navBtns = document.querySelectorAll('.nav-btn');
+            
+            sections.forEach(s => s.classList.remove('active'));
+            navBtns.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // 選擇答案
+        function selectAnswer(e, questionId, answer) {
+            e.stopPropagation();
+            
+            const card = document.getElementById(questionId);
+            card.classList.add('answered');
+            
+            const options = card.querySelectorAll('.option');
+            options.forEach(opt => {
+                opt.classList.remove('selected');
+                opt.style.borderColor = 'transparent';
+                opt.style.backgroundColor = 'white';
+            });
+            
+            const selected = e.target.closest('.option');
+            selected.classList.add('selected');
+            selected.style.borderColor = '#B8860B';
+            selected.style.backgroundColor = '#fffef0';
+        }
+        
+        // 英文發音
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
+                
+                const btn = event ? event.target.closest('.speaker-icon, .speaker-btn') : null;
+                if (btn) {
+                    btn.classList.add('playing');
+                }
+                
+                utterance.onend = function() {
+                    if (btn) {
+                        btn.classList.remove('playing');
+                    }
+                };
+                
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('您的瀏覽器不支援語音合成功能。\nYour browser does not support speech synthesis.');
+            }
+        }
+    </script>
+</body>
+</html>
