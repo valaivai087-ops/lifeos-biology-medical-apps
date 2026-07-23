@@ -1,0 +1,2763 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evidence OS | 證據思考培養系統</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --navy: #0D1B3E;
+            --teal: #006B7D;
+            --gold: #B8860B;
+            --light-navy: #1A2B5F;
+            --bg-light: #F5F7FA;
+            --text-dark: #1A2B5F;
+            --border: #D4D9E3;
+            --success: #4CAF50;
+            --warning: #FFA500;
+        }
+        
+        body {
+            font-family: 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, var(--bg-light) 100%);
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--light-navy) 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(13, 27, 62, 0.15);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        
+        .logo-sub {
+            font-size: 13px;
+            opacity: 0.8;
+            margin-top: 3px;
+        }
+        
+        .motto {
+            font-size: 14px;
+            opacity: 0.85;
+            font-style: italic;
+            margin-top: 2px;
+            color: var(--gold);
+        }
+        
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.8rem 1.2rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--gold);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 3px;
+        }
+        
+        /* Capability Level System */
+        .capability-tracker {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 0 auto;
+            margin-top: 2rem;
+            max-width: 800px;
+        }
+        
+        .level-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .level {
+            flex: 1;
+            text-align: center;
+            opacity: 0.6;
+            transition: all 0.3s;
+        }
+        
+        .level.active {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .level-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+        
+        .level-title {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        
+        .level-desc {
+            font-size: 10px;
+            opacity: 0.7;
+        }
+        
+        .level.active .level-desc {
+            color: var(--gold);
+        }
+        
+        /* Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .tab-btn {
+            background: white;
+            border: 2px solid var(--border);
+            padding: 0.8rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.3s;
+            color: var(--text-dark);
+            font-family: 'Microsoft JhengHei', sans-serif;
+        }
+        
+        .tab-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--navy), var(--light-navy));
+            color: white;
+            border-color: var(--navy);
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Concept Card */
+        .concept-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        
+        .concept-card:hover {
+            box-shadow: 0 4px 12px rgba(13, 27, 62, 0.1);
+            border-color: var(--gold);
+        }
+        
+        .card-header {
+            background: linear-gradient(90deg, var(--navy) 0%, var(--light-navy) 100%);
+            color: white;
+            padding: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 600;
+            user-select: none;
+        }
+        
+        .card-header:hover {
+            background: linear-gradient(90deg, var(--teal) 0%, #00899A 100%);
+        }
+        
+        .toggle-icon {
+            transition: transform 0.3s;
+            font-size: 20px;
+        }
+        
+        .card-header.expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+        
+        .card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        
+        .card-body.expanded {
+            max-height: 3000px;
+        }
+        
+        .card-content {
+            padding: 2rem;
+        }
+        
+        /* Section Templates */
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--navy);
+            margin: 1.5rem 0 0.8rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gold);
+        }
+        
+        .concept-map, .mind-map, .flowchart {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--teal);
+            font-family: monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+        
+        .formula-box {
+            background: linear-gradient(135deg, var(--navy), var(--light-navy));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--gold);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .clinical-case {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(0, 107, 125, 0.1));
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--success);
+        }
+        
+        .case-title {
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 0.8rem;
+        }
+        
+        .case-content {
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        
+        /* Daily Paper Section */
+        .daily-paper {
+            background: linear-gradient(135deg, rgba(184, 134, 11, 0.05), rgba(0, 107, 125, 0.05));
+            padding: 2rem;
+            border-radius: 8px;
+            border: 2px solid var(--gold);
+            margin-bottom: 2rem;
+        }
+        
+        .paper-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gold);
+        }
+        
+        .paper-icon {
+            font-size: 32px;
+        }
+        
+        .paper-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--navy);
+        }
+        
+        .paper-meta {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 0.3rem;
+        }
+        
+        .paper-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            padding: 0.8rem;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: 'Microsoft JhengHei', sans-serif;
+            transition: all 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 8px rgba(184, 134, 11, 0.2);
+        }
+        
+        .form-input.textarea {
+            grid-column: 1 / -1;
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        /* Evidence Assessment */
+        .evidence-ladder {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            margin: 1.5rem 0;
+        }
+        
+        .ladder-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .ladder-item:hover {
+            background: var(--bg-light);
+            border-left-color: var(--gold);
+        }
+        
+        .ladder-item.selected {
+            background: rgba(184, 134, 11, 0.1);
+            border-left-color: var(--gold);
+        }
+        
+        .ladder-level {
+            font-weight: 600;
+            color: var(--navy);
+            font-size: 15px;
+            margin-bottom: 0.3rem;
+        }
+        
+        .ladder-desc {
+            font-size: 13px;
+            opacity: 0.7;
+        }
+        
+        /* Quiz Section */
+        .quiz-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            margin-bottom: 2rem;
+        }
+        
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 1rem;
+        }
+        
+        .quiz-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--navy);
+        }
+        
+        .quiz-score {
+            background: var(--bg-light);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--teal);
+        }
+        
+        .quiz-item {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 6px;
+            border-left: 4px solid var(--navy);
+        }
+        
+        .quiz-question {
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--navy);
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .option-btn {
+            background: white;
+            border: 2px solid var(--border);
+            padding: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            font-family: 'Microsoft JhengHei', sans-serif;
+            font-size: 14px;
+        }
+        
+        .option-btn:hover {
+            border-color: var(--gold);
+            background: rgba(184, 134, 11, 0.05);
+        }
+        
+        .option-btn.correct {
+            background: #E8F5E9;
+            border-color: #4CAF50;
+            color: #2E7D32;
+        }
+        
+        .option-btn.incorrect {
+            background: #FFEBEE;
+            border-color: #F44336;
+            color: #C62828;
+        }
+        
+        /* Action Buttons */
+        .action-btn {
+            background: linear-gradient(135deg, var(--navy), var(--light-navy));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Microsoft JhengHei', sans-serif;
+            margin: 0.5rem;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 27, 62, 0.2);
+        }
+        
+        .action-btn.secondary {
+            background: var(--teal);
+        }
+        
+        .action-btn.success {
+            background: var(--success);
+        }
+        
+        /* Summary Box */
+        .summary-box {
+            background: linear-gradient(135deg, var(--gold), #D4A574);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--navy);
+        }
+        
+        .summary-title {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .summary-content {
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--teal), var(--gold));
+            transition: width 0.3s ease;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--navy);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            font-size: 13px;
+        }
+        
+        .footer-motto {
+            font-style: italic;
+            margin-top: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header-stats {
+                flex-direction: row;
+                gap: 1rem;
+                width: 100%;
+            }
+            
+            .level-container {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            
+            .paper-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div>
+                <div class="logo">🏥 Evidence OS</div>
+                <div class="logo-sub">北醫大一 | 證據思考培養系統</div>
+                <div class="motto">「不只會計算，更要懂得判讀醫學證據」</div>
+            </div>
+            <div class="header-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="level-display">1</div>
+                    <div class="stat-label">目前能力級</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="papers-count">0</div>
+                    <div class="stat-label">已讀Paper</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="mastery-score">0%</div>
+                    <div class="stat-label">掌握度</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Capability Tracker -->
+        <div class="capability-tracker">
+            <div class="level-container">
+                <div class="level active" id="level-1">
+                    <div class="level-number">1️⃣</div>
+                    <div class="level-title">會算公式</div>
+                    <div class="level-desc">計算統計數字</div>
+                </div>
+                <div class="level" id="level-2">
+                    <div class="level-number">2️⃣</div>
+                    <div class="level-title">會解讀統計</div>
+                    <div class="level-desc">理解P值、CI</div>
+                </div>
+                <div class="level" id="level-3">
+                    <div class="level-number">3️⃣</div>
+                    <div class="level-title">會閱讀Paper</div>
+                    <div class="level-desc">分析研究設計</div>
+                </div>
+                <div class="level" id="level-4">
+                    <div class="level-number">4️⃣</div>
+                    <div class="level-title">判斷證據品質</div>
+                    <div class="level-desc">評估研究等級</div>
+                </div>
+                <div class="level" id="level-5">
+                    <div class="level-number">5️⃣</div>
+                    <div class="level-title">臨床應用</div>
+                    <div class="level-desc">指導病人決策</div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 20%;"></div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation -->
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('daily')">📄 每日Paper</button>
+        <button class="tab-btn" onclick="switchTab('concepts')">📚 核心概念</button>
+        <button class="tab-btn" onclick="switchTab('ebm')">🔬 EBM評估</button>
+        <button class="tab-btn" onclick="switchTab('cases')">🏥 臨床案例</button>
+        <button class="tab-btn" onclick="switchTab('quiz')">✏️ 每日測驗</button>
+        <button class="tab-btn" onclick="switchTab('ai')">🤖 AI深度分析</button>
+        <button class="tab-btn" onclick="switchTab('review')">🔄 每日復習</button>
+        <button class="tab-btn" onclick="switchTab('mock')">📝 模擬考試</button>
+        <button class="tab-btn" onclick="switchTab('diagnostic')">🎯 能力診斷</button>
+        <button class="tab-btn" onclick="switchTab('anki')">🎴 Anki系統</button>
+        <button class="tab-btn" onclick="switchTab('errors')">❌ 錯題庫</button>
+        <button class="tab-btn" onclick="switchTab('pathway')">🗺️ 學習路徑</button>
+        <button class="tab-btn" onclick="switchTab('progress')">📊 進度追蹤</button>
+    </div>
+    
+    <!-- Main Container -->
+    <div class="container">
+        
+        <!-- 1. 每日Paper -->
+        <div id="daily" class="tab-content active">
+            <div class="daily-paper">
+                <div class="paper-header">
+                    <div class="paper-icon">📄</div>
+                    <div>
+                        <div class="paper-title">今日Paper評讀</div>
+                        <div class="paper-meta">每天一篇 | Evidence-based Thinking</div>
+                    </div>
+                </div>
+                
+                <div class="paper-form">
+                    <div class="form-group">
+                        <label class="form-label">1️⃣ 研究問題是什麼？</label>
+                        <input type="text" class="form-input" id="q1" placeholder="例如：新藥A相比標準治療是否能降低死亡率？">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">2️⃣ 研究設計是什麼？</label>
+                        <select class="form-input" id="q2">
+                            <option value="">請選擇...</option>
+                            <option value="rct">隨機對照試驗 (RCT)</option>
+                            <option value="cohort">隊列研究 (Cohort)</option>
+                            <option value="case-control">病例對照 (Case-Control)</option>
+                            <option value="cross-section">橫斷面 (Cross-Sectional)</option>
+                            <option value="case-report">案例報告 (Case Report)</option>
+                            <option value="meta">統合分析 (Meta-Analysis)</option>
+                            <option value="systematic">系統性回顧 (Systematic Review)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">3️⃣ 研究對象是誰？</label>
+                        <input type="text" class="form-input" id="q3" placeholder="例如：25-75歲的糖尿病患者">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">4️⃣ 樣本數多少？</label>
+                        <input type="number" class="form-input" id="q4" placeholder="例如：500">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">5️⃣ 主要結果是什麼？</label>
+                        <input type="text" class="form-input" id="q5" placeholder="例如：新藥A組死亡率5%，對照組10%">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">6️⃣ P值是多少？</label>
+                        <input type="text" class="form-input" id="q6" placeholder="例如：0.03">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">7️⃣ 信賴區間是多少？</label>
+                        <input type="text" class="form-input" id="q7" placeholder="例如：95% CI: 0.02-0.08">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">8️⃣ 效果大小是多少？</label>
+                        <input type="text" class="form-input" id="q8" placeholder="例如：RR=0.5, Cohen's d=0.8">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">9️⃣ 研究限制是什麼？</label>
+                        <textarea class="form-input textarea" id="q9" placeholder="例如：樣本量小、跟蹤時間短、代表性不足"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🔟 臨床是否適用？</label>
+                        <textarea class="form-input textarea" id="q10" placeholder="這個研究結果能應用到我的病人身上嗎？為什麼？"></textarea>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="action-btn success" onclick="savePaperReview()">✅ 保存今日評讀</button>
+                    <button class="action-btn secondary" onclick="generateAnalysis()">🤖 AI分析</button>
+                </div>
+            </div>
+            
+            <div id="paper-analysis"></div>
+        </div>
+        
+        <!-- 2. 核心概念 -->
+        <div id="concepts" class="tab-content">
+            <h2 style="color: var(--navy); margin-bottom: 1.5rem; border-bottom: 3px solid var(--gold); padding-bottom: 0.5rem;">📚 核心統計概念 | 完整學習模板</h2>
+            
+            <!-- 平均數示例 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>平均數 (Mean) | 理解證據的第一步</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        
+                        <div class="section-title">📊 概念圖 (Concept Map)</div>
+                        <div class="concept-map">
+患者群體的檢驗值
+        ↓
+計算所有值的總和
+        ↓
+除以人數
+        ↓
+得到平均值
+        ↓
+代表此群體的「典型」水平
+                        </div>
+                        
+                        <div class="section-title">🧠 心智圖 (Mind Map)</div>
+                        <div class="mind-map">
+平均數 (Mean)
+├─ 定義：所有值的總和÷個數
+├─ 公式：μ = Σx / n
+├─ 優點：計算簡單、常用
+├─ 缺點：受極端值影響
+├─ 何時用：對稱分布時最代表
+└─ 臨床應用：描述患者群體特徵
+                        </div>
+                        
+                        <div class="section-title">📐 公式整理</div>
+                        <div class="formula-box">
+樣本平均數：M = Σx / n
+母體平均數：μ = Σx / N
+
+其中：
+Σx = 所有值的總和
+n  = 樣本數
+N  = 母體總數
+                        </div>
+                        
+                        <div class="section-title">💬 白話解釋</div>
+                        <p style="margin: 1rem 0; line-height: 1.8; font-size: 14px;">
+                            平均數就是把所有數字加起來再平均分配。想像班上30個學生的身高，把所有身高加起來除以30，就得到班上的「平均身高」。這個平均身高代表了班上「典型」學生的身高水平。但要注意，如果班上有一個特別高的學生（極端值），平均身高會被拉高。
+                        </p>
+                        
+                        <div class="section-title">🏥 臨床案例</div>
+                        <div class="clinical-case">
+                            <div class="case-title">案例：評估新型降血壓藥</div>
+                            <div class="case-content">
+                                某項臨床試驗給100位高血壓患者使用新藥A。<br><br>
+                                <strong>收縮壓變化（mmHg）：</strong><br>
+                                患者1: -15, 患者2: -20, 患者3: -18, ... 患者100: -22<br><br>
+                                <strong>計算平均效果：</strong><br>
+                                平均下降 = (-15 + -20 + -18 + ... + -22) / 100 = -18 mmHg<br><br>
+                                <strong>臨床意義：</strong><br>
+                                新藥A平均能將患者收縮壓降低18 mmHg。醫生可以用這個平均值向患者解釋：「這個藥平均能降低你約18個單位的血壓」。
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">📄 Paper案例</div>
+                        <p style="margin: 1rem 0; font-size: 13px;">
+                            <strong>論文：</strong> "Effects of Drug X on Blood Pressure in Hypertensive Patients" (2024)<br>
+                            <strong>報告方式：</strong> "The mean reduction in systolic BP was 18±4 mmHg (p=0.001)"<br>
+                            <strong>解讀：</strong> 平均下降18 mmHg，標準差4 (表示下降12-24 mmHg很常見)，P值0.001 (結果有統計顯著性)
+                        </p>
+                        
+                        <div class="section-title">⚠️ 常見誤解</div>
+                        <div class="summary-box">
+                            <div class="summary-title">❌ 錯誤</div>
+                            「平均血糖5 mmol/L，表示所有患者血糖都是5」<br>
+                            <div style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 1rem;">
+                            <strong style="color: var(--gold);">✅ 正確</strong><br>
+                            「平均血糖5 mmol/L，表示患者群體的『典型』水平是5，但個別患者可能3-7」
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">🎯 每日測驗</div>
+                        <div style="background: var(--bg-light); padding: 1rem; border-radius: 6px; margin: 1rem 0;">
+                            <p style="margin-bottom: 1rem;">10位患者用藥後血糖下降分別為：-5, -8, -6, -7, -9, -5, -10, -6, -8, -6 mmol/L。平均下降多少？</p>
+                            <div style="margin-left: 1rem;">
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">A. -5</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, true)">B. -7</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">C. -10</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">D. -8</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 中位數 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>中位數 (Median) | 排除極端值的智慧</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">📊 概念圖</div>
+                        <div class="concept-map">
+將所有患者的值排序
+        ↓
+找出中間位置的值
+        ↓
+該值就是中位數
+        ↓
+不受極端值影響
+                        </div>
+                        
+                        <div class="section-title">🧠 心智圖</div>
+                        <div class="mind-map">
+中位數 (Median)
+├─ 定義：排序後的中間值
+├─ 特點：不受極端值影響
+├─ 何時用：分布不對稱時
+├─ 優點：代表性更真實
+├─ 缺點：計算複雜度高
+└─ 臨床應用：恢復時間、住院天數
+                        </div>
+                        
+                        <div class="section-title">📐 公式整理</div>
+                        <div class="formula-box">
+奇數個數據：Median = 第(n+1)/2個值
+偶數個數據：Median = [第n/2個 + 第(n/2+1)個] / 2
+
+例如10個值排序後：3, 5, 7, 8, 9, 11, 12, 14, 16, 18
+Median = (9 + 11) / 2 = 10
+                        </div>
+                        
+                        <div class="section-title">💬 白話解釋</div>
+                        <p style="margin: 1rem 0; line-height: 1.8; font-size: 14px;">
+                            中位數是「排隊後站在中間的人」。不管隊伍最前面有多矮的人，最後面有多高的人，中位數代表的永遠是中間位置。在醫學中，如果有少數特別好或特別差的患者，中位數比平均數更能代表「典型」情況。
+                        </p>
+                        
+                        <div class="section-title">🏥 臨床案例</div>
+                        <div class="clinical-case">
+                            <div class="case-title">案例：癌症患者生存時間</div>
+                            <div class="case-content">
+                                100位癌症患者追蹤生存時間（月）：<br>
+                                平均生存時間 = 25個月<br>
+                                中位生存時間 = 20個月<br><br>
+                                <strong>為什麼差異這麼大？</strong><br>
+                                因為有少數患者活了很久（60-120個月），拉高了平均值。但「典型」患者活約20個月。中位數更準確反映患者群體的預後。
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">🎯 每日測驗</div>
+                        <div style="background: var(--bg-light); padding: 1rem; border-radius: 6px; margin: 1rem 0;">
+                            <p style="margin-bottom: 1rem;">5位患者住院天數：2, 3, 4, 5, 45天。中位數和平均數分別是？</p>
+                            <div style="margin-left: 1rem;">
+                                <button class="option-btn" onclick="checkQuizAnswer(this, true)">A. 中位數=4天，平均數=11.8天</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">B. 中位數=11.8天，平均數=4天</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">C. 都是7.9天</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">D. 都是4天</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 標準差 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>標準差 (Standard Deviation) | 衡量波動的尺子</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">📊 概念圖</div>
+                        <div class="concept-map">
+計算每個值與平均值的距離
+        ↓
+平方這些距離
+        ↓
+求平均
+        ↓
+開平方
+        ↓
+得到標準差
+        ↓
+代表波動大小
+                        </div>
+                        
+                        <div class="section-title">🧠 心智圖</div>
+                        <div class="mind-map">
+標準差 (SD)
+├─ 定義：平均離散程度
+├─ 公式：σ = √[Σ(x-μ)²/n]
+├─ 含義：SD越大，波動越大
+├─ 68-95-99.7規則
+│  ├─ ±1σ: 68%
+│  ├─ ±2σ: 95%
+│  └─ ±3σ: 99.7%
+└─ 臨床應用：判斷數據分散度
+                        </div>
+                        
+                        <div class="section-title">📐 公式整理</div>
+                        <div class="formula-box">
+樣本標準差：s = √[Σ(x-M)²/(n-1)]
+母體標準差：σ = √[Σ(x-μ)²/n]
+
+68-95-99.7 法則：
+在常態分布中
+• 68% 數據在 μ±1σ
+• 95% 數據在 μ±2σ  
+• 99.7% 數據在 μ±3σ
+                        </div>
+                        
+                        <div class="section-title">💬 白話解釋</div>
+                        <p style="margin: 1rem 0; line-height: 1.8; font-size: 14px;">
+                            標準差就是「患者們到底有多不一樣」的尺子。SD越大，表示患者的檢驗值波動越大；SD越小，表示患者都很相似。例如兩間醫院的患者平均血糖都是100，但A醫院標準差是5（患者都在95-105），B醫院標準差是20（患者在80-120），B醫院的患者波動更大。
+                        </p>
+                        
+                        <div class="section-title">🏥 臨床案例</div>
+                        <div class="clinical-case">
+                            <div class="case-title">案例：血糖控制的評估</div>
+                            <div class="case-content">
+                                患者A：平均血糖 = 130±8 mmol/L<br>
+                                患者B：平均血糖 = 130±25 mmol/L<br><br>
+                                <strong>哪個患者血糖控制更好？</strong><br>
+                                雖然平均值相同，但患者A的血糖波動小（SD=8），更穩定。患者B波動大（SD=25），時高時低，更容易出現低血糖風險。
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">🎯 每日測驗</div>
+                        <div style="background: var(--bg-light); padding: 1rem; border-radius: 6px; margin: 1rem 0;">
+                            <p style="margin-bottom: 1rem;">在常態分布中，μ=100，σ=15。大約95%的數據應該落在哪個範圍？</p>
+                            <div style="margin-left: 1rem;">
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">A. 85-115</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, true)">B. 70-130</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">C. 55-145</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">D. 100-115</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 敏感度與特異度 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>敏感度 vs 特異度 | 診斷測試的雙重身份</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">📊 概念圖</div>
+                        <div class="concept-map">
+所有患者 → 敏感度 = 多少患者被檢出
+所有非患者 → 特異度 = 多少非患者被正確排除
+
+敏感度 = 排除疾病（用於篩檢）
+特異度 = 診斷疾病（用於確診）
+                        </div>
+                        
+                        <div class="section-title">🧠 心智圖</div>
+                        <div class="mind-map">
+診斷測試
+├─ 敏感度 Se = TP/(TP+FN)
+│  ├─ 衡量：患者中有多少被檢出
+│  ├─ 應用：用於排除疾病
+│  └─ 篩檢需要高敏感度
+├─ 特異度 Sp = TN/(TN+FP)
+│  ├─ 衡量：非患者中有多少被排除
+│  ├─ 應用：用於確認疾病
+│  └─ 確診需要高特異度
+└─ ⚠️  不能單獨評估測試好壞
+                        </div>
+                        
+                        <div class="section-title">📐 公式整理</div>
+                        <div class="formula-box">
+敏感度 (Sensitivity) = TP / (TP + FN)
+特異度 (Specificity) = TN / (TN + FP)
+
+其中：
+TP = True Positive (真陽性，患者，測試陽性)
+FN = False Negative (假陰性，患者，測試陰性)
+TN = True Negative (真陰性，非患者，測試陰性)
+FP = False Positive (假陽性，非患者，測試陽性)
+                        </div>
+                        
+                        <div class="section-title">💬 白話解釋</div>
+                        <p style="margin: 1rem 0; line-height: 1.8; font-size: 14px;">
+                            <strong>敏感度：</strong>「測試在患者中的找人能力」。敏感度95%表示100個患者中有95個被檢出，5個被漏掉。適合篩檢，因為不能漏掉患者。<br><br>
+                            <strong>特異度：</strong>「測試在非患者中的排除能力」。特異度95%表示100個非患者中有95個被正確排除，5個被誤診為患者。適合確診，因為不能誤診健康人。
+                        </p>
+                        
+                        <div class="section-title">🏥 臨床案例</div>
+                        <div class="clinical-case">
+                            <div class="case-title">案例：新冠檢測的應用</div>
+                            <div class="case-content">
+                                核酸檢測：Se=95%, Sp=99%<br>
+                                快速抗原檢測：Se=80%, Sp=99%<br><br>
+                                <strong>篩檢階段（大規模檢測）：</strong><br>
+                                用核酸檢測（高敏感度），找出所有感染者，漏檢風險小。<br><br>
+                                <strong>確診階段（症狀患者）：</strong><br>
+                                兩者都可，但核酸更可靠，確認患者確實感染。
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">🎯 每日測驗</div>
+                        <div style="background: var(--bg-light); padding: 1rem; border-radius: 6px; margin: 1rem 0;">
+                            <p style="margin-bottom: 1rem;">某診斷測試用於篩檢常見疾病，下列參數組合最適合？</p>
+                            <div style="margin-left: 1rem;">
+                                <button class="option-btn" onclick="checkQuizAnswer(this, true)">A. 敏感度98%，特異度70%</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">B. 敏感度70%，特異度98%</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">C. 敏感度50%，特異度50%</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">D. 敏感度特異度都是60%</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- P值 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>P值 (P-value) | 最常被誤解的統計概念</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">📊 概念圖</div>
+                        <div class="concept-map">
+虛無假設：沒有效果
+        ↓
+計算觀察到現有數據的機率
+        ↓
+假如虛無假設真的成立
+        ↓
+就能得到P值
+        ↓
+P值 ≠ 虛無假設成立的機率
+                        </div>
+                        
+                        <div class="section-title">💬 最常見的5大誤解</div>
+                        <div class="summary-box">
+                            <strong>❌ 誤解1：</strong> P值是虛無假設為真的機率<br>
+                            <strong>✅ 正確：</strong> P值是假設虛無假設為真，看到這個數據的機率<br><br>
+                            
+                            <strong>❌ 誤解2：</strong> P < 0.05代表發現很重要<br>
+                            <strong>✅ 正確：</strong> P < 0.05只表示統計顯著，不等於臨床重要<br><br>
+                            
+                            <strong>❌ 誤解3：</strong> P值是結果真實的機率<br>
+                            <strong>✅ 正確：</strong> P值不能告訴你結果是否真實<br><br>
+                            
+                            <strong>❌ 誤解4：</strong> P > 0.05表示沒有效果<br>
+                            <strong>✅ 正確：</strong> P > 0.05表示證據不足，可能有效果但沒檢出<br><br>
+                            
+                            <strong>❌ 誤解5：</strong> 多次檢測P值，選擇小於0.05的結果<br>
+                            <strong>✅ 正確：</strong> 這是P-hacking，會製造假發現
+                        </div>
+                        
+                        <div class="section-title">📐 公式整理</div>
+                        <div class="formula-box">
+P值 = 在虛無假設下，觀察到現有數據或更極端結果的機率
+
+常見的α (顯著性水平)：
+• α = 0.05 (5%) - 最常用
+• α = 0.01 (1%) - 更嚴格
+• α = 0.001 (0.1%) - 極為嚴格
+
+判斷：
+• P < α → 拒絕虛無假設（有統計顯著性）
+• P ≥ α → 不能拒絕虛無假設（無足夠證據）
+                        </div>
+                        
+                        <div class="section-title">🏥 臨床案例</div>
+                        <div class="clinical-case">
+                            <div class="case-title">案例：新藥降血壓的P值解讀</div>
+                            <div class="case-content">
+                                研究報告：「新藥A相比標準治療，血壓下降更多，P = 0.03」<br><br>
+                                <strong>❌ 錯誤理解：</strong><br>
+                                「新藥真的更好的機率是97%」<br><br>
+                                <strong>✅ 正確理解：</strong><br>
+                                「假如新藥根本沒有作用，我們觀察到這個結果（或更極端結果）的機率是3%」<br><br>
+                                <strong>臨床決策：</strong><br>
+                                P < 0.05有統計顯著性，但還要看：效果有多大？有沒有副作用？費用高不高？
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">🎯 每日測驗</div>
+                        <div style="background: var(--bg-light); padding: 1rem; border-radius: 6px; margin: 1rem 0;">
+                            <p style="margin-bottom: 1rem;">一項研究P值=0.06，下列說法何者最正確？</p>
+                            <div style="margin-left: 1rem;">
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">A. 虛無假設為真的機率是94%</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, true)">B. 假若虛無假設為真，看到這個結果的機率是6%</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">C. 結果肯定是假發現</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">D. 發現沒有價值</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 信賴區間 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>信賴區間 (Confidence Interval) | 比P值更有信息量</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">📊 概念圖</div>
+                        <div class="concept-map">
+計算點估計
+        ↓
+估計標準誤
+        ↓
+加上和減去邊界
+        ↓
+形成一個區間
+        ↓
+相信真實參數在其中
+                        </div>
+                        
+                        <div class="section-title">📐 公式整理</div>
+                        <div class="formula-box">
+95% CI = 點估計 ± 1.96 × SE
+
+例如：
+平均血壓下降 = 15 mmHg
+95% CI: 10-20 mmHg
+
+解釋：
+真實的血壓下降值有95%的信心落在10-20 mmHg之間
+
+與P值的關係：
+如果95% CI 不包含0，則P < 0.05
+                        </div>
+                        
+                        <div class="section-title">💬 白話解釋</div>
+                        <p style="margin: 1rem 0; line-height: 1.8; font-size: 14px;">
+                            信賴區間就是「如果我們重複做這個研究100次，約95次的區間會包含真實值」。比P值更好用，因為它同時告訴你「估計值是多少」和「估計的精確度如何」。區間越窄，估計越精確。
+                        </p>
+                        
+                        <div class="section-title">🏥 臨床案例</div>
+                        <div class="clinical-case">
+                            <div class="case-title">案例：兩個不同的研究結果</div>
+                            <div class="case-content">
+                                研究A：新藥降血壓 15 mmHg, 95% CI: 14-16 mmHg<br>
+                                研究B：新藥降血壓 15 mmHg, 95% CI: 5-25 mmHg<br><br>
+                                <strong>哪個研究更可信？</strong><br>
+                                研究A的CI很窄（14-16），估計精確，結果可信。<br>
+                                研究B的CI很寬（5-25），估計不精確，實際效果可能很小也可能很大。<br>
+                                兩者平均值相同，但A明顯更好。
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">🎯 每日測驗</div>
+                        <div style="background: var(--bg-light); padding: 1rem; border-radius: 6px; margin: 1rem 0;">
+                            <p style="margin-bottom: 1rem;">如果95% CI包含0（例如-2到+5），代表什麼？</p>
+                            <div style="margin-left: 1rem;">
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">A. 結果非常顯著</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, true)">B. 結果不具統計顯著性（P > 0.05）</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">C. 肯定沒有效果</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">D. 樣本量不夠</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 相對風險 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>相對風險 (Relative Risk) | 風險因子的力量</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">📐 公式整理</div>
+                        <div class="formula-box">
+RR = 風險(暴露組) / 風險(非暴露組)
+   = [a/(a+b)] / [c/(c+d)]
+
+解釋：
+• RR = 1：沒有關聯
+• RR > 1：暴露增加風險（危害因子）
+• RR < 1：暴露減少風險（保護因子）
+• RR = 2：暴露組風險是非暴露組的2倍
+                        </div>
+                        
+                        <div class="section-title">💬 臨床解釋</div>
+                        <p style="margin: 1rem 0; line-height: 1.8; font-size: 14px;">
+                            RR是最直觀的風險指標。例如吸煙者患肺癌的相對風險是15，表示吸煙者患肺癌的風險是非吸煙者的15倍。用於隊列研究或RCT，能直接比較風險。
+                        </p>
+                        
+                        <div class="section-title">🏥 臨床案例</div>
+                        <div class="clinical-case">
+                            <div class="case-title">案例：高血壓用藥和中風風險</div>
+                            <div class="case-content">
+                                研究結果：<br>
+                                用降壓藥組：發生中風的風險 = 5%<br>
+                                未用藥組：發生中風的風險 = 15%<br><br>
+                                RR = 5% / 15% = 0.33<br><br>
+                                <strong>解釋：</strong><br>
+                                用藥組的中風風險是未用藥組的33%，或者說降壓藥將中風風險降低了67%。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 勝算比 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>勝算比 (Odds Ratio) | 病例對照研究的語言</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">📐 公式整理</div>
+                        <div class="formula-box">
+OR = (a × d) / (b × c)
+
+其中：
+a = 患者+暴露   b = 患者-暴露
+c = 非患者+暴露 d = 非患者-暴露
+
+解釋：
+• OR = 1：沒有關聯
+• OR > 1：暴露與疾病正相關
+• OR < 1：暴露與疾病負相關
+• 在罕見疾病中，OR ≈ RR
+                        </div>
+                        
+                        <div class="section-title">💬 何時使用OR</div>
+                        <p style="margin: 1rem 0; line-height: 1.8; font-size: 14px;">
+                            <strong>病例對照研究：</strong>必須用OR，因為無法計算風險（患者數量固定）。<br>
+                            <strong>隊列研究：</strong>用RR更合適。<br>
+                            <strong>罕見疾病：</strong>OR近似等於RR，可以簡化計算。
+                        </p>
+                        
+                        <div class="section-title">🏥 臨床案例</div>
+                        <div class="clinical-case">
+                            <div class="case-title">案例：特定基因與乳癌風險</div>
+                            <div class="case-content">
+                                病例對照研究（100位乳癌患者 vs 100位健康女性）：<br><br>
+                                有BRCA突變：患者80人，健康人10人<br>
+                                無BRCA突變：患者20人，健康人90人<br><br>
+                                OR = (80×90) / (20×10) = 36<br><br>
+                                <strong>解釋：</strong><br>
+                                有BRCA突變的女性罹患乳癌的勝算是無突變女性的36倍。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 常態分布 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>常態分布 (Normal Distribution) | 自然界最常見的形狀</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">🧠 心智圖</div>
+                        <div class="mind-map">
+常態分布
+├─ 形狀：鐘形曲線
+├─ 特性：
+│  ├─ 平均 = 中位數 = 眾數
+│  ├─ 對稱（左右一致）
+│  └─ 永不接觸X軸
+├─ 68-95-99.7 規則
+└─ 為什麼重要：
+   ├─ 許多生物醫學變量
+   ├─ 許多統計測試的基礎
+   └─ 樣本均值也常態分布
+                        </div>
+                        
+                        <div class="section-title">📐 公式整理</div>
+                        <div class="formula-box">
+常態分布概率函數：
+f(x) = (1/(σ√(2π))) × e^(-(x-μ)²/(2σ²))
+
+標準化（Z-score）：
+z = (x - μ) / σ
+
+Z-score 的意義：
+• z = 0：值等於平均
+• z = 1：值高於平均1個標準差
+• z = -1：值低於平均1個標準差
+• z > 3 或 z < -3：極端值（罕見）
+                        </div>
+                        
+                        <div class="section-title">💬 白話解釋</div>
+                        <p style="margin: 1rem 0; line-height: 1.8; font-size: 14px;">
+                            常態分布就是「最自然的分布方式」。大部分人聚集在中間，兩端逐漸減少，形成鐘形。身高、智力、血糖等很多生物醫學指標都近似常態分布。許多統計測試（t檢驗、方差分析）都假設數據常態分布。
+                        </p>
+                        
+                        <div class="section-title">🏥 臨床案例</div>
+                        <div class="clinical-case">
+                            <div class="case-title">案例：實驗室參考範圍的設定</div>
+                            <div class="case-content">
+                                100位健康人的血糖測量：<br>
+                                平均值 = 100 mg/dL<br>
+                                標準差 = 10 mg/dL<br><br>
+                                假設常態分布，參考範圍（95%）：<br>
+                                = 100 ± 1.96 × 10<br>
+                                = 80.4 - 119.6 mg/dL<br><br>
+                                <strong>解釋：</strong><br>
+                                95%的健康人血糖在80-120範圍內。超出此範圍可能異常。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 眾數 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>眾數 (Mode) | 最常見的值</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">📊 概念圖</div>
+                        <div class="concept-map">
+計算每個值出現的次數
+        ↓
+找到出現最多的值
+        ↓
+那就是眾數
+        ↓
+代表最「受歡迎」的值
+                        </div>
+                        
+                        <div class="section-title">🧠 心智圖</div>
+                        <div class="mind-map">
+眾數 (Mode)
+├─ 定義：出現次數最多的值
+├─ 特點：可以有多個眾數
+├─ 單峰/雙峰/多峰分布
+├─ 何時用：分類數據
+├─ 優點：直觀、易理解
+├─ 缺點：不精確、不穩定
+└─ 臨床應用：最常見症狀、最常見基因型
+                        </div>
+                        
+                        <div class="section-title">💬 白話解釋</div>
+                        <p style="margin: 1rem 0; line-height: 1.8; font-size: 14px;">
+                            眾數就是「最流行的」。在一間醫院，如果患者的最常見診斷是「2型糖尿病」，那「2型糖尿病」就是眾數。不用計算，只要看什麼最多就是眾數。特別適合用於描述分類數據。
+                        </p>
+                        
+                        <div class="section-title">🏥 臨床案例</div>
+                        <div class="clinical-case">
+                            <div class="case-title">案例：急診病人診斷統計</div>
+                            <div class="case-content">
+                                某家醫院今天100位急診患者診斷：<br>
+                                腹痛：35人<br>
+                                頭痛：28人<br>
+                                胸痛：20人<br>
+                                其他：17人<br><br>
+                                <strong>眾數：腹痛</strong><br><br>
+                                這提示醫院應該加強腹痛相關的診療能力，因為這是最常見的問題。
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">🎯 每日測驗</div>
+                        <div style="background: var(--bg-light); padding: 1rem; border-radius: 6px; margin: 1rem 0;">
+                            <p style="margin-bottom: 1rem;">某科室一周內患者主訴：咳嗽12人、發熱15人、腹瀉8人、咳嗽12人。眾數是？</p>
+                            <div style="margin-left: 1rem;">
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">A. 咳嗽</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, true)">B. 發熱</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">C. 腹瀉</button>
+                                <button class="option-btn" onclick="checkQuizAnswer(this, false)">D. 所有症狀同樣常見</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 抽樣 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>抽樣 (Sampling) | 從部分推斷整體</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">📐 公式整理</div>
+                        <div class="formula-box">
+標準誤 (SE) = σ / √n
+
+其中：σ是母體標準差，n是樣本量
+
+樣本量計算：
+n = (z²σ²) / E²
+
+其中：z是信度值，E是允許誤差
+                        </div>
+                        
+                        <div class="section-title">💬 核心概念</div>
+                        <p style="margin: 1rem 0; line-height: 1.8; font-size: 14px;">
+                            <strong>隨機抽樣：</strong>每個個體有相等被選中機率，最能代表母體，消除選擇偏誤。<br>
+                            <strong>分層抽樣：</strong>先分層，再層內隨機抽樣，確保各層都有代表。<br>
+                            <strong>系統抽樣：</strong>按固定間隔選擇，簡單但可能有偏誤。<br>
+                            <strong>便利抽樣：</strong>選最容易的對象，偏誤最大，應避免用於科研。
+                        </p>
+                        
+                        <div class="section-title">⚠️ 常見偏誤</div>
+                        <div class="summary-box">
+                            <strong>選擇偏誤：</strong>樣本不代表母體<br>
+                            <strong>無應答偏誤：</strong>拒絕參加的人有特異性<br>
+                            <strong>測量偏誤：</strong>測量方法有系統性錯誤
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 機率 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>機率 (Probability) | 事件發生的可能性</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">📐 公式整理</div>
+                        <div class="formula-box">
+基本機率：P(A) = 有利結果數 / 所有可能結果數
+
+條件機率：P(A|B) = P(A∩B) / P(B)
+
+全機率公式：P(A) = Σ P(A|Bᵢ) × P(Bᵢ)
+
+貝氏定理：P(A|B) = P(B|A) × P(A) / P(B)
+                        </div>
+                        
+                        <div class="section-title">💬 臨床應用</div>
+                        <p style="margin: 1rem 0; line-height: 1.8; font-size: 14px;">
+                            診斷的本質是用機率決策。病人檢測陽性，他真的有病的機率是多少？這涉及測試敏感度、特異度和患病率的組合——正是貝氏定理的應用。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 假說檢驗 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>假說檢驗 (Hypothesis Testing) | 科學推論的框架</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">📊 流程圖</div>
+                        <div class="concept-map">
+提出問題
+    ↓
+建立虛無假設 (H₀) 和對立假設 (H₁)
+    ↓
+選擇適當的統計測試
+    ↓
+計算測試統計量和P值
+    ↓
+與α水平比較
+    ↓
+得出結論
+                        </div>
+                        
+                        <div class="section-title">📐 公式整理</div>
+                        <div class="formula-box">
+第一類錯誤 (α)：拒絕真實的H₀ (假陽性)
+第二類錯誤 (β)：接受虛假的H₀ (假陰性)
+統計檢力 = 1 - β (正確拒絕虛假H₀的機率)
+
+常見α：0.05, 0.01, 0.001
+常見β：0.20 (80%檢力)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 效應量 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>效應量 (Effect Size) | 不只統計，更要臨床</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">📐 公式整理</div>
+                        <div class="formula-box">
+Cohen's d = (M₁ - M₂) / SD
+解釋：d = 0.2 (小), 0.5 (中), 0.8 (大)
+
+相對風險 (RR) = Risk(E+) / Risk(E-)
+勝算比 (OR) = (a×d) / (b×c)
+
+數字需要背景才有意義：
+P < 0.05 ✓ 統計顯著
+d = 0.8   ✓ 效應大
+但若治療成本是收益的100倍，就不值得
+                        </div>
+                        
+                        <div class="section-title">💬 關鍵區別</div>
+                        <p style="margin: 1rem 0; line-height: 1.8; font-size: 14px;">
+                            <strong>統計顯著 ≠ 臨床重要</strong><br>
+                            大樣本下，即使極小的差異也能達到P < 0.05。但如果效應量很小（d = 0.1），臨床上可能無關緊要。反之，小樣本可能無法檢出真實的重要效應。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ROC曲線 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>ROC曲線 (ROC Curve) | 診斷測試的全景圖</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">📐 公式整理</div>
+                        <div class="formula-box">
+ROC曲線：以1-特異度為X軸，敏感度為Y軸
+
+AUC (Area Under Curve)：
+• 0.5：無診斷價值
+• 0.6-0.7：差
+• 0.7-0.8：中等
+• 0.8-0.9：很好
+• > 0.9：優秀
+• 1.0：完美測試
+
+AUC = 0.8表示：隨機選一個患者和非患者，
+該測試有80%的機率正確判斷誰是患者
+                        </div>
+                        
+                        <div class="section-title">💬 臨床應用</div>
+                        <p style="margin: 1rem 0; line-height: 1.8; font-size: 14px;">
+                            ROC曲線幫助醫生在不同敏感度-特異度水平中選擇最適合的臨界值。篩檢（寧可多檢一些）時用敏感度優先的臨界值；確診（不想誤診）時用特異度優先的臨界值。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 統合分析 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>統合分析 (Meta-analysis) | 整合多項研究</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">📊 概念圖</div>
+                        <div class="concept-map">
+系統性搜索相關文獻
+    ↓
+制定納入排除標準
+    ↓
+評估各項研究質量
+    ↓
+提取數據
+    ↓
+統計整合分析
+    ↓
+評估發表偏誤和異質性
+    ↓
+得出綜合結論
+                        </div>
+                        
+                        <div class="section-title">💬 優勢和限制</div>
+                        <div class="summary-box">
+                            <strong>✅ 優勢：</strong><br>
+                            • 樣本量大，統計檢力高<br>
+                            • 結論更穩健<br>
+                            • 1級最高級別證據<br><br>
+                            
+                            <strong>❌ 限制：</strong><br>
+                            • 垃圾進垃圾出 (GIGO)<br>
+                            • 發表偏誤（只發表陽性結果）<br>
+                            • 異質性可能掩蓋真相
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 系統性回顧 -->
+            <div class="concept-card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span>系統性回顧 (Systematic Review) | 最高級別的證據</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-content">
+                        <div class="section-title">🧠 心智圖</div>
+                        <div class="mind-map">
+系統性回顧
+├─ 定義：系統、明確、可重複的文獻回顧
+├─ 通常配合統合分析
+├─ 1級最高級別證據
+├─ 與非系統性回顧的區別：
+│  ├─ 明確的搜索策略
+│  ├─ 預先註冊（PROSPERO）
+│  ├─ 獨立評審員評估
+│  └─ 可重現的方法
+└─ 臨床應用：指南制定、最佳實踐證據
+                        </div>
+                        
+                        <div class="section-title">💬 如何評讀SR</div>
+                        <p style="margin: 1rem 0; line-height: 1.8; font-size: 14px;">
+                            ✓ 是否在PROSPERO預先註冊？<br>
+                            ✓ 納入的研究都是高質量嗎？<br>
+                            ✓ 有多少研究支持結論？<br>
+                            ✓ 是否有利益衝突？<br>
+                            ✓ 結論是否過度解釋？
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="text-align: center; color: var(--teal); font-size: 14px; margin-top: 2rem; font-weight: 600;">
+                ✨ 已增建17大核心概念完整模板｜統計基礎9個 + 推論檢驗8個
+            </p>
+        </div>
+        </div>
+        
+        <!-- 3. EBM評估 -->
+        <div id="ebm" class="tab-content">
+            <h2 style="color: var(--navy); margin-bottom: 1.5rem; border-bottom: 3px solid var(--gold); padding-bottom: 0.5rem;">🔬 證據醫學等級評估 | Evidence Hierarchy</h2>
+            
+            <div style="margin: 2rem 0;">
+                <h3 style="color: var(--navy); margin-bottom: 1rem;">請選擇該研究的等級：</h3>
+                
+                <div class="evidence-ladder">
+                    <div class="ladder-item" onclick="selectEvidenceLevel(this, '1a')">
+                        <div class="ladder-level">等級 1a：系統評論 (SR) 的多個RCT薈萃分析</div>
+                        <div class="ladder-desc">最高質量證據。多項隨機試驗的系統性整合分析。</div>
+                    </div>
+                    
+                    <div class="ladder-item" onclick="selectEvidenceLevel(this, '1b')">
+                        <div class="ladder-level">等級 1b：高質量RCT或SR的單一大型隨機試驗</div>
+                        <div class="ladder-desc">設計嚴謹的隨機對照試驗，樣本量大，隨訪完整。</div>
+                    </div>
+                    
+                    <div class="ladder-item" onclick="selectEvidenceLevel(this, '1c')">
+                        <div class="ladder-level">等級 1c：全或無型臨床試驗結果</div>
+                        <div class="ladder-desc">治療效果極端明顯，無需對照組。</div>
+                    </div>
+                    
+                    <div class="ladder-item" onclick="selectEvidenceLevel(this, '2a')">
+                        <div class="ladder-level">等級 2a：SR的優質隊列研究</div>
+                        <div class="ladder-desc">多項質量較好的隊列研究的系統性評論。</div>
+                    </div>
+                    
+                    <div class="ladder-item" onclick="selectEvidenceLevel(this, '2b')">
+                        <div class="ladder-level">等級 2b：低質量RCT或單一隊列研究</div>
+                        <div class="ladder-desc">前瞻性隊列研究，但設計有限制或樣本量較小。</div>
+                    </div>
+                    
+                    <div class="ladder-item" onclick="selectEvidenceLevel(this, '3a')">
+                        <div class="ladder-level">等級 3a：SR的病例對照研究</div>
+                        <div class="ladder-desc">多項病例對照研究的系統評論。</div>
+                    </div>
+                    
+                    <div class="ladder-item" onclick="selectEvidenceLevel(this, '3b')">
+                        <div class="ladder-level">等級 3b：單一病例對照研究</div>
+                        <div class="ladder-desc">後溯性設計，易受偏誤影響。</div>
+                    </div>
+                    
+                    <div class="ladder-item" onclick="selectEvidenceLevel(this, '4')">
+                        <div class="ladder-level">等級 4：病例系列報告</div>
+                        <div class="ladder-desc">沒有對照組的描述性研究。</div>
+                    </div>
+                    
+                    <div class="ladder-item" onclick="selectEvidenceLevel(this, '5')">
+                        <div class="ladder-level">等級 5：專家意見</div>
+                        <div class="ladder-desc">最低質量證據。基於臨床經驗或傳統。</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="evidence-feedback" style="display: none; margin-top: 2rem;">
+                <div class="summary-box">
+                    <div class="summary-title">✅ 你的評估</div>
+                    <div class="summary-content" id="feedback-content"></div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem; padding: 2rem; background: white; border-radius: 8px; border: 2px solid var(--border);">
+                <h3 style="color: var(--navy); margin-bottom: 1rem;">🎯 GRADE 品質評估方法</h3>
+                <p style="margin: 1rem 0; font-size: 14px;">GRADE (Grading of Recommendations, Assessment, Development, and Evaluations) 評估證據品質的四個維度：</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--success);">
+                        <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">1️⃣ 研究設計質量</div>
+                        <p style="font-size: 13px;">RCT起點高，觀察研究起點低</p>
+                    </div>
+                    
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--warning);">
+                        <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">2️⃣ 偏誤風險</div>
+                        <p style="font-size: 13px;">設計缺陷、實施不佳、報告不完整</p>
+                    </div>
+                    
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--teal);">
+                        <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">3️⃣ 一致性</div>
+                        <p style="font-size: 13px;">不同研究結果是否一致</p>
+                    </div>
+                    
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--gold);">
+                        <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">4️⃣ 直接性</div>
+                        <p style="font-size: 13px;">研究對象是否代表臨床患者</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 4. 臨床案例 -->
+        <div id="cases" class="tab-content">
+            <h2 style="color: var(--navy); margin-bottom: 1.5rem; border-bottom: 3px solid var(--gold); padding-bottom: 0.5rem;">🏥 臨床案例庫 | 證據應用實戰</h2>
+            
+            <div class="clinical-case" style="border-left: 4px solid var(--success); background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(255, 255, 255, 0));">
+                <div class="case-title" style="font-size: 16px;">案例1：降血壓藥的選擇困境</div>
+                <div class="case-content">
+                    <p><strong>臨床情景：</strong><br>
+                    55歲男性患者，高血壓5年，BP 150/95。醫生考慮給予ACE抑制劑或鈣離子通道阻滯劑。患者詢問：「哪個藥更好？」</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>相關證據：</strong><br>
+                    • 2024年高血壓指南（1級證據：多個RCT薈萃分析）：兩類藥物同樣有效<br>
+                    • 該患者沒有蛋白尿，無需特別選擇ACE抑制劑<br>
+                    • 但患者有輕度肺功能下降，鈣離子通道阻滯劑可能更安全</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>EBM決策：</strong><br>
+                    用強有力的證據（1級）說明兩者同樣有效，但根據患者個人情況（肺功能）選擇鈣離子通道阻滯劑，並向患者解釋理由。</p>
+                </div>
+            </div>
+            
+            <div class="clinical-case" style="border-left: 4px solid var(--teal); background: linear-gradient(135deg, rgba(0, 107, 125, 0.1), rgba(255, 255, 255, 0));">
+                <div class="case-title" style="font-size: 16px;">案例2：新藥的臨床適用性問題</div>
+                <div class="case-content">
+                    <p><strong>臨床情景：</strong><br>
+                    某新型抗癌藥在期刊發表，相比舊藥延長生存期3個月。患者看到新聞，要求使用新藥。</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>批判性評讀：</strong><br>
+                    ✓ 這是2級研究嗎？（隊列研究）<br>
+                    ✓ 樣本量多少？<br>
+                    ✓ 隨訪周期夠嗎？<br>
+                    ✓ 副作用如何？生活質量如何？<br>
+                    ✓ 新藥花費多少倍？值不值得？</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>EBM決策：</strong><br>
+                    用證據分析回答患者：「延長3個月生存是統計顯著，但臨床上意義有限。考慮副作用、費用、生活質量，我們需要共同決策。」</p>
+                </div>
+            </div>
+            
+            <div class="clinical-case" style="border-left: 4px solid var(--warning); background: linear-gradient(135deg, rgba(255, 165, 0, 0.1), rgba(255, 255, 255, 0));">
+                <div class="case-title" style="font-size: 16px;">案例3：信賴區間的臨床應用</div>
+                <div class="case-content">
+                    <p><strong>臨床情景：</strong><br>
+                    兩家醫院分別進行新穎治療效果研究，都報告「平均效果：降低肝酶20%」</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>詳細數據：</strong><br>
+                    A醫院：下降20%, 95% CI: 18-22%（樣本1000人，隨訪完善）<br>
+                    B醫院：下降20%, 95% CI: 5-35%（樣本50人，隨訪不完全）</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>EBM判斷：</strong><br>
+                    雖然平均值相同，但A醫院的CI很窄，說明結果精確可靠，有信心效果確實在18-22%。<br>
+                    B醫院的CI很寬，說明結果不精確，效果可能小到5%，也可能大到35%，無法確定。<br>
+                    應該選擇相信A醫院的結果。</p>
+                </div>
+            </div>
+            
+            <div class="clinical-case" style="border-left: 4px solid var(--success); background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(255, 255, 255, 0));">
+                <div class="case-title" style="font-size: 16px;">案例4：敏感度特異度的臨床權衡</div>
+                <div class="case-content">
+                    <p><strong>臨床困境：</strong><br>
+                    診斷罕見疾病時，有兩個測試可選：</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>快速測試：</strong> 敏感度95%，特異度70%<br>
+                    <strong>精確測試：</strong> 敏感度90%，特異度98%</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>EBM決策：</strong><br>
+                    <strong>篩檢階段：</strong>用快速測試，因為我們不能漏診患者<br>
+                    <strong>確診階段：</strong>用精確測試，因為我們不能誤診<br>
+                    <strong>結合應用：</strong>先用快速測試篩檢，陽性患者再用精確測試確診，既提高效率又保證準確</p>
+                </div>
+            </div>
+            
+            <div class="clinical-case" style="border-left: 4px solid #FF6B6B; background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 255, 255, 0));">
+                <div class="case-title" style="font-size: 16px;">案例5：P值誤解導致的臨床錯誤</div>
+                <div class="case-content">
+                    <p><strong>案例：</strong><br>
+                    某研究發現新保健食品能「預防感冒」，P = 0.04</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>❌ 錯誤理解：</strong><br>
+                    「有96%的機率這個食品真的能預防感冒」<br>
+                    「食品預防感冒的效果非常顯著」<br>
+                    「我應該推薦所有患者吃」</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>✅ 正確理解：</strong><br>
+                    「假如食品根本無效，看到這個結果的機率是4%」<br>
+                    「結果有統計顯著性，但效果大小可能很小」<br>
+                    「需要看：樣本量多少？效果大小多少？有無副作用？」</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>EBM決策：</strong><br>
+                    P < 0.05只是門檻，不代表結果重要。需要進一步檢查：<br>
+                    ✓ 信賴區間是什麼？<br>
+                    ✓ 樣本量夠嗎？<br>
+                    ✓ 有沒有多次比較問題（P-hacking）？<br>
+                    ✓ 實際效果值得臨床應用嗎？</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 5. 每日測驗 -->
+        <div id="quiz" class="tab-content">
+            <div class="quiz-section">
+                <div class="quiz-header">
+                    <div class="quiz-title">✏️ 今日統計測驗</div>
+                    <div class="quiz-score">正確: <span id="quiz-score">0</span>/5</div>
+                </div>
+                
+                <div class="quiz-item">
+                    <div class="quiz-question">1. 一項研究報告「P值=0.04」，表示什麼？</div>
+                    <div class="quiz-options">
+                        <button class="option-btn" onclick="checkAnswer(this, false)">A. 虛無假設為真的機率是4%</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true)">B. 在虛無假設為真的情況下，觀察到這個結果或更極端結果的機率是4%</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">C. 研究結果的準確度是96%</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">D. 這個發現100%可靠</button>
+                    </div>
+                </div>
+                
+                <div class="quiz-item">
+                    <div class="quiz-question">2. 信賴區間95% CI: 0.7-0.9，哪個說法正確？</div>
+                    <div class="quiz-options">
+                        <button class="option-btn" onclick="checkAnswer(this, false)">A. 參數在0.7-0.9範圍內的機率是95%</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true)">B. 如果重複該研究100次，約95次的CI會包含真實參數</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">C. 參數肯定在0.7-0.9之間</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">D. 數據的95%落在0.7-0.9範圍</button>
+                    </div>
+                </div>
+                
+                <div class="quiz-item">
+                    <div class="quiz-question">3. 某診斷測試敏感度95%，特異度85%。以下何者錯誤？</div>
+                    <div class="quiz-options">
+                        <button class="option-btn" onclick="checkAnswer(this, false)">A. 患者中有95%會被該測試檢出</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">B. 非患者中有85%會被正確排除</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true)">C. 測試結果80%準確</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">D. 該測試適合篩檢而非確診</button>
+                    </div>
+                </div>
+                
+                <div class="quiz-item">
+                    <div class="quiz-question">4. 以下哪種研究設計能提供最強的因果推論證據？</div>
+                    <div class="quiz-options">
+                        <button class="option-btn" onclick="checkAnswer(this, true)">A. 多項RCT的系統性回顧和薈萃分析</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">B. 單一大型隊列研究</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">C. 多項病例對照研究</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">D. 專家共識意見</button>
+                    </div>
+                </div>
+                
+                <div class="quiz-item">
+                    <div class="quiz-question">5. 一項研究針對60-75歲患者，但你要將結果應用於35歲患者。你應該：</div>
+                    <div class="quiz-options">
+                        <button class="option-btn" onclick="checkAnswer(this, false)">A. 直接應用，結果適用於所有年齡</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true)">B. 謹慎，因為年齡不同可能影響藥物效果和安全性</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">C. 拒絕應用該研究</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false)">D. 等待更多研究證實</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="action-btn success" onclick="submitQuiz()">提交測驗</button>
+            </div>
+        </div>
+        
+        <!-- 6. AI深度分析 -->
+        <div id="ai" class="tab-content">
+            <h2 style="color: var(--navy); margin-bottom: 1.5rem; border-bottom: 3px solid var(--gold); padding-bottom: 0.5rem;">🤖 AI Paper深度分析 | 由Claude驅動</h2>
+            
+            <div style="background: white; padding: 2rem; border-radius: 8px; border: 2px solid var(--border); margin-bottom: 2rem;">
+                <h3 style="color: var(--navy); margin-bottom: 1.5rem;">上傳或粘貼Paper摘要進行深度分析</h3>
+                <textarea id="paper-full-text" class="form-input textarea" style="min-height: 200px;" placeholder="粘貼論文摘要、背景、方法、結果等內容..."></textarea>
+                
+                <div style="margin-top: 1rem; text-align: center;">
+                    <button class="action-btn" onclick="deepAnalyzePaper()">🔍 AI深度分析</button>
+                </div>
+                
+                <div id="deep-analysis-result" style="margin-top: 2rem;"></div>
+            </div>
+            
+            <div style="background: var(--bg-light); padding: 2rem; border-radius: 8px; border-left: 4px solid var(--gold);">
+                <h3 style="color: var(--navy); margin-bottom: 1rem;">📌 AI分析包含</h3>
+                <ul style="font-size: 14px; line-height: 2; margin-left: 1.5rem;">
+                    <li>✓ 研究設計的優缺點</li>
+                    <li>✓ 統計方法的評價</li>
+                    <li>✓ 結論是否適當支持</li>
+                    <li>✓ 臨床適用性評估</li>
+                    <li>✓ 與現有指南比較</li>
+                    <li>✓ 建議的後續行動</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 7. 每日復習 -->
+        <div id="review" class="tab-content">
+            <h2 style="color: var(--navy); margin-bottom: 1.5rem; border-bottom: 3px solid var(--gold); padding-bottom: 0.5rem;">🔄 每日復習計劃 | 根據遺忘曲線</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 2px solid var(--border); text-align: center;">
+                    <div style="font-size: 32px; margin-bottom: 0.5rem;">📖</div>
+                    <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.3rem;">今日需復習</div>
+                    <div id="today-review-count" style="font-size: 24px; color: var(--teal); font-weight: bold;">5</div>
+                    <div style="font-size: 12px; opacity: 0.7; margin-top: 0.5rem;">概念/題目</div>
+                </div>
+                
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 2px solid var(--border); text-align: center;">
+                    <div style="font-size: 32px; margin-bottom: 0.5rem;">⏰</div>
+                    <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.3rem;">預計時間</div>
+                    <div id="review-time" style="font-size: 24px; color: var(--teal); font-weight: bold;">25</div>
+                    <div style="font-size: 12px; opacity: 0.7; margin-top: 0.5rem;">分鐘</div>
+                </div>
+                
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 2px solid var(--border); text-align: center;">
+                    <div style="font-size: 32px; margin-bottom: 0.5rem;">🎯</div>
+                    <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.3rem;">複習進度</div>
+                    <div id="review-progress" style="font-size: 24px; color: var(--success); font-weight: bold;">0%</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 0%;"></div></div>
+                </div>
+            </div>
+            
+            <div id="review-items"></div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="action-btn success" onclick="generateReviewPlan()">📅 生成今日復習計劃</button>
+            </div>
+        </div>
+        
+        <!-- 8. 模擬考試 -->
+        <div id="mock" class="tab-content">
+            <h2 style="color: var(--navy); margin-bottom: 1.5rem; border-bottom: 3px solid var(--gold); padding-bottom: 0.5rem;">📝 模擬考試 | 全真模擬</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <button class="action-btn" style="padding: 2rem; background: linear-gradient(135deg, var(--navy), var(--light-navy));" onclick="startMockExam('basic')">
+                    <div style="font-size: 20px; margin-bottom: 0.5rem;">📘 基礎章節</div>
+                    <div style="font-size: 13px; opacity: 0.9;">20題 × 30分鐘</div>
+                </button>
+                
+                <button class="action-btn" style="padding: 2rem; background: linear-gradient(135deg, var(--teal), #00899A);" onclick="startMockExam('medium')">
+                    <div style="font-size: 20px; margin-bottom: 0.5rem;">📗 進階章節</div>
+                    <div style="font-size: 13px; opacity: 0.9;">30題 × 45分鐘</div>
+                </button>
+                
+                <button class="action-btn" style="padding: 2rem; background: linear-gradient(135deg, var(--gold), #D4A574);" onclick="startMockExam('full')">
+                    <div style="font-size: 20px; margin-bottom: 0.5rem;">📙 完整試卷</div>
+                    <div style="font-size: 13px; opacity: 0.9;">50題 × 90分鐘</div>
+                </button>
+            </div>
+            
+            <div id="exam-area"></div>
+        </div>
+        
+        <!-- 9. 能力診斷 -->
+        <div id="diagnostic" class="tab-content">
+            <h2 style="color: var(--navy); margin-bottom: 1.5rem; border-bottom: 3px solid var(--gold); padding-bottom: 0.5rem;">🎯 快速能力診斷 | 5分鐘測驗</h2>
+            
+            <div style="background: white; padding: 2rem; border-radius: 8px; border: 2px solid var(--border); margin-bottom: 2rem;">
+                <h3 style="color: var(--navy); margin-bottom: 1.5rem;">一個診斷測試快速確認你的當前水平</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                    <button class="option-btn" style="padding: 1.5rem; text-align: center; border: 3px solid var(--border);" onclick="diagnosticQuiz(1)">
+                        <div style="font-size: 28px; margin-bottom: 0.5rem;">1️⃣</div>
+                        <div style="font-weight: 600; color: var(--navy);">第1層</div>
+                        <div style="font-size: 12px; opacity: 0.7;">會算公式</div>
+                    </button>
+                    
+                    <button class="option-btn" style="padding: 1.5rem; text-align: center; border: 3px solid var(--border);" onclick="diagnosticQuiz(2)">
+                        <div style="font-size: 28px; margin-bottom: 0.5rem;">2️⃣</div>
+                        <div style="font-weight: 600; color: var(--navy);">第2層</div>
+                        <div style="font-size: 12px; opacity: 0.7;">會解讀統計</div>
+                    </button>
+                    
+                    <button class="option-btn" style="padding: 1.5rem; text-align: center; border: 3px solid var(--border);" onclick="diagnosticQuiz(3)">
+                        <div style="font-size: 28px; margin-bottom: 0.5rem;">3️⃣</div>
+                        <div style="font-weight: 600; color: var(--navy);">第3層</div>
+                        <div style="font-size: 12px; opacity: 0.7;">會閱讀Paper</div>
+                    </button>
+                    
+                    <button class="option-btn" style="padding: 1.5rem; text-align: center; border: 3px solid var(--border);" onclick="diagnosticQuiz(4)">
+                        <div style="font-size: 28px; margin-bottom: 0.5rem;">4️⃣</div>
+                        <div style="font-weight: 600; color: var(--navy);">第4層</div>
+                        <div style="font-size: 12px; opacity: 0.7;">判斷證據品質</div>
+                    </button>
+                    
+                    <button class="option-btn" style="padding: 1.5rem; text-align: center; border: 3px solid var(--border);" onclick="diagnosticQuiz(5)">
+                        <div style="font-size: 28px; margin-bottom: 0.5rem;">5️⃣</div>
+                        <div style="font-weight: 600; color: var(--navy);">第5層</div>
+                        <div style="font-size: 12px; opacity: 0.7;">臨床應用</div>
+                    </button>
+                </div>
+                
+                <div id="diagnostic-result"></div>
+            </div>
+        </div>
+        
+        <!-- 10. Anki系統 -->
+        <div id="anki" class="tab-content">
+            <h2 style="color: var(--navy); margin-bottom: 1.5rem; border-bottom: 3px solid var(--gold); padding-bottom: 0.5rem;">🎴 Anki卡片系統 | 間隔重複學習</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <button class="action-btn secondary" onclick="exportAnkiDeck()">
+                    📥 匯出所有卡片 (CSV)
+                </button>
+                <button class="action-btn secondary" onclick="generateAnkiForConcept()">
+                    ⭐ 生成指定章節卡片
+                </button>
+                <button class="action-btn secondary" onclick="importAnkiStats()">
+                    📊 同步Anki進度
+                </button>
+            </div>
+            
+            <div style="background: white; padding: 2rem; border-radius: 8px; border: 2px solid var(--border);">
+                <h3 style="color: var(--navy); margin-bottom: 1.5rem;">📈 卡片統計</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 6px; border-left: 4px solid var(--success);">
+                        <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.3rem;">✅ 已掌握</div>
+                        <div style="font-size: 24px; color: var(--success); font-weight: bold;" id="anki-mastered">0</div>
+                        <div style="font-size: 12px; opacity: 0.7;">張卡片</div>
+                    </div>
+                    
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 6px; border-left: 4px solid var(--warning);">
+                        <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.3rem;">📚 學習中</div>
+                        <div style="font-size: 24px; color: var(--warning); font-weight: bold;" id="anki-learning">0</div>
+                        <div style="font-size: 12px; opacity: 0.7;">張卡片</div>
+                    </div>
+                    
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 6px; border-left: 4px solid var(--teal);">
+                        <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.3rem;">🆕 新增</div>
+                        <div style="font-size: 24px; color: var(--teal); font-weight: bold;" id="anki-new">15</div>
+                        <div style="font-size: 12px; opacity: 0.7;">張卡片</div>
+                    </div>
+                </div>
+                
+                <div id="anki-preview" style="margin-top: 2rem;"></div>
+            </div>
+        </div>
+        
+        <!-- 11. 錯題庫 -->
+        <div id="errors" class="tab-content">
+            <h2 style="color: var(--navy); margin-bottom: 1.5rem; border-bottom: 3px solid var(--gold); padding-bottom: 0.5rem;">❌ 錯題庫 | 從錯誤中學習</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 2px solid var(--border); text-align: center;">
+                    <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">📊 錯題統計</div>
+                    <div id="error-count" style="font-size: 28px; color: #F44336; font-weight: bold;">0</div>
+                    <div style="font-size: 12px; opacity: 0.7;">題目</div>
+                </div>
+                
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 2px solid var(--border); text-align: center;">
+                    <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">⚠️ 重點薄弱</div>
+                    <div id="weakness-topic" style="font-size: 16px; color: var(--navy); font-weight: bold;">P值</div>
+                    <div style="font-size: 12px; opacity: 0.7;">次常錯</div>
+                </div>
+                
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 2px solid var(--border); text-align: center;">
+                    <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">🎯 改善建議</div>
+                    <button class="option-btn" style="width: 100%; margin-top: 0.5rem;" onclick="generateErrorReport()">生成報告</button>
+                </div>
+            </div>
+            
+            <div id="error-list"></div>
+        </div>
+        
+        <!-- 12. 學習路徑 -->
+        <div id="pathway" class="tab-content">
+            <h2 style="color: var(--navy); margin-bottom: 1.5rem; border-bottom: 3px solid var(--gold); padding-bottom: 0.5rem;">🗺️ 個性化學習路徑 | 定制你的進度</h2>
+            
+            <div style="background: white; padding: 2rem; border-radius: 8px; border: 2px solid var(--border); margin-bottom: 2rem;">
+                <h3 style="color: var(--navy); margin-bottom: 1.5rem;">根據你的目標選擇學習路徑</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; border: 2px solid var(--border); cursor: pointer;" onclick="selectPathway('exam')">
+                        <div style="font-size: 24px; margin-bottom: 0.8rem;">📚</div>
+                        <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">考試衝刺</div>
+                        <div style="font-size: 13px; opacity: 0.7;">
+                            <strong>適合：</strong>近期有考試<br>
+                            <strong>時間：</strong>4周<br>
+                            <strong>強度：</strong>⚡⚡⚡
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; border: 2px solid var(--border); cursor: pointer;" onclick="selectPathway('clinical')">
+                        <div style="font-size: 24px; margin-bottom: 0.8rem;">🏥</div>
+                        <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">臨床實踐</div>
+                        <div style="font-size: 13px; opacity: 0.7;">
+                            <strong>適合：</strong>在地臨床應用<br>
+                            <strong>時間：</strong>12周<br>
+                            <strong>強度：</strong>⚡⚡
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; border: 2px solid var(--border); cursor: pointer;" onclick="selectPathway('deep')">
+                        <div style="font-size: 24px; margin-bottom: 0.8rem;">🔬</div>
+                        <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">深度掌握</div>
+                        <div style="font-size: 13px; opacity: 0.7;">
+                            <strong>適合：</strong>系統學習<br>
+                            <strong>時間：</strong>24周<br>
+                            <strong>強度：</strong>⚡
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="pathway-detail" style="margin-top: 2rem;"></div>
+            </div>
+        </div>
+        
+        <!-- 6. 進度追蹤 -->
+        <div id="progress" class="tab-content">
+            <h2 style="color: var(--navy); margin-bottom: 1.5rem; border-bottom: 3px solid var(--gold); padding-bottom: 0.5rem;">📊 學習進度追蹤</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+                <!-- 能力發展 -->
+                <div style="background: white; padding: 2rem; border-radius: 8px; border: 2px solid var(--border); box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+                    <h3 style="color: var(--navy); margin-bottom: 1.5rem; border-bottom: 2px solid var(--gold); padding-bottom: 0.5rem;">🎯 能力級別進度</h3>
+                    <div id="level-progress"></div>
+                </div>
+                
+                <!-- Paper閱讀統計 -->
+                <div style="background: white; padding: 2rem; border-radius: 8px; border: 2px solid var(--border); box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+                    <h3 style="color: var(--navy); margin-bottom: 1.5rem; border-bottom: 2px solid var(--gold); padding-bottom: 0.5rem;">📄 Paper統計</h3>
+                    <div style="margin: 1rem 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <span>本週已讀：</span>
+                            <strong style="color: var(--teal); font-size: 18px;" id="weekly-count">0篇</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <span>本月已讀：</span>
+                            <strong style="color: var(--gold); font-size: 18px;" id="monthly-count">0篇</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>連續閱讀天數：</span>
+                            <strong style="color: var(--success); font-size: 18px;" id="streak">0天</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 掌握度 -->
+                <div style="background: white; padding: 2rem; border-radius: 8px; border: 2px solid var(--border); box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+                    <h3 style="color: var(--navy); margin-bottom: 1.5rem; border-bottom: 2px solid var(--gold); padding-bottom: 0.5rem;">📈 概念掌握度</h3>
+                    <div id="mastery-details"></div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; background: white; padding: 2rem; border-radius: 8px; border: 2px solid var(--border);">
+                <h3 style="color: var(--navy); margin-bottom: 1rem;">🏆 成就系統</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                    <div style="background: var(--bg-light); padding: 1rem; border-radius: 6px; text-align: center; opacity: 0.6;">
+                        <div style="font-size: 32px; margin-bottom: 0.5rem;">📖</div>
+                        <div style="font-weight: 600; color: var(--navy); font-size: 13px;">讀者</div>
+                        <div style="font-size: 12px; opacity: 0.7;">閱讀5篇Paper</div>
+                    </div>
+                    <div style="background: var(--bg-light); padding: 1rem; border-radius: 6px; text-align: center; opacity: 0.6;">
+                        <div style="font-size: 32px; margin-bottom: 0.5rem;">🔍</div>
+                        <div style="font-weight: 600; color: var(--navy); font-size: 13px;">評論者</div>
+                        <div style="font-size: 12px; opacity: 0.7;">完整評讀10篇</div>
+                    </div>
+                    <div style="background: var(--bg-light); padding: 1rem; border-radius: 6px; text-align: center; opacity: 0.6;">
+                        <div style="font-size: 32px; margin-bottom: 0.5rem;">🧠</div>
+                        <div style="font-weight: 600; color: var(--navy); font-size: 13px;">思想家</div>
+                        <div style="font-size: 12px; opacity: 0.7;">評估30篇證據</div>
+                    </div>
+                    <div style="background: var(--bg-light); padding: 1rem; border-radius: 6px; text-align: center; opacity: 0.6;">
+                        <div style="font-size: 32px; margin-bottom: 0.5rem;">⚕️</div>
+                        <div style="font-weight: 600; color: var(--navy); font-size: 13px;">EBM醫師</div>
+                        <div style="font-size: 12px; opacity: 0.7;">評估100篇證據</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <p>Evidence OS | 北醫大一 證據思考培養系統</p>
+        <p class="footer-motto">「醫學的真正核心，不只是會計算，而是能根據最佳證據做出合理的臨床判斷」</p>
+        <p style="margin-top: 1rem; font-size: 12px; opacity: 0.8;">每天閱讀一篇Paper，成為懂證據的醫師</p>
+    </footer>
+    
+    <script>
+        let userLevel = 1;
+        let papersRead = 0;
+        let masteryScore = 0;
+        let quizCorrect = 0;
+        let dailyPapers = [];
+        
+        // Tab switching
+        function switchTab(tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(c => c.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            window.scrollTo(0, 0);
+        }
+        
+        // Card toggle
+        function toggleCard(header) {
+            const cardBody = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            
+            cardBody.classList.toggle('expanded');
+            header.classList.toggle('expanded');
+        }
+        
+        // Evidence Level Selection
+        function selectEvidenceLevel(elem, level) {
+            const items = document.querySelectorAll('.ladder-item');
+            items.forEach(item => item.classList.remove('selected'));
+            elem.classList.add('selected');
+            
+            const levelDescriptions = {
+                '1a': '🏆 最高級別證據 | 這個發現有極強的科學根據，適合臨床應用。',
+                '1b': '🥇 強證據 | 隨機試驗設計良好，可信度高，適合臨床應用。',
+                '1c': '⭐ 極端效果 | 治療效果明顯，幾乎無需對照，極為罕見。',
+                '2a': '✅ 中等偏上證據 | 多項隊列研究支持，可在臨床應用。',
+                '2b': '✅ 中等證據 | 單一隊列研究或低質量RCT，需謹慎應用。',
+                '3a': '⚠️ 中等偏下證據 | 病例對照研究易受偏誤，應用時需謹慎。',
+                '3b': '⚠️ 較弱證據 | 後溯性設計，僅供參考。',
+                '4': '❌ 弱證據 | 沒有對照組，難以推斷因果關係。',
+                '5': '❌ 最弱證據 | 不超過專家意見，需要更好的科學證據。'
+            };
+            
+            const feedback = document.getElementById('evidence-feedback');
+            const feedbackContent = document.getElementById('feedback-content');
+            feedbackContent.textContent = levelDescriptions[level];
+            feedback.style.display = 'block';
+        }
+        
+        // Paper Review
+        function savePaperReview() {
+            const q1 = document.getElementById('q1').value;
+            const q2 = document.getElementById('q2').value;
+            
+            if (!q1 || !q2) {
+                alert('請至少填寫研究問題和研究設計');
+                return;
+            }
+            
+            papersRead++;
+            updateStats();
+            alert('✅ 今日Paper評讀已保存！繼續為未來的臨床決策積累證據。');
+            
+            // Clear form
+            document.querySelectorAll('.form-input').forEach(input => input.value = '');
+        }
+        
+        // Generate AI Analysis (mock)
+        function generateAnalysis() {
+            const output = document.getElementById('paper-analysis');
+            output.innerHTML = `
+                <div style="background: white; padding: 2rem; border-radius: 8px; border-left: 4px solid var(--teal); margin-top: 2rem; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+                    <h3 style="color: var(--navy); margin-bottom: 1rem;">🤖 AI初步分析</h3>
+                    <div style="line-height: 1.8; font-size: 14px;">
+                        <p><strong>研究強度評估：</strong> 根據你填入的研究設計，這是一項[中等質量]的研究。</p>
+                        <p style="margin-top: 0.8rem;"><strong>P值解讀：</strong> 如果P值小於0.05，則結果具有統計顯著性。但記住，統計顯著≠臨床意義重大。</p>
+                        <p style="margin-top: 0.8rem;"><strong>臨床適用性：</strong> 在決定是否將該研究應用到你的患者前，請考慮：</p>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>你的患者是否符合該研究的納入標準？</li>
+                            <li>你的臨床環境是否類似？</li>
+                            <li>患者是否有特殊的忌諱或合併症？</li>
+                        </ul>
+                        <p style="margin-top: 1rem; padding: 1rem; background: var(--bg-light); border-left: 3px solid var(--gold); border-radius: 4px;">
+                            <strong>💡 建議：</strong> 將此Paper與至少2篇同主題的研究比較，看結果是否一致。如果不一致，那就需要更多證據或進行共同決策。
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Quiz functions
+        function checkAnswer(btn, isCorrect) {
+            if (isCorrect) {
+                btn.classList.add('correct');
+                quizCorrect++;
+            } else {
+                btn.classList.add('incorrect');
+            }
+            
+            const parent = btn.parentElement;
+            const options = parent.querySelectorAll('.option-btn');
+            options.forEach(opt => opt.disabled = true);
+        }
+        
+        function checkQuizAnswer(btn, isCorrect) {
+            if (isCorrect) {
+                btn.classList.add('correct');
+            } else {
+                btn.classList.add('incorrect');
+            }
+            
+            const parent = btn.parentElement;
+            const options = parent.querySelectorAll('.option-btn');
+            options.forEach(opt => opt.disabled = true);
+        }
+        
+        function submitQuiz() {
+            document.getElementById('quiz-score').textContent = quizCorrect;
+            if (quizCorrect >= 4) {
+                masteryScore = Math.min(100, masteryScore + 15);
+                alert(`✅ 測驗完成！你答對了${quizCorrect}/5題。掌握度+15% → ${masteryScore}%`);
+            } else {
+                alert(`你答對了${quizCorrect}/5題。繼續加油！`);
+            }
+            updateStats();
+            quizCorrect = 0;
+        }
+        
+        // Update stats
+        function updateStats() {
+            // Update header
+            document.getElementById('papers-count').textContent = papersRead;
+            document.getElementById('mastery-score').textContent = masteryScore + '%';
+            
+            // Update level
+            if (papersRead >= 5) userLevel = 2;
+            if (papersRead >= 10) userLevel = 3;
+            if (papersRead >= 20) userLevel = 4;
+            if (papersRead >= 50) userLevel = 5;
+            
+            document.getElementById('level-display').textContent = userLevel;
+            updateLevelDisplay();
+            
+            // Progress bar
+            const progress = (papersRead / 50) * 100;
+            document.getElementById('progress-fill').style.width = Math.min(100, progress) + '%';
+        }
+        
+        function updateLevelDisplay() {
+            for (let i = 1; i <= 5; i++) {
+                const level = document.getElementById(`level-${i}`);
+                if (i <= userLevel) {
+                    level.classList.add('active');
+                } else {
+                    level.classList.remove('active');
+                }
+            }
+        }
+        
+        // AI Deep Analysis
+        async function deepAnalyzePaper() {
+            const paperText = document.getElementById('paper-full-text').value;
+            if (!paperText.trim()) {
+                alert('請輸入Paper內容');
+                return;
+            }
+            
+            const result = document.getElementById('deep-analysis-result');
+            result.innerHTML = '<div style="text-align: center; color: var(--teal);">🔍 AI分析中...</div>';
+            
+            const analysisPrompt = `
+作為醫學統計專家，請對以下Paper進行深度分析：
+
+${paperText}
+
+請從以下10個方面進行評析：
+1. 研究設計的優缺點
+2. 樣本量是否合理
+3. 統計方法是否適當
+4. 結論是否被充分支持
+5. 潛在的偏誤
+6. 與現有指南的比較
+7. 臨床實踐意義
+8. 適用於哪些患者
+9. 不適用於哪些情景
+10. 建議的後續行動
+
+使用繁體中文回答，重點突出，便於臨床參考。`;
+            
+            const response = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: 'claude-sonnet-4-6',
+                    max_tokens: 1500,
+                    messages: [{ role: 'user', content: analysisPrompt }]
+                })
+            }).catch(e => {
+                result.innerHTML = `<div class="summary-box"><strong>⚠️ API未配置</strong><br>本地演示模式。請配置Claude API以啟用AI分析。</div>`;
+                return null;
+            });
+            
+            if (response) {
+                const data = await response.json();
+                const reply = data.content[0].text;
+                result.innerHTML = `<div class="summary-box"><div class="summary-content">${reply.replace(/\n/g, '<br>')}</div></div>`;
+                addXP(20);
+            }
+        }
+        
+        // Review Plan
+        function generateReviewPlan() {
+            const today = new Date().toLocaleDateString('zh-TW');
+            const items = [
+                { concept: '平均數', difficulty: '簡單', lastReview: '3天前' },
+                { concept: 'P值', difficulty: '困難', lastReview: '5天前' },
+                { concept: '敏感度', difficulty: '中等', lastReview: '2天前' },
+                { concept: '信賴區間', difficulty: '困難', lastReview: '7天前' },
+                { concept: '相對風險', difficulty: '中等', lastReview: '4天前' }
+            ];
+            
+            let reviewHTML = `<div style="margin-top: 1.5rem;"><h3 style="color: var(--navy); margin-bottom: 1rem;">📅 ${today} 的復習計劃</h3>`;
+            
+            items.forEach((item, idx) => {
+                reviewHTML += `
+                <div class="quiz-item">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>${idx + 1}. ${item.concept}</strong><br>
+                            <span style="font-size: 12px; opacity: 0.7;">難度：${item.difficulty} | 上次複習：${item.lastReview}</span>
+                        </div>
+                        <button class="option-btn" onclick="markReviewDone(this)">完成</button>
+                    </div>
+                </div>`;
+            });
+            
+            reviewHTML += '</div>';
+            document.getElementById('review-items').innerHTML = reviewHTML;
+            document.getElementById('today-review-count').textContent = items.length;
+        }
+        
+        function markReviewDone(btn) {
+            btn.textContent = '✓ 已完成';
+            btn.style.background = '#E8F5E9';
+            btn.style.borderColor = '#4CAF50';
+            btn.disabled = true;
+            addXP(5);
+        }
+        
+        // Mock Exam
+        function startMockExam(type) {
+            const exams = {
+                basic: { title: '基礎章節測驗', questions: 20, time: 30 },
+                medium: { title: '進階章節測驗', questions: 30, time: 45 },
+                full: { title: '完整試卷', questions: 50, time: 90 }
+            };
+            
+            const exam = exams[type];
+            document.getElementById('exam-area').innerHTML = `
+            <div style="background: white; padding: 2rem; border-radius: 8px; border: 2px solid var(--border); text-align: center;">
+                <h3 style="color: var(--navy); margin-bottom: 1rem;">🚀 ${exam.title}</h3>
+                <p style="margin-bottom: 1rem; font-size: 16px;">
+                    <strong>${exam.questions}題</strong> × <strong>${exam.time}分鐘</strong>
+                </p>
+                <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                    <p style="margin: 0.5rem 0; font-size: 14px;">⏱️ 你確定要開始嗎？</p>
+                    <p style="margin: 0.5rem 0; font-size: 12px; opacity: 0.7;">開始後將進入計時模式，無法暫停</p>
+                </div>
+                <button class="action-btn success" onclick="beginExam('${type}', ${exam.questions}, ${exam.time})">開始考試</button>
+                <button class="action-btn" style="background: var(--border); color: var(--navy);" onclick="document.getElementById('exam-area').innerHTML = ''">取消</button>
+            </div>`;
+        }
+        
+        function beginExam(type, questions, time) {
+            const startTime = Date.now();
+            const timeLimit = time * 60 * 1000;
+            
+            document.getElementById('exam-area').innerHTML = `
+            <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 600; color: var(--navy);">⏱️ 剩餘時間: <span id="time-left">${time}</span> 分鐘</div>
+                <div style="font-weight: 600; color: var(--teal);">進度: <span id="question-progress">1</span>/${questions}</div>
+            </div>
+            <div class="quiz-item">
+                <div class="quiz-question">示例題1：下列關於P值的敍述，何者正確？</div>
+                <div class="quiz-options">
+                    <button class="option-btn" onclick="checkAnswer(this, false)">A. P值是虛無假設為真的機率</button>
+                    <button class="option-btn" onclick="checkAnswer(this, true)">B. P值是在虛無假設下看到現有數據的機率</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false)">C. P值衡量結論的重要性</button>
+                </div>
+            </div>
+            <button class="action-btn" style="margin-top: 1rem;" onclick="endExam()">結束考試</button>`;
+            
+            // Countdown
+            const countdown = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const remaining = Math.max(0, timeLimit - elapsed);
+                const mins = Math.floor(remaining / 60000);
+                const secs = Math.floor((remaining % 60000) / 1000);
+                document.getElementById('time-left').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+                
+                if (remaining <= 0) {
+                    clearInterval(countdown);
+                    endExam();
+                }
+            }, 1000);
+        }
+        
+        function endExam() {
+            alert('考試已結束！\n\n成績統計正在計算...\n\n模擬模式：點擊即可查看詳細分析');
+            document.getElementById('exam-area').innerHTML = `
+            <div style="background: white; padding: 2rem; border-radius: 8px; border: 2px solid var(--border); text-align: center;">
+                <h3 style="color: var(--navy); margin-bottom: 1.5rem;">📊 考試成績</h3>
+                <div style="font-size: 48px; color: var(--teal); font-weight: bold; margin-bottom: 1rem;">78分</div>
+                <p style="font-size: 16px; color: var(--navy); margin-bottom: 1.5rem;"><strong>及格！</strong> 相比平均分 68分，你領先 +10分</p>
+                <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: left;">
+                    <p>✓ 統計基礎：85%<br>✓ 檢驗方法：78%<br>✗ 臨床應用：62% ⚠️<br>✓ Paper閱讀：81%</p>
+                </div>
+                <button class="action-btn" onclick="generateExamReport()">📋 生成詳細報告</button>
+            </div>`;
+            addXP(30);
+        }
+        
+        // Diagnostic Quiz
+        function diagnosticQuiz(level) {
+            const questions = {
+                1: { q: '平均數的計算方式是？', correct: 'B' },
+                2: { q: 'P < 0.05代表什麼？', correct: 'B' },
+                3: { q: '敏感度的應用是？', correct: 'A' },
+                4: { q: '信賴區間的正確解釋是？', correct: 'B' },
+                5: { q: '下列哪項研究設計最高級？', correct: 'A' }
+            };
+            
+            alert('診斷測驗載入中...\n\n你選擇了第' + level + '層測試\n\n(完整版會有自適應題庫)');
+        }
+        
+        // Anki Export
+        function exportAnkiDeck() {
+            const ankiCards = [
+                { front: '平均數的公式', back: 'μ = Σx / n' },
+                { front: 'P值的正確解釋', back: '在虛無假設下，觀察到現有數據或更極端結果的機率' },
+                { front: '敏感度的定義', back: '患者中被檢出的比例' },
+                { front: '特異度的定義', back: '非患者中被正確排除的比例' },
+                { front: '信賴區間的含義', back: '如果重複研究100次，約95次的CI會包含真實參數' },
+                { front: '相對風險RR=2代表什麼', back: '暴露組的風險是非暴露組的2倍' },
+                { front: '勝算比何時使用', back: '病例對照研究中必須使用OR' },
+                { front: '常態分布的68-95-99.7規則', back: '68%在±1σ，95%在±2σ，99.7%在±3σ' },
+                { front: '眾數的定義', back: '出現次數最多的值' },
+                { front: '抽樣偏誤的主要來源', back: '選擇偏誤、無應答偏誤、測量偏誤' },
+                { front: '第一類錯誤（α）', back: '拒絕真實的虛無假設（假陽性）' },
+                { front: '第二類錯誤（β）', back: '接受虛假的虛無假設（假陰性）' },
+                { front: '統計檢力', back: '1 - β，正確拒絕虛假虛無假設的機率' },
+                { front: 'ROC曲線AUC的含義', back: '隨機選一個患者和非患者，測試正確判斷的機率' },
+                { front: '系統性回顧的特點', back: '系統、明確、可重複的文獻回顧，通常配合統合分析' }
+            ];
+            
+            let ankiText = '';
+            ankiCards.forEach(card => {
+                ankiText += `${card.front}\t${card.back}\n`;
+            });
+            
+            const blob = new Blob([ankiText], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'evidence_os_anki.txt';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            addXP(10);
+            alert(`✅ 已匯出${ankiCards.length}張Anki卡片！\n可直接導入Anki應用進行複習`);
+        }
+        
+        // Error Tracking
+        function generateErrorReport() {
+            const errors = [
+                { question: 'P值的含義', error: '理解為虛無假設成立的機率', correct: '應為在虛無假設下看到現有數據的機率' },
+                { question: '敏感度 vs 特異度', error: '混淆兩者的應用情景', correct: '敏感度用於排除，特異度用於診斷' },
+                { question: '信賴區間解釋', error: '認為參數肯定在此區間內', correct: '應為有95%信心參數在其中' }
+            ];
+            
+            let html = '<div style="margin-top: 1rem;">';
+            errors.forEach((e, idx) => {
+                html += `
+                <div class="clinical-case">
+                    <div class="case-title">❌ 錯誤${idx + 1}：${e.question}</div>
+                    <div class="case-content">
+                        <p><strong>你的理解：</strong> ${e.error}</p>
+                        <p style="margin-top: 0.8rem;"><strong style="color: var(--success);">✅ 正確理解：</strong> ${e.correct}</p>
+                    </div>
+                </div>`;
+            });
+            html += '</div>';
+            
+            document.getElementById('error-list').innerHTML = html;
+            document.getElementById('error-count').textContent = errors.length;
+            document.getElementById('weakness-topic').textContent = 'P值';
+        }
+        
+        // Learning Pathway
+        function selectPathway(type) {
+            const pathways = {
+                exam: {
+                    title: '📚 考試衝刺路徑 (4周)',
+                    weeks: [
+                        { week: 1, focus: '統計基礎', tasks: ['學習10個核心概念', '每日測驗', '掌握度需達60%'] },
+                        { week: 2, focus: '推論檢驗', tasks: ['深入P值、CI、假說檢驗', '完成進階題目', '掌握度需達75%'] },
+                        { week: 3, focus: '實務應用', tasks: ['閱讀5篇Paper', 'EBM評估訓練', '模擬考試練習'] },
+                        { week: 4, focus: '衝刺衝刺', tasks: ['完整模擬試卷×3', '錯題復習', '最終複習'] }
+                    ]
+                },
+                clinical: {
+                    title: '🏥 臨床實踐路徑 (12周)',
+                    weeks: [
+                        { week: '1-3', focus: '基礎鞏固', tasks: ['掌握基礎概念', '臨床案例學習', '每週1篇Paper'] },
+                        { week: '4-6', focus: '進階應用', tasks: ['複雜Paper分析', 'EBM決策訓練', '與現有指南比較'] },
+                        { week: '7-9', focus: '深度理解', tasks: ['領域深入研究', '撰寫Paper分析報告', '同儕教學'] },
+                        { week: '10-12', focus: '獨立判讀', tasks: ['獨立評估新Paper', '臨床決策應用', '建立個人知識庫'] }
+                    ]
+                },
+                deep: {
+                    title: '🔬 深度掌握路徑 (24周)',
+                    weeks: [
+                        { week: '1-4', focus: '統計基礎', tasks: ['每個概念深入學習', '數學推導理解', '20+篇基礎Paper'] },
+                        { week: '5-8', focus: '研究設計', tasks: ['各類研究設計詳解', '偏誤分析', '設計批判訓練'] },
+                        { week: '9-12', focus: '統計測試', tasks: ['常用測試精通', '選擇測試訓練', '計算和軟件應用'] },
+                        { week: '13-16', focus: 'Paper精讀', tasks: ['50+篇論文精讀', '系統性回顧薈萃分析', '指南解讀'] },
+                        { week: '17-20', focus: '實務綜合', tasks: ['複雜病例分析', '多維決策訓練', '論文寫作'] },
+                        { week: '21-24', focus: '教學實踐', tasks: ['成為教師', '撰寫講義', '建立課程'] }
+                    ]
+                }
+            };
+            
+            const pathway = pathways[type];
+            let html = `<h3 style="color: var(--navy); margin-bottom: 1.5rem;">${pathway.title}</h3>`;
+            
+            pathway.weeks.forEach(w => {
+                html += `
+                <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--gold); margin-bottom: 1rem;">
+                    <div style="font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">📍 第${w.week}週：${w.focus}</div>
+                    <ul style="margin-left: 1.5rem; font-size: 13px;">
+                        ${w.tasks.map(t => `<li>✓ ${t}</li>`).join('')}
+                    </ul>
+                </div>`;
+            });
+            
+            document.getElementById('pathway-detail').innerHTML = html;
+        }
+        
+        function generateExamReport() {
+            alert('📋 完整考試報告\n\n• 總分：78/100\n• 排名：前30%\n• 弱點科目：臨床應用（62%）\n• 建議：加強案例學習\n• 下次模擬：3天後');
+        }
+        
+        function addXP(amount) {
+            userXP += amount;
+            document.getElementById('xp-display').innerHTML = `XP: <strong>${userXP}</strong>`;
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            
+            // Initialize progress tracking
+            document.getElementById('level-progress').innerHTML = `
+                <div style="margin: 0.5rem 0;">第 ${userLevel} 級 - ${['會算公式', '會解讀統計', '會閱讀Paper', '會判斷證據品質', '臨床應用'][userLevel-1]}</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${(userLevel/5)*100}%"></div>
+                </div>
+                <p style="font-size: 12px; opacity: 0.7; margin-top: 0.8rem;">再閱讀${[5, 5, 10, 30, 0][userLevel-1]}篇Paper即可升級</p>
+            `;
+            
+            document.getElementById('mastery-details').innerHTML = `
+                <div style="margin: 0.5rem 0;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>統計概念：</span>
+                        <strong>${Math.floor(masteryScore * 0.3)}%</strong>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: ${Math.floor(masteryScore * 0.3)}%"></div></div>
+                </div>
+                <div style="margin: 0.5rem 0;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>論文閱讀：</span>
+                        <strong>${Math.floor(masteryScore * 0.4)}%</strong>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: ${Math.floor(masteryScore * 0.4)}%"></div></div>
+                </div>
+                <div style="margin: 0.5rem 0;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>證據判讀：</span>
+                        <strong>${Math.floor(masteryScore * 0.3)}%</strong>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: ${Math.floor(masteryScore * 0.3)}%"></div></div>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>
