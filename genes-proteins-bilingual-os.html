@@ -1,0 +1,2078 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基因與蛋白質 | Genes & Proteins</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #1A2B5F;
+            --gold: #C9960C;
+            --teal: #0A7A72;
+            --light-bg: #F8F7F5;
+            --text-dark: #2C3E50;
+            --text-light: #666;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, #F8F7F5 0%, #FFFBF7 100%);
+            color: var(--text-dark);
+            line-height: 1.7;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 24px rgba(26, 43, 95, 0.15);
+        }
+
+        header h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 18px;
+            opacity: 0.95;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: 2px solid var(--navy);
+            background: white;
+            color: var(--navy);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--navy);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn.active {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: white;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 15px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 2px solid transparent;
+            color: var(--text-light);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px 6px 0 0;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: var(--gold);
+            color: white;
+            border-color: var(--gold);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            border-left: 6px solid var(--teal);
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--teal) 0%, rgba(10, 122, 114, 0.7) 100%);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .card-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .card-toggle {
+            font-size: 24px;
+            transition: transform 0.3s;
+        }
+
+        .card.open .card-toggle {
+            transform: rotate(180deg);
+        }
+
+        .card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 20px;
+        }
+
+        .card.open .card-content {
+            max-height: 2000px;
+            padding: 20px;
+        }
+
+        .bilingual-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 15px 0;
+        }
+
+        .lang-block {
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: 6px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .lang-label {
+            font-weight: 700;
+            color: var(--navy);
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .lang-content {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-dark);
+        }
+
+        .speak-btn {
+            background: var(--gold);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .speak-btn:hover {
+            background: #B8860B;
+            transform: scale(1.05);
+        }
+
+        .diagram {
+            background: var(--light-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .key-point {
+            background: linear-gradient(135deg, #FFF8DC 0%, #FFFACD 100%);
+            border-left: 4px solid var(--gold);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .key-point strong {
+            color: var(--navy);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: var(--navy);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--light-bg);
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .concept-box {
+            background: white;
+            border: 2px solid var(--teal);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .concept-box h4 {
+            color: var(--navy);
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .concept-box p {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .dna-sequence {
+            font-family: 'Courier New', monospace;
+            background: var(--light-bg);
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        .highlight-gold {
+            background: #FFF8DC;
+            padding: 0 4px;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .highlight-teal {
+            background: rgba(10, 122, 114, 0.1);
+            padding: 0 4px;
+            font-weight: 600;
+            color: var(--teal);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            color: var(--text-light);
+            border-top: 2px solid var(--gold);
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .quiz-intro {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .quiz-intro h2 {
+            color: var(--navy);
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .quiz-intro p {
+            font-size: 18px;
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .difficulty-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .difficulty-btn {
+            padding: 20px;
+            border: 3px solid var(--navy);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--navy);
+            transition: all 0.3s;
+        }
+
+        .difficulty-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(26, 43, 95, 0.2);
+            background: linear-gradient(135deg, var(--navy), var(--teal));
+            color: white;
+            border-color: transparent;
+        }
+
+        .difficulty-btn small {
+            display: block;
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 8px;
+        }
+
+        .quiz-stats {
+            background: var(--light-bg);
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .quiz-stats h3 {
+            color: var(--navy);
+            margin-bottom: 15px;
+        }
+
+        .quiz-stats p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .quiz-content {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .quiz-header {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--teal), var(--gold));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        #question-counter {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .quiz-question {
+            background: linear-gradient(135deg, #f8f7f5, #fffbf7);
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 5px solid var(--teal);
+            margin-bottom: 30px;
+        }
+
+        .quiz-question h3 {
+            color: var(--navy);
+            font-size: 22px;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .question-badge {
+            display: inline-block;
+            background: var(--gold);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .quiz-option {
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+            font-size: 16px;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--teal);
+            background: rgba(10, 122, 114, 0.05);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--teal);
+            background: rgba(10, 122, 114, 0.1);
+            font-weight: 600;
+        }
+
+        .quiz-option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .quiz-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .quiz-results {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .quiz-results h2 {
+            color: var(--navy);
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--navy), var(--teal));
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto;
+            box-shadow: 0 8px 24px rgba(26, 43, 95, 0.2);
+        }
+
+        #final-score {
+            font-size: 60px;
+            font-weight: 700;
+        }
+
+        .score-circle p {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .results-summary {
+            background: var(--light-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .results-summary p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .results-by-topic {
+            background: var(--light-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .results-by-topic h3 {
+            color: var(--navy);
+            margin-bottom: 15px;
+        }
+
+        .topic-bar {
+            margin: 15px 0;
+        }
+
+        .topic-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .topic-progress {
+            height: 24px;
+            background: #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .topic-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--teal), var(--gold));
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .quiz-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .quiz-review {
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .quiz-review h2 {
+            color: var(--navy);
+            margin-bottom: 30px;
+        }
+
+        .review-item {
+            background: var(--light-bg);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border-left: 5px solid var(--teal);
+        }
+
+        .review-question {
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 15px;
+        }
+
+        .review-answer {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .review-answer.correct {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+
+        .review-answer.incorrect {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 28px;
+            }
+
+            .bilingual-section {
+                grid-template-columns: 1fr;
+            }
+
+            .card-header h3 {
+                font-size: 18px;
+            }
+
+            .concept-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .difficulty-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .score-circle {
+                width: 150px;
+                height: 150px;
+            }
+
+            #final-score {
+                font-size: 48px;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--gold);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧬 基因與蛋白質 | Genes & Proteins</h1>
+            <p>分子生物學完整學習系統 | Comprehensive Molecular Biology Learning System</p>
+        </header>
+
+        <div class="controls">
+            <button class="btn" onclick="speakText('Molecular biology is the study of genes and proteins')">🔊 Test Audio</button>
+            <button class="btn" onclick="expandAll()">📖 Expand All</button>
+            <button class="btn" onclick="collapseAll()">📕 Collapse All</button>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('central-dogma')">中心法則 | Central Dogma</button>
+            <button class="tab-btn" onclick="switchTab('dna-replication')">DNA複製 | Replication</button>
+            <button class="tab-btn" onclick="switchTab('transcription')">轉錄 | Transcription</button>
+            <button class="tab-btn" onclick="switchTab('translation')">轉譯 | Translation</button>
+            <button class="tab-btn" onclick="switchTab('mutations')">突變 | Mutations</button>
+            <button class="tab-btn" onclick="switchTab('cancer')">癌症 | Cancer</button>
+            <button class="tab-btn" onclick="switchTab('framework')">🗺️ 知識體系 | Framework</button>
+            <button class="tab-btn" onclick="switchTab('quiz')">📝 題庫 | Quiz Bank</button>
+        </div>
+
+        <!-- TAB 1: Central Dogma -->
+        <div id="central-dogma" class="tab-content active">
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🧬 中心法則概述 | Overview of Central Dogma</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                中心法則描述遺傳信息從DNA到蛋白質的流向：<br>
+                                <strong>DNA → RNA → 蛋白質</strong><br><br>
+                                轉錄是以DNA中的信息為模板合成RNA<br>
+                                轉譯是以mRNA中的信息為模板合成多肽鏈
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                Central Dogma describes the flow of genetic information:<br>
+                                <strong>DNA → RNA → Protein</strong><br><br>
+                                Transcription: synthesis of RNA using DNA as template<br>
+                                Translation: synthesis of polypeptide using mRNA as template
+                            </div>
+                            <button class="speak-btn" onclick="speakText('Central Dogma describes the flow of genetic information from DNA to RNA to Protein. Transcription synthesizes RNA from DNA template, while translation synthesizes proteins from mRNA template')">🔊 Speak</button>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>🔑 關鍵概念：</strong><br>
+                        • 轉錄發生在細胞核內（真核生物）或細胞質內（原核生物）<br>
+                        • 轉譯發生在核糖體上<br>
+                        • RNA是基因和蛋白質合成之間的橋樑
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🔄 原核生物 vs 真核生物 | Prokaryotes vs Eukaryotes</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>特徵 | Feature</th>
+                                <th>原核生物 | Prokaryotes</th>
+                                <th>真核生物 | Eukaryotes</th>
+                            </tr>
+                            <tr>
+                                <td>轉錄位置</td>
+                                <td>細胞質</td>
+                                <td>細胞核</td>
+                            </tr>
+                            <tr>
+                                <td>轉譯位置</td>
+                                <td>細胞質</td>
+                                <td>細胞質（核糖體）</td>
+                            </tr>
+                            <tr>
+                                <td>時間順序</td>
+                                <td>耦聯（同時）</td>
+                                <td>分離（轉錄後再轉譯）</td>
+                            </tr>
+                            <tr>
+                                <td>RNA處理</td>
+                                <td>無</td>
+                                <td>5'加帽，3'加尾，剪接</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🧩 遺傳密碼 | The Genetic Code</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                <strong>遺傳密碼的特點：</strong><br>
+                                • 三核苷酸密碼子：每3個核苷酸編碼1個氨基酸<br>
+                                • 64個密碼子編碼20種氨基酸<br>
+                                • 61個編碼氨基酸，3個是終止密碼子<br>
+                                • 冗餘性：多個密碼子可編碼同一氨基酸<br>
+                                • 無歧義性：每個密碼子只編碼一種氨基酸<br>
+                                • 通用性：遺傳密碼在大多數生物中相同
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                <strong>Characteristics of Genetic Code:</strong><br>
+                                • Triplet codons: every 3 nucleotides code for 1 amino acid<br>
+                                • 64 codons encode 20 amino acids<br>
+                                • 61 code for amino acids, 3 are stop signals<br>
+                                • Redundancy: multiple codons code for same amino acid<br>
+                                • Unambiguous: each codon codes for only one amino acid<br>
+                                • Universal: genetic code is same in most organisms
+                            </div>
+                            <button class="speak-btn" onclick="speakText('The genetic code uses triplet codons. There are 64 codons that encode 20 amino acids. The code is redundant but unambiguous and universal across most organisms')">🔊 Speak</button>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>💡 核心原則：</strong><br>
+                        AUG = 起始密碼子（編碼甲硫氨酸）<br>
+                        UAA, UAG, UGA = 終止密碼子
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: DNA Replication -->
+        <div id="dna-replication" class="tab-content">
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🔀 DNA複製概述 | DNA Replication Overview</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                DNA複製是生成兩個相同DNA分子的過程<br><br>
+                                <strong>三個主要階段：</strong><br>
+                                1. 解螺旋化：DNA解旋酶解開DNA雙螺旋<br>
+                                2. 複製：DNA聚合酶合成新的DNA鏈<br>
+                                3. 分離：兩個新的DNA分子分離
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                DNA replication produces two identical DNA molecules<br><br>
+                                <strong>Three main stages:</strong><br>
+                                1. Unwinding: helicase unwinds the double helix<br>
+                                2. Replication: DNA polymerase synthesizes new strands<br>
+                                3. Separation: two new DNA molecules separate
+                            </div>
+                            <button class="speak-btn" onclick="speakText('DNA replication creates two identical DNA molecules through unwinding, synthesis, and separation stages')">🔊 Speak</button>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>⚙️ 關鍵酶：</strong><br>
+                        • 解螺旋酶 (Helicase) - 解開DNA雙螺旋<br>
+                        • DNA聚合酶 (DNA Polymerase) - 合成新DNA鏈<br>
+                        • 原核酶 (Primase) - 合成RNA引物<br>
+                        • DNA連接酶 (DNA Ligase) - 連接Okazaki片段
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>➡️ 先導鏈 vs 滯後鏈 | Leading vs Lagging Strand</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>特徵 | Feature</th>
+                                <th>先導鏈 | Leading Strand</th>
+                                <th>滯後鏈 | Lagging Strand</th>
+                            </tr>
+                            <tr>
+                                <td>方向</td>
+                                <td>3'→5' 模板<br>5'→3' 新合成</td>
+                                <td>5'→3' 模板<br>3'→5' 新合成</td>
+                            </tr>
+                            <tr>
+                                <td>合成方式</td>
+                                <td>連續合成</td>
+                                <td>不連續（Okazaki片段）</td>
+                            </tr>
+                            <tr>
+                                <td>片段大小</td>
+                                <td>一條完整鏈</td>
+                                <td>1000-2000核苷酸片段</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>🧬 記住：</strong><br>
+                        DNA聚合酶只能5'→3'方向合成，所以滯後鏈需要分片段合成
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🔚 複製DNA末端 | Replicating DNA Ends (Telomeres)</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                <strong>末粒問題：</strong><br>
+                                由於滯後鏈的3'端沒有可配對的模板，DNA複製時無法完全複製末端<br><br>
+                                <strong>解決方案：端粒酶</strong><br>
+                                • 含有RNA和蛋白質<br>
+                                • 利用內部的RNA模板添加DNA序列<br>
+                                • 補償每次複製丟失的核苷酸
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                <strong>The End-Replication Problem:</strong><br>
+                                The 3' end of lagging strand cannot be fully replicated<br><br>
+                                <strong>Solution: Telomerase</strong><br>
+                                • Contains RNA and protein components<br>
+                                • Uses internal RNA template to add DNA sequence<br>
+                                • Compensates for nucleotides lost in each replication
+                            </div>
+                            <button class="speak-btn" onclick="speakText('Telomerase solves the end-replication problem by adding DNA sequences to chromosome ends')">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Transcription -->
+        <div id="transcription" class="tab-content">
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>📝 轉錄過程 | Transcription Process</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                轉錄是以DNA模板鏈為基礎合成RNA的過程<br><br>
+                                <strong>三個階段：</strong><br>
+                                1. <strong>起始：</strong> RNA聚合酶識別啟動子並開始轉錄<br>
+                                2. <strong>延伸：</strong> RNA聚合酶沿模板鏈移動，添加核糖核苷酸<br>
+                                3. <strong>終止：</strong> RNA聚合酶到達終止信號並脫落
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                Transcription synthesizes RNA using DNA template strand<br><br>
+                                <strong>Three stages:</strong><br>
+                                1. <strong>Initiation:</strong> RNA polymerase recognizes promoter<br>
+                                2. <strong>Elongation:</strong> RNA polymerase moves along template, adding ribonucleotides<br>
+                                3. <strong>Termination:</strong> RNA polymerase reaches stop signal and releases
+                            </div>
+                            <button class="speak-btn" onclick="speakText('Transcription has three stages: initiation when RNA polymerase finds the promoter, elongation as it adds nucleotides, and termination when it reaches a stop signal')">🔊 Speak</button>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>📍 重要位點：</strong><br>
+                        • 啟動子 (Promoter) - RNA聚合酶結合位點<br>
+                        • 終止子 (Terminator) - 信號轉錄停止<br>
+                        • TATA框 (TATA box) - 真核生物啟動子的常見序列
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🔄 RNA處理 | RNA Processing</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                <strong>真核生物中的RNA處理步驟：</strong><br><br>
+                                1. <strong>5'加帽：</strong> 添加7-甲基鳥苷酸帽<br>
+                                2. <strong>3'加尾：</strong> 添加50-250個腺苷酸尾<br>
+                                3. <strong>剪接：</strong> 移除內含子，連接外顯子<br><br>
+                                這些處理使mRNA更穩定且可被核出
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                <strong>RNA processing in eukaryotes:</strong><br><br>
+                                1. <strong>5' capping:</strong> Adding 7-methylguanosine cap<br>
+                                2. <strong>3' polyadenylation:</strong> Adding 50-250 adenine nucleotides<br>
+                                3. <strong>Splicing:</strong> Removing introns, joining exons<br><br>
+                                These modifications stabilize mRNA and allow export from nucleus
+                            </div>
+                            <button class="speak-btn" onclick="speakText('RNA processing in eukaryotes involves adding a 5 prime cap, adding an adenine tail to the 3 prime end, and removing introns while joining exons')">🔊 Speak</button>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>🧬 區分：</strong><br>
+                        • <strong>前mRNA：</strong> 轉錄直接產物（含內含子和外顯子）<br>
+                        • <strong>mRNA：</strong> 經處理的成熟RNA（只含外顯子）<br>
+                        • <strong>內含子：</strong> 被移除的非編碼序列<br>
+                        • <strong>外顯子：</strong> 保留的編碼序列
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🎲 選擇性剪接 | Alternative Splicing</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                一個基因可以通過不同的剪接方式產生不同的mRNA和蛋白質<br><br>
+                                <strong>例子：原肌球蛋白基因</strong><br>
+                                • 含5個外顯子<br>
+                                • 通過包含或排除不同外顯子<br>
+                                • 可產生多種蛋白質異體<br><br>
+                                這增加了蛋白質多樣性，一個基因可編碼多種功能蛋白
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                One gene can produce different mRNAs and proteins through different splicing patterns<br><br>
+                                <strong>Example: Tropomyosin gene</strong><br>
+                                • Contains 5 exons<br>
+                                • By including or excluding different exons<br>
+                                • Can produce multiple protein variants<br><br>
+                                This increases protein diversity; one gene can encode multiple functional proteins
+                            </div>
+                            <button class="speak-btn" onclick="speakText('Alternative splicing allows one gene to produce multiple different proteins by including or excluding different exons during RNA processing')">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: Translation -->
+        <div id="translation" class="tab-content">
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🔤 轉譯概述 | Translation Overview</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                轉譯是根據mRNA合成多肽鏈（蛋白質）的過程<br><br>
+                                <strong>關鍵參與者：</strong><br>
+                                1. <strong>mRNA：</strong> 攜帶遺傳信息<br>
+                                2. <strong>tRNA：</strong> 轉運氨基酸<br>
+                                3. <strong>核糖體：</strong> 轉譯位點<br><br>
+                                遺傳密碼在核糖體上被"讀取"，逐步添加氨基酸
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                Translation synthesizes a polypeptide chain using mRNA<br><br>
+                                <strong>Key participants:</strong><br>
+                                1. <strong>mRNA:</strong> Carries genetic information<br>
+                                2. <strong>tRNA:</strong> Transports amino acids<br>
+                                3. <strong>Ribosome:</strong> Site of translation<br><br>
+                                The genetic code is "read" at the ribosome, adding amino acids step by step
+                            </div>
+                            <button class="speak-btn" onclick="speakText('Translation synthesizes proteins using mRNA as a template. The ribosome reads the genetic code and tRNA brings amino acids')">🔊 Speak</button>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>🎯 三個階段：</strong><br>
+                        • 起始 (Initiation) - 核糖體和初始tRNA結合mRNA<br>
+                        • 延伸 (Elongation) - tRNA依次添加氨基酸<br>
+                        • 終止 (Termination) - 到達終止密碼子，多肽鏈釋放
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🧵 tRNA結構與功能 | tRNA Structure & Function</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                <strong>tRNA的雙重功能：</strong><br><br>
+                                1. <strong>3'端</strong> - 氨基酸附著位點<br>
+                                - 每種tRNA特異性結合一種氨基酸<br>
+                                - 由特異的tRNA合成酶催化<br><br>
+                                2. <strong>反密碼子環</strong> - 與mRNA密碼子配對<br>
+                                - 3'→5'與密碼子5'→3'配對<br>
+                                - 遵循鹼基配對規則（搖晃配對）
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                <strong>tRNA's dual function:</strong><br><br>
+                                1. <strong>3' end</strong> - Amino acid attachment site<br>
+                                - Each tRNA binds one specific amino acid<br>
+                                - Catalyzed by specific aminoacyl-tRNA synthetase<br><br>
+                                2. <strong>Anticodon loop</strong> - Pairs with mRNA codon<br>
+                                - 3'→5' anticodon pairs with 5'→3' codon<br>
+                                - Follows base-pairing rules (wobble pairing)
+                            </div>
+                            <button class="speak-btn" onclick="speakText('tRNA molecules have two important parts: the three prime end where amino acids attach, and the anticodon that pairs with mRNA codons')">🔊 Speak</button>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>⚠️ 準確性：</strong><br>
+                        • tRNA合成酶確保每個tRNA攜帶正確的氨基酸<br>
+                        • 核糖體確保正確的tRNA與mRNA密碼子結合<br>
+                        • 這個雙重檢查機制確保轉譯準確性
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🔬 核糖體結構 | Ribosome Structure</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                <strong>核糖體的組成：</strong><br>
+                                • 由rRNA和蛋白質組成<br>
+                                • 兩個核糖體亞基（大亞基和小亞基）<br><br>
+                                <strong>三個tRNA結合位點：</strong><br>
+                                • P位點 (Peptidyl) - 攜帶延伸肽的tRNA<br>
+                                • A位點 (Aminoacyl) - 新進的tRNA<br>
+                                • E位點 (Exit) - 釋放的空tRNA<br><br>
+                                核糖體還有一個mRNA結合位點
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                <strong>Ribosome composition:</strong><br>
+                                • Made of rRNA and proteins<br>
+                                • Two ribosomal subunits (large and small)<br><br>
+                                <strong>Three tRNA binding sites:</strong><br>
+                                • P site (Peptidyl) - tRNA carrying growing chain<br>
+                                • A site (Aminoacyl) - incoming tRNA<br>
+                                • E site (Exit) - discharged empty tRNA<br><br>
+                                Ribosome also has an mRNA binding site
+                            </div>
+                            <button class="speak-btn" onclick="speakText('Ribosomes have three tRNA binding sites called P A and E sites where transfer RNAs interact during protein synthesis')">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🚀 轉譯延伸循環 | Translation Elongation Cycle</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                <strong>循環重複三個步驟：</strong><br><br>
+                                1. <strong>密碼子識別</strong><br>
+                                - 正確的tRNA進入A位點<br>
+                                - 反密碼子與mRNA密碼子配對<br><br>
+                                2. <strong>肽鍵形成</strong><br>
+                                - P位點的肽鏈轉移到A位點的氨基酸<br>
+                                - 形成新的肽鍵（核糖體的催化作用）<br><br>
+                                3. <strong>易位</strong><br>
+                                - tRNA和mRNA一起移動<br>
+                                - P位點tRNA移至E位點<br>
+                                - A位點tRNA移至P位點<br>
+                                - 新密碼子進入A位點
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                <strong>The cycle repeats three steps:</strong><br><br>
+                                1. <strong>Codon recognition</strong><br>
+                                - Correct tRNA enters A site<br>
+                                - Anticodon pairs with mRNA codon<br><br>
+                                2. <strong>Peptide bond formation</strong><br>
+                                - Peptide chain transfers from P to A site<br>
+                                - New peptide bond formed (ribosome catalyzes)<br><br>
+                                3. <strong>Translocation</strong><br>
+                                - tRNA and mRNA move together<br>
+                                - P site tRNA moves to E site<br>
+                                - A site tRNA moves to P site<br>
+                                - New codon enters A site
+                            </div>
+                            <button class="speak-btn" onclick="speakText('During elongation, the ribosome repeats a cycle of codon recognition, peptide bond formation, and translocation until reaching a stop codon')">🔊 Speak</button>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>⚡ 能量消耗：</strong><br>
+                        每個氨基酸的添加需要GTP水解（2個GTP）<br>
+                        第一步（密碼子識別）和第三步（易位）消耗能量
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: Mutations -->
+        <div id="mutations" class="tab-content">
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🔀 突變類型 | Types of Mutations</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>突變類型 | Type</th>
+                                <th>描述 | Description</th>
+                                <th>影響 | Effect</th>
+                            </tr>
+                            <tr>
+                                <td><strong>沉默突變</strong><br>Silent</td>
+                                <td>鹼基改變但氨基酸相同</td>
+                                <td>無影響（由於冗餘性）</td>
+                            </tr>
+                            <tr>
+                                <td><strong>錯義突變</strong><br>Missense</td>
+                                <td>鹼基改變導致不同氨基酸</td>
+                                <td>可能有害、有利或無影響</td>
+                            </tr>
+                            <tr>
+                                <td><strong>無義突變</strong><br>Nonsense</td>
+                                <td>變成終止密碼子</td>
+                                <td>通常有害（截斷蛋白質）</td>
+                            </tr>
+                            <tr>
+                                <td><strong>移碼突變</strong><br>Frameshift</td>
+                                <td>插入或缺失1-2個核苷酸</td>
+                                <td>通常有害（改變所有下游密碼子）</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>💡 重點：</strong><br>
+                        • 鹼基替換比插入/缺失影響更小<br>
+                        • 第三位置變化最常導致沉默突變<br>
+                        • 移碼突變通常最有害
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🩸 鐮刀形細胞病 | Sickle Cell Disease</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                <strong>原因：β-珠蛋白基因單一鹼基替換</strong><br>
+                                DNA: CTC → CAC (第17號密碼子)<br>
+                                mRNA: GAG → GUG<br>
+                                蛋白質: Glu（谷氨酸）→ Val（纈氨酸）<br><br>
+                                <strong>結果：</strong><br>
+                                • 缺少一個負電荷<br>
+                                • 珠蛋白分子聚集<br>
+                                • 紅細胞呈鐮刀形<br>
+                                • 導致血管阻塞和組織損傷
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                <strong>Cause: Single base substitution in β-globin gene</strong><br>
+                                DNA: CTC → CAC (codon 17)<br>
+                                mRNA: GAG → GUG<br>
+                                Protein: Glu (Glutamic acid) → Val (Valine)<br><br>
+                                <strong>Result:</strong><br>
+                                • Loss of one negative charge<br>
+                                • Globin molecules aggregate<br>
+                                • Red blood cells become sickle-shaped<br>
+                                • Causes vessel blockage and tissue damage
+                            </div>
+                            <button class="speak-btn" onclick="speakText('Sickle cell disease is caused by a point mutation where glutamic acid is replaced by valine in the beta-globin protein, causing red blood cells to sickle')">🔊 Speak</button>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>💊 遺傳：</strong><br>
+                        • 常染色體隱性遺傳<br>
+                        • 雜合子：鐮刀形細胞性狀（鐮刀狀細胞特徵不明顯）<br>
+                        • 純合子：鐮刀形細胞病（嚴重）
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🧬 原癌基因激活 | Proto-oncogene Activation</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                <strong>原癌基因可通過以下方式激活為癌基因：</strong><br><br>
+                                1. <strong>易位或轉位</strong><br>
+                                - 基因移到新位置，受新的控制<br>
+                                - 導致過度表達<br><br>
+                                2. <strong>基因擴增</strong><br>
+                                - 多個基因副本<br>
+                                - 導致過量蛋白質<br><br>
+                                3. <strong>點突變</strong><br>
+                                - 控制元件中的突變 → 過度表達<br>
+                                - 基因內的突變 → 高度活躍或難以降解的蛋白質
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                <strong>Proto-oncogenes activate to oncogenes through:</strong><br><br>
+                                1. <strong>Translocation/Transposition</strong><br>
+                                - Gene moves to new location under new control<br>
+                                - Results in overexpression<br><br>
+                                2. <strong>Gene Amplification</strong><br>
+                                - Multiple gene copies<br>
+                                - Results in excess protein<br><br>
+                                3. <strong>Point Mutation</strong><br>
+                                - In control element → overexpression<br>
+                                - In gene → hyperactive or degradation-resistant protein
+                            </div>
+                            <button class="speak-btn" onclick="speakText('Proto-oncogenes become oncogenes through translocation, gene amplification, or point mutations that cause overexpression or produce hyperactive proteins')">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 6: Cancer -->
+        <div id="cancer" class="tab-content">
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🔬 癌症的多步驟模型 | Multistep Model of Cancer</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                <strong>癌症發展需要多個遺傳變化：</strong><br><br>
+                                癌細胞通常具有：<br>
+                                • 至少一個活躍的原癌基因<br>
+                                • 多個腫瘤抑制基因的失活<br><br>
+                                <strong>例：結腸癌的進展</strong><br>
+                                1. APC腫瘤抑制基因喪失<br>
+                                2. Ras原癌基因激活<br>
+                                3. SMAD4腫瘤抑制基因喪失<br>
+                                4. p53腫瘤抑制基因喪失<br><br>
+                                每一步導致進一步異常生長
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                <strong>Cancer development requires multiple genetic changes:</strong><br><br>
+                                Cancerous cells usually have:<br>
+                                • At least one active proto-oncogene<br>
+                                • Loss of several tumor suppressor genes<br><br>
+                                <strong>Example: Colon cancer progression</strong><br>
+                                1. Loss of APC tumor suppressor<br>
+                                2. Activation of Ras proto-oncogene<br>
+                                3. Loss of SMAD4 tumor suppressor<br>
+                                4. Loss of p53 tumor suppressor<br><br>
+                                Each step leads to further abnormal growth
+                            </div>
+                            <button class="speak-btn" onclick="speakText('Cancer develops through multiple genetic changes. Normal cells accumulate mutations in proto-oncogenes and tumor suppressors over time')">🔊 Speak</button>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>📊 統計：</strong><br>
+                        • 癌症發病率隨年齡增加<br>
+                        • 需要3-7個主要遺傳變化形成惡性腫瘤
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🧬 BRCA1和BRCA2基因 | BRCA1 and BRCA2 Genes</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                <strong>BRCA基因的功能：</strong><br>
+                                • 腫瘤抑制基因<br>
+                                • 幫助修復受損DNA<br>
+                                • 銷毀無法修復的細胞<br><br>
+                                <strong>BRCA基因位置：</strong><br>
+                                • BRCA1: 17號染色體<br>
+                                • BRCA2: 13號染色體<br><br>
+                                <strong>突變的影響：</strong><br>
+                                • DNA修復缺陷<br>
+                                • 遺傳性乳腺癌風險增加<br>
+                                • 卵巢癌風險增加
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                <strong>BRCA gene functions:</strong><br>
+                                • Tumor suppressor genes<br>
+                                • Help repair damaged DNA<br>
+                                • Destroy cells if DNA cannot be repaired<br><br>
+                                <strong>BRCA gene locations:</strong><br>
+                                • BRCA1: Chromosome 17<br>
+                                • BRCA2: Chromosome 13<br><br>
+                                <strong>Effects of mutations:</strong><br>
+                                • Defective DNA repair<br>
+                                • Increased hereditary breast cancer risk<br>
+                                • Increased ovarian cancer risk
+                            </div>
+                            <button class="speak-btn" onclick="speakText('BRCA1 and BRCA2 are tumor suppressor genes that help repair DNA damage. Mutations in these genes significantly increase the risk of breast and ovarian cancer')">🔊 Speak</button>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>📋 遺傳測試：</strong><br>
+                        • BRCAanalysis測試可檢測BRCA1和BRCA2突變<br>
+                        • 遺傳諮詢幫助理解風險<br>
+                        • 陽性結果需要個性化醫療管理計畫
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <h3>🩸 費城染色體 | Philadelphia Chromosome</h3>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="lang-block">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-content">
+                                <strong>費城染色體是什麼？</strong><br>
+                                • 9號和22號染色體之間的異常易位<br>
+                                • 導致異常短的22號染色體<br>
+                                • 最常與慢性骨髓性白血病（CML）相關<br><br>
+                                <strong>遺傳學機制：</strong><br>
+                                • BCR-ABL基因融合<br>
+                                • 編碼持續活躍的酪氨酸激酶<br>
+                                • 蛋白質"始終打開"<br>
+                                • 導致過度細胞生長
+                            </div>
+                        </div>
+                        <div class="lang-block">
+                            <div class="lang-label">English</div>
+                            <div class="lang-content">
+                                <strong>What is Philadelphia Chromosome?</strong><br>
+                                • Abnormal translocation between chromosomes 9 and 22<br>
+                                • Results in abnormally short chromosome 22<br>
+                                • Most commonly associated with chronic myelogenous leukemia (CML)<br><br>
+                                <strong>Genetic mechanism:</strong><br>
+                                • BCR-ABL gene fusion<br>
+                                • Encodes continuously active tyrosine kinase<br>
+                                • Protein is "always on"<br>
+                                • Results in excessive cell growth
+                            </div>
+                            <button class="speak-btn" onclick="speakText('The Philadelphia chromosome is a translocation between chromosomes 9 and 22 that produces an abnormal BCR-ABL fusion gene, resulting in chronic myelogenous leukemia')">🔊 Speak</button>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>💊 治療：</strong><br>
+                        • 易來陸 (Imatinib/Gleevec) 特異性抑制BCR-ABL激酶<br>
+                        • 這是靶向癌症治療的成功例子
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 7: Knowledge Framework -->
+        <div id="framework" class="tab-content">
+            <div class="framework-container">
+                <div class="framework-tabs">
+                    <button class="framework-tab-btn active" onclick="switchFrameworkTab('knowledge-map')">📊 知識地圖 | Knowledge Map</button>
+                    <button class="framework-tab-btn" onclick="switchFrameworkTab('mindmap')">🧠 心智圖 | Mind Map</button>
+                    <button class="framework-tab-btn" onclick="switchFrameworkTab('learning-path')">🎯 學習路徑 | Learning Path</button>
+                </div>
+
+                <!-- Knowledge Map -->
+                <div id="knowledge-map" class="framework-view active">
+                    <h2>🗺️ 分子生物學知識地圖 | Molecular Biology Knowledge Map</h2>
+                    <svg viewBox="0 0 1000 700" class="knowledge-svg">
+                        <!-- Central Dogma -->
+                        <rect x="350" y="20" width="300" height="80" fill="#1A2B5F" rx="10"/>
+                        <text x="500" y="45" font-size="24" font-weight="bold" fill="white" text-anchor="middle">中心法則 | CENTRAL DOGMA</text>
+                        <text x="500" y="70" font-size="16" fill="white" text-anchor="middle">DNA → RNA → Protein</text>
+
+                        <!-- Three main processes -->
+                        <!-- DNA Replication -->
+                        <rect x="50" y="150" width="180" height="100" fill="#0A7A72" rx="8"/>
+                        <text x="140" y="175" font-size="18" font-weight="bold" fill="white" text-anchor="middle">DNA複製</text>
+                        <text x="140" y="195" font-size="14" fill="white" text-anchor="middle">DNA Replication</text>
+                        <text x="140" y="220" font-size="12" fill="white" text-anchor="middle">• 解螺旋酶</text>
+                        <text x="140" y="235" font-size="12" fill="white" text-anchor="middle">• 先導/滯後鏈</text>
+                        <line x1="230" y1="200" x2="350" y2="60" stroke="#C9960C" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                        <!-- Transcription -->
+                        <rect x="410" y="150" width="180" height="100" fill="#0A7A72" rx="8"/>
+                        <text x="500" y="175" font-size="18" font-weight="bold" fill="white" text-anchor="middle">轉錄</text>
+                        <text x="500" y="195" font-size="14" fill="white" text-anchor="middle">Transcription</text>
+                        <text x="500" y="220" font-size="12" fill="white" text-anchor="middle">• mRNA合成</text>
+                        <text x="500" y="235" font-size="12" fill="white" text-anchor="middle">• RNA處理</text>
+                        <line x1="500" y1="150" x2="500" y2="100" stroke="#C9960C" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                        <!-- Translation -->
+                        <rect x="770" y="150" width="180" height="100" fill="#0A7A72" rx="8"/>
+                        <text x="860" y="175" font-size="18" font-weight="bold" fill="white" text-anchor="middle">轉譯</text>
+                        <text x="860" y="195" font-size="14" fill="white" text-anchor="middle">Translation</text>
+                        <text x="860" y="220" font-size="12" fill="white" text-anchor="middle">• tRNA</text>
+                        <text x="860" y="235" font-size="12" fill="white" text-anchor="middle">• 核糖體</text>
+                        <line x1="770" y1="200" x2="650" y2="60" stroke="#C9960C" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                        <!-- Supporting Topics -->
+                        <!-- Genetic Code -->
+                        <rect x="50" y="320" width="150" height="80" fill="#C9960C" rx="8"/>
+                        <text x="125" y="345" font-size="16" font-weight="bold" fill="white" text-anchor="middle">遺傳密碼</text>
+                        <text x="125" y="365" font-size="12" fill="white" text-anchor="middle">Genetic Code</text>
+                        <text x="125" y="380" font-size="11" fill="white" text-anchor="middle">64密碼子</text>
+                        <line x1="125" y1="320" x2="500" y2="250" stroke="#ddd" stroke-width="2" stroke-dasharray="5,5"/>
+
+                        <!-- Mutations -->
+                        <rect x="270" y="320" width="150" height="80" fill="#C9960C" rx="8"/>
+                        <text x="345" y="345" font-size="16" font-weight="bold" fill="white" text-anchor="middle">突變</text>
+                        <text x="345" y="365" font-size="12" fill="white" text-anchor="middle">Mutations</text>
+                        <text x="345" y="380" font-size="11" fill="white" text-anchor="middle">點突變/移碼</text>
+                        <line x1="345" y1="320" x2="500" y2="250" stroke="#ddd" stroke-width="2" stroke-dasharray="5,5"/>
+
+                        <!-- Cancer Biology -->
+                        <rect x="490" y="320" width="150" height="80" fill="#C9960C" rx="8"/>
+                        <text x="565" y="345" font-size="16" font-weight="bold" fill="white" text-anchor="middle">癌症生物學</text>
+                        <text x="565" y="365" font-size="12" fill="white" text-anchor="middle">Cancer Biology</text>
+                        <text x="565" y="380" font-size="11" fill="white" text-anchor="middle">BRCA/BCR-ABL</text>
+                        <line x1="565" y1="320" x2="500" y2="250" stroke="#ddd" stroke-width="2" stroke-dasharray="5,5"/>
+
+                        <!-- Gene Expression -->
+                        <rect x="710" y="320" width="150" height="80" fill="#C9960C" rx="8"/>
+                        <text x="785" y="345" font-size="16" font-weight="bold" fill="white" text-anchor="middle">基因表達</text>
+                        <text x="785" y="365" font-size="12" fill="white" text-anchor="middle">Gene Expression</text>
+                        <text x="785" y="380" font-size="11" fill="white" text-anchor="middle">選擇性剪接</text>
+                        <line x1="785" y1="320" x2="500" y2="250" stroke="#ddd" stroke-width="2" stroke-dasharray="5,5"/>
+
+                        <!-- Bottom Concepts -->
+                        <rect x="50" y="500" width="140" height="70" fill="#1A2B5F" rx="8" opacity="0.8"/>
+                        <text x="120" y="525" font-size="14" font-weight="bold" fill="white" text-anchor="middle">DNA結構</text>
+                        <text x="120" y="545" font-size="11" fill="white" text-anchor="middle">5'→3' 雙螺旋</text>
+
+                        <rect x="260" y="500" width="140" height="70" fill="#1A2B5F" rx="8" opacity="0.8"/>
+                        <text x="330" y="525" font-size="14" font-weight="bold" fill="white" text-anchor="middle">核糖體</text>
+                        <text x="330" y="545" font-size="11" fill="white" text-anchor="middle">P/A/E位點</text>
+
+                        <rect x="470" y="500" width="140" height="70" fill="#1A2B5F" rx="8" opacity="0.8"/>
+                        <text x="540" y="525" font-size="14" font-weight="bold" fill="white" text-anchor="middle">酶系統</text>
+                        <text x="540" y="545" font-size="11" fill="white" text-anchor="middle">聚合酶/合成酶</text>
+
+                        <rect x="680" y="500" width="140" height="70" fill="#1A2B5F" rx="8" opacity="0.8"/>
+                        <text x="750" y="525" font-size="14" font-weight="bold" fill="white" text-anchor="middle">調控機制</text>
+                        <text x="750" y="545" font-size="11" fill="white" text-anchor="middle">啟動子/終止子</text>
+
+                        <!-- Arrow marker definition -->
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <polygon points="0 0, 10 3, 0 6" fill="#C9960C" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <!-- Mind Map -->
+                <div id="mindmap" class="framework-view">
+                    <h2>🧠 分子生物學心智圖 | Mind Map</h2>
+                    <svg viewBox="0 0 1000 800" class="mindmap-svg">
+                        <!-- Central node -->
+                        <circle cx="500" cy="400" r="80" fill="#1A2B5F" stroke="#C9960C" stroke-width="3"/>
+                        <text x="500" y="390" font-size="18" font-weight="bold" fill="white" text-anchor="middle">分子</text>
+                        <text x="500" y="415" font-size="18" font-weight="bold" fill="white" text-anchor="middle">生物學</text>
+
+                        <!-- Main branches -->
+                        <!-- DNA Replication Branch -->
+                        <line x1="420" y1="330" x2="250" y2="200" stroke="#0A7A72" stroke-width="3"/>
+                        <circle cx="250" cy="200" r="60" fill="#0A7A72" stroke="#C9960C" stroke-width="2"/>
+                        <text x="250" y="200" font-size="14" font-weight="bold" fill="white" text-anchor="middle" dy="0.3em">DNA</text>
+                        <text x="250" y="215" font-size="12" fill="white" text-anchor="middle">複製</text>
+
+                        <!-- Transcription Branch -->
+                        <line x1="500" y1="320" x2="500" y2="150" stroke="#0A7A72" stroke-width="3"/>
+                        <circle cx="500" cy="150" r="60" fill="#0A7A72" stroke="#C9960C" stroke-width="2"/>
+                        <text x="500" y="145" font-size="14" font-weight="bold" fill="white" text-anchor="middle">轉</text>
+                        <text x="500" y="160" font-size="14" font-weight="bold" fill="white" text-anchor="middle">錄</text>
+
+                        <!-- Translation Branch -->
+                        <line x1="580" y1="330" x2="750" y2="200" stroke="#0A7A72" stroke-width="3"/>
+                        <circle cx="750" cy="200" r="60" fill="#0A7A72" stroke="#C9960C" stroke-width="2"/>
+                        <text x="750" y="200" font-size="14" font-weight="bold" fill="white" text-anchor="middle" dy="0.3em">轉</text>
+                        <text x="750" y="215" font-size="12" fill="white" text-anchor="middle">譯</text>
+
+                        <!-- Sub-branches for DNA -->
+                        <line x1="190" y1="250" x2="100" y2="350" stroke="#C9960C" stroke-width="2"/>
+                        <circle cx="100" cy="350" r="45" fill="#C9960C"/>
+                        <text x="100" y="355" font-size="11" fill="white" text-anchor="middle">先導/滯後</text>
+
+                        <line x1="250" y1="260" x2="250" y2="380" stroke="#C9960C" stroke-width="2"/>
+                        <circle cx="250" cy="380" r="45" fill="#C9960C"/>
+                        <text x="250" y="385" font-size="11" fill="white" text-anchor="middle">端粒酶</text>
+
+                        <!-- Sub-branches for Transcription -->
+                        <line x1="450" y1="210" x2="350" y2="310" stroke="#C9960C" stroke-width="2"/>
+                        <circle cx="350" cy="310" r="45" fill="#C9960C"/>
+                        <text x="350" y="315" font-size="11" fill="white" text-anchor="middle">RNA</text>
+                        <text x="350" y="328" font-size="11" fill="white" text-anchor="middle">處理</text>
+
+                        <line x1="550" y1="210" x2="650" y2="310" stroke="#C9960C" stroke-width="2"/>
+                        <circle cx="650" cy="310" r="45" fill="#C9960C"/>
+                        <text x="650" y="315" font-size="11" fill="white" text-anchor="middle">選擇性</text>
+                        <text x="650" y="328" font-size="11" fill="white" text-anchor="middle">剪接</text>
+
+                        <!-- Sub-branches for Translation -->
+                        <line x1="810" y1="250" x2="900" y2="350" stroke="#C9960C" stroke-width="2"/>
+                        <circle cx="900" cy="350" r="45" fill="#C9960C"/>
+                        <text x="900" y="355" font-size="11" fill="white" text-anchor="middle">核糖體</text>
+
+                        <line x1="750" y1="260" x2="750" y2="380" stroke="#C9960C" stroke-width="2"/>
+                        <circle cx="750" cy="380" r="45" fill="#C9960C"/>
+                        <text x="750" y="385" font-size="11" fill="white" text-anchor="middle">遺傳密碼</text>
+
+                        <!-- Lower branches -->
+                        <line x1="420" y1="470" x2="300" y2="600" stroke="#0A7A72" stroke-width="3"/>
+                        <circle cx="300" cy="600" r="60" fill="#0A7A72" stroke="#C9960C" stroke-width="2"/>
+                        <text x="300" y="600" font-size="14" font-weight="bold" fill="white" text-anchor="middle" dy="0.3em">突變</text>
+
+                        <line x1="580" y1="470" x2="700" y2="600" stroke="#0A7A72" stroke-width="3"/>
+                        <circle cx="700" cy="600" r="60" fill="#0A7A72" stroke="#C9960C" stroke-width="2"/>
+                        <text x="700" y="600" font-size="14" font-weight="bold" fill="white" text-anchor="middle" dy="0.3em">癌症</text>
+                    </svg>
+                </div>
+
+                <!-- Learning Path -->
+                <div id="learning-path" class="framework-view">
+                    <h2>🎯 推薦學習路徑 | Recommended Learning Path</h2>
+                    <div class="learning-path-container">
+                        <div class="path-stage">
+                            <div class="stage-number">第1階段 | Stage 1</div>
+                            <div class="stage-title">基礎概念 | Fundamentals</div>
+                            <div class="stage-content">
+                                <div class="path-item">✓ DNA結構與複製</div>
+                                <div class="path-item">✓ 中心法則概述</div>
+                                <div class="path-item">✓ 遺傳密碼基礎</div>
+                            </div>
+                            <div class="stage-desc">建立分子生物學的基本框架</div>
+                        </div>
+
+                        <div class="stage-arrow">↓</div>
+
+                        <div class="path-stage">
+                            <div class="stage-number">第2階段 | Stage 2</div>
+                            <div class="stage-title">核心過程 | Core Processes</div>
+                            <div class="stage-content">
+                                <div class="path-item">✓ 轉錄詳解</div>
+                                <div class="path-item">✓ RNA處理與剪接</div>
+                                <div class="path-item">✓ 轉譯機制</div>
+                            </div>
+                            <div class="stage-desc">深入理解基因表達的分子細節</div>
+                        </div>
+
+                        <div class="stage-arrow">↓</div>
+
+                        <div class="path-stage">
+                            <div class="stage-number">第3階段 | Stage 3</div>
+                            <div class="stage-title">進階應用 | Advanced Applications</div>
+                            <div class="stage-content">
+                                <div class="path-item">✓ 突變類型與效應</div>
+                                <div class="path-item">✓ 癌症生物學</div>
+                                <div class="path-item">✓ 遺傳調控機制</div>
+                            </div>
+                            <div class="stage-desc">應用基礎知識解釋複雜的生物現象</div>
+                        </div>
+
+                        <div class="stage-arrow">↓</div>
+
+                        <div class="path-stage">
+                            <div class="stage-number">第4階段 | Stage 4</div>
+                            <div class="stage-title">知識整合 | Integration</div>
+                            <div class="stage-content">
+                                <div class="path-item">✓ 完成所有題庫測驗</div>
+                                <div class="path-item">✓ 分析綜合案例研究</div>
+                                <div class="path-item">✓ 掌握核心概念聯繫</div>
+                            </div>
+                            <div class="stage-desc">達到全面掌握分子生物學知識</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 8: Quiz -->
+        <div id="quiz" class="tab-content">
+            <div class="quiz-container">
+                <div id="quiz-intro" class="quiz-intro">
+                    <h2>📚 分子生物學測驗系統 | Molecular Biology Quiz System</h2>
+                    <p>選擇難度開始測驗 | Choose difficulty to start quiz</p>
+                    
+                    <div class="difficulty-selector">
+                        <button class="difficulty-btn" onclick="startQuiz('easy')">
+                            🟢 初級 | Beginner
+                            <br><small>10 題 | 10 Questions</small>
+                        </button>
+                        <button class="difficulty-btn" onclick="startQuiz('medium')">
+                            🟡 中級 | Intermediate
+                            <br><small>15 題 | 15 Questions</small>
+                        </button>
+                        <button class="difficulty-btn" onclick="startQuiz('hard')">
+                            🔴 高級 | Advanced
+                            <br><small>20 題 | 20 Questions</small>
+                        </button>
+                    </div>
+
+                    <div class="quiz-stats">
+                        <h3>📊 測試統計 | Quiz Statistics</h3>
+                        <p>總答題數 | Total Attempts: <strong id="total-attempts">0</strong></p>
+                        <p>平均分數 | Average Score: <strong id="avg-score">0%</strong></p>
+                        <p>最高分 | Best Score: <strong id="best-score">0%</strong></p>
+                    </div>
+                </div>
+
+                <div id="quiz-content" class="quiz-content" style="display:none;">
+                    <div class="quiz-header">
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                        <p id="question-counter">Question <span id="current-q">1</span> of <span id="total-q">10</span></p>
+                        <p>分數 | Score: <span id="score">0</span>/<span id="max-score">0</span></p>
+                    </div>
+
+                    <div id="quiz-question" class="quiz-question">
+                        <!-- Question will be inserted here -->
+                    </div>
+
+                    <div id="quiz-options" class="quiz-options">
+                        <!-- Options will be inserted here -->
+                    </div>
+
+                    <div class="quiz-controls">
+                        <button class="btn" onclick="previousQuestion()" id="prev-btn" style="display:none;">← 上一題 | Previous</button>
+                        <button class="btn" onclick="nextQuestion()" id="next-btn">下一題 | Next →</button>
+                        <button class="btn" onclick="submitQuiz()" id="submit-btn" style="display:none;">提交測驗 | Submit Quiz</button>
+                    </div>
+                </div>
+
+                <div id="quiz-results" class="quiz-results" style="display:none;">
+                    <h2>🎉 測驗完成 | Quiz Complete!</h2>
+                    <div class="score-circle">
+                        <div id="final-score">0%</div>
+                        <p>分數 | Score</p>
+                    </div>
+
+                    <div id="results-summary" class="results-summary">
+                        <!-- Results will be inserted here -->
+                    </div>
+
+                    <div class="results-by-topic">
+                        <h3>各主題表現 | Performance by Topic</h3>
+                        <div id="topic-breakdown"></div>
+                    </div>
+
+                    <div class="quiz-actions">
+                        <button class="btn" onclick="reviewQuiz()">📖 檢查答案 | Review Answers</button>
+                        <button class="btn" onclick="retakeQuiz()">🔄 重新測驗 | Retake Quiz</button>
+                        <button class="btn" onclick="backToHome()">🏠 回首頁 | Back to Home</button>
+                    </div>
+                </div>
+
+                <div id="quiz-review" class="quiz-review" style="display:none;">
+                    <h2>📖 答案檢查 | Answer Review</h2>
+                    <div id="review-content"></div>
+                    <button class="btn" onclick="backToHome()">🏠 回首頁 | Back to Home</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2024 基因與蛋白質學習系統 | Genes & Proteins Learning System</p>
+            <p>基於Campbell生物學第12版 | Based on Campbell Biology 12th Edition</p>
+            <p>雙語教學資源 | Bilingual Educational Resource</p>
+        </footer>
+    </div>
+
+    <script>
+        // ==================== Content Navigation ====================
+        function toggleCard(header) {
+            const card = header.parentElement;
+            card.classList.toggle('open');
+        }
+
+        function expandAll() {
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.add('open');
+            });
+        }
+
+        function collapseAll() {
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.remove('open');
+            });
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('Speech synthesis not supported in this browser');
+            }
+        }
+
+        // ==================== Quiz System ====================
+        const quizQuestions = {
+            easy: [
+                {id: 1, topic: '中心法則 | Central Dogma', question: '中文：中心法則描述遺傳信息的流向是什麼？\nEnglish: What does Central Dogma describe about genetic information flow?', options: ['DNA → RNA → Protein', 'Protein → RNA → DNA', 'RNA → DNA → Protein', 'Protein → DNA → RNA'], correct: 0, explanation: '中文：中心法則描述遺傳信息從DNA流向RNA再流向蛋白質。\nEnglish: Central Dogma describes the flow of genetic information from DNA to RNA to Protein.'},
+                {id: 2, topic: 'DNA複製 | Replication', question: '中文：哪種酶幫助解開DNA雙螺旋？\nEnglish: Which enzyme helps unwind the DNA double helix?', options: ['DNA聚合酶 | DNA Polymerase', '解螺旋酶 | Helicase', 'DNA連接酶 | DNA Ligase', '原核酶 | Primase'], correct: 1, explanation: '中文：解螺旋酶負責解開DNA雙螺旋結構。\nEnglish: Helicase is responsible for unwinding the DNA double helix structure.'},
+                {id: 3, topic: '轉錄 | Transcription', question: '中文：轉錄是合成什麼的過程？\nEnglish: Transcription is the process of synthesizing what?', options: ['蛋白質 | Protein', 'RNA', 'DNA', '氨基酸 | Amino Acid'], correct: 1, explanation: '中文：轉錄是以DNA為模板合成RNA的過程。\nEnglish: Transcription is the process of synthesizing RNA using DNA as a template.'},
+                {id: 4, topic: '轉譯 | Translation', question: '中文：翻譯發生在哪裡？\nEnglish: Where does translation occur?', options: ['細胞核 | Nucleus', '核糖體 | Ribosome', '線粒體 | Mitochondria', '內質網 | Endoplasmic Reticulum'], correct: 1, explanation: '中文：翻譯發生在核糖體上。\nEnglish: Translation occurs at the ribosome.'},
+                {id: 5, topic: '遺傳密碼 | Genetic Code', question: '中文：有多少個密碼子編碼20種氨基酸？\nEnglish: How many codons encode 20 amino acids?', options: ['20', '40', '61', '64'], correct: 2, explanation: '中文：64個密碼子中的61個編碼氨基酸，3個是終止密碼子。\nEnglish: 61 out of 64 codons encode amino acids, with 3 being stop codons.'},
+                {id: 6, topic: '突變 | Mutations', question: '中文：鐮刀形細胞病是由什麼引起的？\nEnglish: What causes sickle cell disease?', options: ['多個基因突變 | Multiple mutations', '單一鹼基替換 | Single base substitution', '基因缺失 | Gene deletion', '基因插入 | Gene insertion'], correct: 1, explanation: '中文：鐮刀形細胞病由β-珠蛋白基因的單一鹼基替換引起（GAG→GTG）。\nEnglish: Sickle cell disease is caused by a single base substitution in the β-globin gene (GAG→GTG).'},
+                {id: 7, topic: '癌症 | Cancer', question: '中文：BRCA基因是什麼類型的基因？\nEnglish: What type of gene is BRCA?', options: ['原癌基因 | Proto-oncogene', '腫瘤抑制基因 | Tumor suppressor gene', '轉運基因 | Transport gene', '結構基因 | Structural gene'], correct: 1, explanation: '中文：BRCA基因是腫瘤抑制基因，幫助修復DNA損傷。\nEnglish: BRCA genes are tumor suppressor genes that help repair DNA damage.'},
+                {id: 8, topic: '轉錄 | Transcription', question: '中文：RNA聚合酶結合在哪裡開始轉錄？\nEnglish: Where does RNA polymerase bind to begin transcription?', options: ['終止子 | Terminator', '啟動子 | Promoter', '增強子 | Enhancer', '沈默子 | Silencer'], correct: 1, explanation: '中文：RNA聚合酶結合在啟動子上開始轉錄。\nEnglish: RNA polymerase binds to the promoter to begin transcription.'},
+                {id: 9, topic: 'tRNA | Transfer RNA', question: '中文：tRNA分子的哪一端附著氨基酸？\nEnglish: Which end of tRNA molecule attaches amino acids?', options: ["5'端", "3'端", "中間", "兩端"], correct: 1, explanation: "中文：tRNA的3'端附著氨基酸。\nEnglish: The 3' end of tRNA attaches amino acids."},
+                {id: 10, topic: '費城染色體 | Philadelphia Chromosome', question: '中文：費城染色體涉及哪兩條染色體的易位？\nEnglish: Which two chromosomes are involved in the Philadelphia chromosome translocation?', options: ['9和13', '9和22', '17和13', '22和13'], correct: 1, explanation: '中文：費城染色體是9號和22號染色體之間的易位。\nEnglish: Philadelphia chromosome is a translocation between chromosomes 9 and 22.'}
+            ],
+            medium: [],
+            hard: []
+        };
+
+        // Add medium questions (extending easy set)
+        quizQuestions.medium = JSON.parse(JSON.stringify(quizQuestions.easy)).concat([
+            {id: 11, topic: 'DNA複製 | Replication', question: '中文：先導鏈和滯後鏈合成的區別是什麼？\nEnglish: What is the difference in synthesis between leading and lagging strands?', options: ['先導鏈連續，滯後鏈分片段 | Leading continuous, lagging in fragments', '先導鏈分片段，滯後鏈連續 | Leading in fragments, lagging continuous', '都是分片段 | Both in fragments', '都是連續 | Both continuous'], correct: 0, explanation: '中文：由於DNA聚合酶只能5→3方向合成，先導鏈連續合成，滯後鏈需要分片段合成（Okazaki片段）。'},
+            {id: 12, topic: 'RNA處理 | RNA Processing', question: '中文：真核生物mRNA在離開細胞核前需要哪些處理？\nEnglish: What processing does eukaryotic mRNA undergo before leaving the nucleus?', options: ['只需要加帽 | Only capping', '只需要加尾 | Only polyadenylation', '加帽、加尾和剪接 | Capping, polyadenylation, and splicing', '只需要剪接 | Only splicing'], correct: 2, explanation: '中文：真核生物mRNA需要進行5\'加帽、3\'加尾和剪接。'},
+            {id: 13, topic: '轉譯 | Translation', question: '中文：核糖體的tRNA結合位點有哪些？\nEnglish: What are the tRNA binding sites on the ribosome?', options: ['A、B、C位點', 'P位點、A位點、E位點', 'N、M、C位點', 'S、T、R位點'], correct: 1, explanation: '中文：P位點（肽基位點）、A位點（氨基醯位點）、E位點（出口位點）。'},
+            {id: 14, topic: '遺傳密碼 | Genetic Code', question: '中文：遺傳密碼的"冗餘性"是什麼意思？\nEnglish: What does "redundancy" of the genetic code mean?', options: ['一個密碼子編碼多個氨基酸', '多個密碼子編碼同一氨基酸', '一個氨基酸由多個密碼子編碼', '選項B和C都正確'], correct: 3, explanation: '中文：冗餘性意味著多個密碼子可編碼同一氨基酸。'},
+            {id: 15, topic: '突變 | Mutations', question: '中文：移碼突變通常比點突變危害更大的原因是？\nEnglish: Why are frameshift mutations usually more harmful than point mutations?', options: ['改變所有下游氨基酸的合成', '只改變一個氨基酸', '導致蛋白質完全缺失', '降低蛋白質穩定性'], correct: 0, explanation: '中文：移碼突變改變讀碼框，導致所有下游密碼子被錯誤解讀。'}
+        ]);
+
+        // Add hard questions
+        quizQuestions.hard = JSON.parse(JSON.stringify(quizQuestions.medium)).concat([
+            {id: 16, topic: '轉錄 | Transcription', question: '中文：選擇性剪接如何增加蛋白質多樣性？\nEnglish: How does alternative splicing increase protein diversity?', options: ['通過改變轉錄起點', '通過包含或排除不同外顯子產生不同mRNA和蛋白質', '通過改變基因序列', '通過改變翻譯起點'], correct: 1, explanation: '中文：一個基因可以通過不同的剪接方式產生多種蛋白質。'},
+            {id: 17, topic: '轉譯 | Translation', question: '中文：轉譯準確性如何被保證？\nEnglish: How is translation accuracy ensured?', options: ['只通過tRNA反密碼子與mRNA密碼子配對', '只通過氨基酰-tRNA合成酶', '通過双重檢查機制確保正確配對', '通過核糖體的多個檢查點'], correct: 2, explanation: '中文：轉譯準確性由双重檢查機制保證。'},
+            {id: 18, topic: '癌症 | Cancer', question: '中文：為什麼癌症發病率隨著年齡增加而增加？\nEnglish: Why does cancer incidence increase with age?', options: ['免疫系統衰老', '需要多個遺傳突變積累形成癌症', '細胞分裂速度增加', '遺傳物質降解加快'], correct: 1, explanation: '中文：癌症需要3-7個主要遺傳變化，這需要時間積累。'},
+            {id: 19, topic: 'DNA複製 | Replication', question: '中文：端粒酶如何解決DNA複製的末端問題？\nEnglish: How does telomerase solve the end-replication problem?', options: ['通過添加RNA引物', '通過利用內部RNA模板添加DNA序列', '通過重新連接DNA鏈', '通過修復DNA損傷'], correct: 1, explanation: '中文：端粒酶利用其內部RNA模板添加DNA序列。'},
+            {id: 20, topic: 'RNA處理 | RNA Processing', question: '中文：為什麼真核生物需要RNA處理？\nEnglish: Why do eukaryotes require RNA processing?', options: ['真核生物有更多基因', '基因被內含子打斷，需要剪接', '真核生物的RNA更不穩定', '原核生物沒有mRNA'], correct: 1, explanation: '中文：真核生物的基因包含內含子，需要通過剪接去除。'}
+        ]);
+
+        let currentQuiz = null;
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let quizScore = 0;
+        let quizHistory = JSON.parse(localStorage.getItem('quizHistory') || '[]');
+
+        function startQuiz(difficulty) {
+            currentQuiz = {difficulty: difficulty, questions: JSON.parse(JSON.stringify(quizQuestions[difficulty])).sort(() => 0.5 - Math.random())};
+            currentQuestionIndex = 0;
+            userAnswers = new Array(currentQuiz.questions.length).fill(-1);
+            quizScore = 0;
+            document.getElementById('quiz-intro').style.display = 'none';
+            document.getElementById('quiz-content').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const question = currentQuiz.questions[currentQuestionIndex];
+            const totalQuestions = currentQuiz.questions.length;
+            document.getElementById('current-q').textContent = currentQuestionIndex + 1;
+            document.getElementById('total-q').textContent = totalQuestions;
+            document.getElementById('max-score').textContent = totalQuestions;
+            const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            let questionHTML = `<div class="question-badge">${question.topic}</div><h3>${question.question}</h3>`;
+            document.getElementById('quiz-question').innerHTML = questionHTML;
+            let optionsHTML = '';
+            question.options.forEach((option, index) => {
+                const isSelected = userAnswers[currentQuestionIndex] === index ? 'selected' : '';
+                optionsHTML += `<div class="quiz-option ${isSelected}" onclick="selectAnswer(${index})">${String.fromCharCode(65 + index)}. ${option}</div>`;
+            });
+            document.getElementById('quiz-options').innerHTML = optionsHTML;
+            document.getElementById('prev-btn').style.display = currentQuestionIndex > 0 ? 'inline-block' : 'none';
+            document.getElementById('next-btn').style.display = currentQuestionIndex < totalQuestions - 1 ? 'inline-block' : 'none';
+            document.getElementById('submit-btn').style.display = currentQuestionIndex === totalQuestions - 1 ? 'inline-block' : 'none';
+        }
+
+        function selectAnswer(index) {
+            userAnswers[currentQuestionIndex] = index;
+            loadQuestion();
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuiz.questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            quizScore = 0;
+            userAnswers.forEach((answer, index) => {
+                if (answer === currentQuiz.questions[index].correct) {
+                    quizScore++;
+                }
+            });
+            const totalQuestions = currentQuiz.questions.length;
+            const percentage = Math.round((quizScore / totalQuestions) * 100);
+            document.getElementById('quiz-content').style.display = 'none';
+            document.getElementById('quiz-results').style.display = 'block';
+            document.getElementById('final-score').textContent = percentage + '%';
+            let summaryHTML = `<p>✅ 正確答案 | Correct: <strong>${quizScore}/${totalQuestions}</strong></p><p>❌ 錯誤答案 | Incorrect: <strong>${totalQuestions - quizScore}/${totalQuestions}</strong></p>`;
+            document.getElementById('results-summary').innerHTML = summaryHTML;
+            const topicScores = {};
+            currentQuiz.questions.forEach((q, index) => {
+                if (!topicScores[q.topic]) {
+                    topicScores[q.topic] = {correct: 0, total: 0};
+                }
+                topicScores[q.topic].total++;
+                if (userAnswers[index] === q.correct) {
+                    topicScores[q.topic].correct++;
+                }
+            });
+            let topicHTML = '';
+            Object.keys(topicScores).forEach(topic => {
+                const score = topicScores[topic];
+                const percent = Math.round((score.correct / score.total) * 100);
+                topicHTML += `<div class="topic-bar"><div class="topic-label"><span>${topic}</span><span>${score.correct}/${score.total} (${percent}%)</span></div><div class="topic-progress"><div class="topic-fill" style="width: ${percent}%;">${percent}%</div></div></div>`;
+            });
+            document.getElementById('topic-breakdown').innerHTML = topicHTML;
+            quizHistory.push({difficulty: currentQuiz.difficulty, score: percentage, date: new Date().toLocaleString()});
+            localStorage.setItem('quizHistory', JSON.stringify(quizHistory));
+            updateStats();
+        }
+
+        function updateStats() {
+            if (quizHistory.length > 0) {
+                const avgScore = Math.round(quizHistory.reduce((sum, q) => sum + q.score, 0) / quizHistory.length);
+                const bestScore = Math.max(...quizHistory.map(q => q.score));
+                document.getElementById('total-attempts').textContent = quizHistory.length;
+                document.getElementById('avg-score').textContent = avgScore + '%';
+                document.getElementById('best-score').textContent = bestScore + '%';
+            }
+        }
+
+        function reviewQuiz() {
+            let reviewHTML = '';
+            currentQuiz.questions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const correctAnswer = question.correct;
+                const isCorrect = userAnswer === correctAnswer;
+                reviewHTML += `<div class="review-item"><div class="review-question">Q${index + 1}. ${question.question}</div><div class="review-answer ${isCorrect ? 'correct' : 'incorrect'}"><strong>${isCorrect ? '✅ 正確 | Correct' : '❌ 錯誤 | Incorrect'}</strong><br>您的答案 | Your answer: <strong>${question.options[userAnswer]}</strong><br>${!isCorrect ? `正確答案 | Correct answer: <strong>${question.options[correctAnswer]}</strong><br>` : ''}<br><em>${question.explanation}</em></div></div>`;
+            });
+            document.getElementById('review-content').innerHTML = reviewHTML;
+            document.getElementById('quiz-results').style.display = 'none';
+            document.getElementById('quiz-review').style.display = 'block';
+        }
+
+        function retakeQuiz() {
+            document.getElementById('quiz-intro').style.display = 'block';
+            document.getElementById('quiz-results').style.display = 'none';
+            document.getElementById('quiz-review').style.display = 'none';
+        }
+
+        function backToHome() {
+            document.getElementById('quiz-intro').style.display = 'block';
+            document.getElementById('quiz-content').style.display = 'none';
+            document.getElementById('quiz-results').style.display = 'none';
+            document.getElementById('quiz-review').style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstCard = document.querySelector('.card');
+            if (firstCard) {
+                firstCard.classList.add('open');
+            }
+            updateStats();
+        });
+    </script>
+</body>
+</html>
