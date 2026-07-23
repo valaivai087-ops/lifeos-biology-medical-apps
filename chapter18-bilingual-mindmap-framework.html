@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 18: Mind Map & Framework - 心智圖與框架(完全雙語)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #1a2b5f;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0d1b3e 0%, #0a7a72 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            margin-top: 10px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            border-bottom: 4px solid #c9960c;
+            padding-bottom: 15px;
+        }
+
+        .nav-btn {
+            padding: 14px 24px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-family: inherit;
+            font-weight: 600;
+            color: #0d1b3e;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #f0f8ff;
+            border-color: #0a7a72;
+        }
+
+        .nav-btn.active {
+            background: #c9960c;
+            color: white;
+            border-color: #c9960c;
+            box-shadow: 0 4px 12px rgba(201, 150, 12, 0.3);
+        }
+
+        .content-area {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            min-height: 800px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Bilingual Container */
+        .bilingual-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 25px 0;
+        }
+
+        .lang-block {
+            background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+            border: 2px solid #0a7a72;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .lang-block.english {
+            border-color: #c9960c;
+        }
+
+        .lang-header {
+            font-weight: bold;
+            font-size: 1.15em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0a7a72;
+            color: #0d1b3e;
+        }
+
+        .lang-block.english .lang-header {
+            border-bottom-color: #c9960c;
+            color: #c9960c;
+        }
+
+        .lang-block h2 {
+            color: #0d1b3e;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+
+        .lang-block h3 {
+            color: #0a7a72;
+            font-size: 1.1em;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .lang-block.english h3 {
+            color: #c9960c;
+        }
+
+        .lang-block p {
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .lang-block ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .lang-block li {
+            margin-bottom: 8px;
+            padding-left: 25px;
+            position: relative;
+            color: #333;
+        }
+
+        .lang-block li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #c9960c;
+            font-weight: bold;
+        }
+
+        /* Diagram Container */
+        .diagram-container {
+            background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+            border: 2px solid #0a7a72;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .diagram-title {
+            color: white;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding: 15px;
+            background: linear-gradient(135deg, #0a7a72 0%, #0d1b3e 100%);
+            border-radius: 8px;
+        }
+
+        .diagram-subtitle {
+            color: #666;
+            font-size: 1.05em;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .mermaid {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Framework Cards */
+        .framework-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .framework-card {
+            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+            border: 2px solid #0a7a72;
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .framework-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(10, 122, 114, 0.2);
+            border-color: #c9960c;
+        }
+
+        .framework-card h3 {
+            color: #0d1b3e;
+            margin-bottom: 15px;
+            font-size: 1.25em;
+            border-bottom: 2px solid #c9960c;
+            padding-bottom: 10px;
+        }
+
+        .framework-item {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #0a7a72;
+        }
+
+        .framework-item strong {
+            color: #0d1b3e;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .framework-item em {
+            color: #666;
+            font-size: 0.95em;
+            display: block;
+        }
+
+        /* TTS Button */
+        .tts-btn {
+            background: linear-gradient(135deg, #c9960c 0%, #b0860e 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 1.05em;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+            display: inline-block;
+            box-shadow: 0 4px 12px rgba(201, 150, 12, 0.2);
+        }
+
+        .tts-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(201, 150, 12, 0.4);
+        }
+
+        .tts-btn.speaking {
+            background: #0a7a72;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0d1b3e 0%, #0a7a72 100%);
+            color: white;
+            padding: 18px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 1.05em;
+        }
+
+        .comparison-table td {
+            padding: 15px 18px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .comparison-table tr:hover {
+            background: #f0f8ff;
+        }
+
+        .comparison-table .label {
+            font-weight: bold;
+            color: #0d1b3e;
+            width: 25%;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, #fffaf0 0%, #fff9e6 100%);
+            border-left: 5px solid #c9960c;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .info-box h3 {
+            color: #c9960c;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .info-box p {
+            color: #333;
+            line-height: 1.7;
+        }
+
+        /* Key Points */
+        .key-points {
+            background: linear-gradient(135deg, #e8f5f9 0%, #ffffff 100%);
+            border-left: 4px solid #0a7a72;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .key-points h4 {
+            color: #0a7a72;
+            margin-bottom: 15px;
+            font-size: 1.15em;
+        }
+
+        .key-points ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .key-points li {
+            margin-bottom: 10px;
+            color: #333;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .key-points li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #c9960c;
+            font-weight: bold;
+        }
+
+        .memory-box {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%);
+            border: 2px solid #c9960c;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .memory-box h4 {
+            color: #c9960c;
+            margin-bottom: 12px;
+            font-size: 1.15em;
+        }
+
+        .memory-box .memory-item {
+            background: white;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border-left: 3px solid #c9960c;
+        }
+
+        .memory-item strong {
+            color: #0d1b3e;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .memory-item em {
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .bilingual-container {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 20px;
+            }
+
+            .nav-tabs {
+                gap: 8px;
+            }
+
+            .nav-btn {
+                padding: 10px 15px;
+                font-size: 0.9em;
+            }
+
+            .framework-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.9em;
+            }
+
+            .comparison-table th, .comparison-table td {
+                padding: 10px;
+            }
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, #0a7a72 0%, #0d1b3e 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(10, 122, 114, 0.3);
+        }
+
+        h2 {
+            color: #0d1b3e;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #c9960c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Chapter 18: Mind Map & Framework</h1>
+            <p>第18章：完整知識心智圖與背誦框架</p>
+            <p style="font-size: 0.95em; margin-top: 15px;">✨ 完全雙語呈現 | 英文發出聲 | All Content Bilingual with Full English TTS</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="nav-btn active" data-section="mindmap">🧠 Mind Map</button>
+            <button class="nav-btn" data-section="framework">📊 Framework</button>
+            <button class="nav-btn" data-section="operon">⚙️ Operon</button>
+            <button class="nav-btn" data-section="eukaryotic">🧫 Eukaryotic</button>
+            <button class="nav-btn" data-section="comparison">🔀 Comparison</button>
+            <button class="nav-btn" data-section="memorization">🧩 Memorization</button>
+            <button class="nav-btn" data-section="summary">📋 Summary</button>
+            <button class="export-btn" onclick="window.print()">🖨️ Print</button>
+        </div>
+
+        <div class="content-area">
+
+            <!-- MIND MAP SECTION -->
+            <div class="section active" id="mindmap">
+                <h2>🧠 Complete Knowledge Mind Map - 完整知識心智圖</h2>
+
+                <div class="diagram-container">
+                    <div class="diagram-title">Chapter 18: Gene Expression Control</div>
+                    <div class="diagram-subtitle">完整知識架構</div>
+                    <div class="mermaid">
+mindmap
+  root((🧬<br/>Gene Expression<br/>基因表現控制))
+    PROKARYOTIC<br/>原核生物
+      Operon<br/>操作子
+        Promoter 啟動子
+        Operator 操作子
+        Genes 基因
+      Negative<br/>負調控
+        trp<br/>可抑制
+          ON→OFF
+          Corepressor
+      Positive<br/>正調控
+        lac<br/>可誘導
+          OFF→ON
+          Inducer
+        CRP-cAMP
+    EUKARYOTIC<br/>真核生物
+      Chromatin<br/>核小體
+        Acetylation
+        乙醯化=ON
+        Methylation
+        甲基化=OFF
+      Transcription<br/>轉錄
+        General TF
+        通用轉錄因子
+        Specific TF
+        特異性轉錄因子
+        Enhancers
+        增強子
+      Post-Transcription<br/>轉錄後
+        Splicing
+        剪接
+        mRNA Stability
+        mRNA穩定性
+        Translation Control
+        翻譯控制
+    ncRNA<br/>非編碼RNA
+      miRNA
+        Target mRNA
+      piRNA
+        Heterochromatin
+      lncRNA
+        Scaffold
+    DEVELOPMENT<br/>發育分化
+      Cytoplasmic<br/>細胞質決定
+      Master Genes<br/>主調控基因
+      Differentiation<br/>細胞分化
+    CANCER<br/>癌症
+      Oncogenes
+      癌基因
+      Tumor Suppressors
+      腫瘤抑制基因
+      Multistep
+      多步驟
+                    </div>
+                </div>
+
+                <div class="bilingual-container">
+                    <div class="lang-block english">
+                        <div class="lang-header">📖 How to Read This Mind Map</div>
+                        <h3>Understanding the Structure</h3>
+                        <p>This mind map shows the complete overview of gene expression control organized into five major branches:</p>
+                        <ul>
+                            <li><strong>Prokaryotic Systems:</strong> Bacteria use operons for coordinated gene control with negative (trp) and positive (lac) regulation</li>
+                            <li><strong>Eukaryotic Systems:</strong> Multi-level control from chromatin modifications through transcription to post-transcriptional processing</li>
+                            <li><strong>Non-coding RNAs:</strong> miRNA, piRNA, and lncRNA regulate genes at various stages</li>
+                            <li><strong>Development:</strong> Cytoplasmic determinants and master genes direct cell differentiation</li>
+                            <li><strong>Cancer:</strong> Dysregulation of proto-oncogenes and tumor suppressors in multistep model</li>
+                        </ul>
+                    </div>
+                    <div class="lang-block">
+                        <div class="lang-header">📖 如何閱讀心智圖</div>
+                        <h3>理解結構</h3>
+                        <p>這個心智圖展示了基因表現控制的完整概況，組織成五個主要分支：</p>
+                        <ul>
+                            <li><strong>原核系統：</strong>細菌使用操作子進行協調基因控制，具有負調控(trp)和正調控(lac)</li>
+                            <li><strong>真核系統：</strong>從核小體修飾、轉錄到轉錄後加工的多層級控制</li>
+                            <li><strong>非編碼RNA：</strong>miRNA、piRNA和lncRNA在各個階段調節基因</li>
+                            <li><strong>發育分化：</strong>細胞質決定因子和主調控基因指導細胞分化</li>
+                            <li><strong>癌症：</strong>原癌基因和腫瘤抑制基因的失調在多步驟模型中</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="tts-btn" onclick="speak('This mind map shows the complete overview of Chapter 18. It is organized into five main branches. First, Prokaryotic systems where bacteria use operons for coordinated gene control. Second, Eukaryotic systems with multi-level control from chromatin to protein. Third, non-coding RNAs that regulate genes. Fourth, Development and cell differentiation. And fifth, Cancer as a result of dysregulation. Each branch connects specific concepts that build upon each other.')">
+                    🔊 Explain Mind Map (播放英文解釋)
+                </button>
+            </div>
+
+            <!-- FRAMEWORK SECTION -->
+            <div class="section" id="framework">
+                <h2>📊 Regulation Framework - 調控框架</h2>
+
+                <div class="diagram-container">
+                    <div class="diagram-title">Three-Level Regulatory Control | 三層級調控控制</div>
+                    <div class="mermaid">
+graph TD
+    A["🧬 GENE EXPRESSION<br/>基因表現"] --> B["LEVEL 1<br/>CONTROL"]
+    A --> C["LEVEL 2<br/>CONTROL"]
+    A --> D["LEVEL 3<br/>CONTROL"]
+    
+    B --> B1["CHROMATIN 核小體<br/>Histone 組蛋白"]
+    B1 --> B1a["Acetylation 乙醯化<br/>Open = ON"]
+    B1 --> B1b["Methylation 甲基化<br/>Closed = OFF"]
+    
+    C --> C1["TRANSCRIPTION 轉錄<br/>Transcription Factors"]
+    C1 --> C1a["General TF 通用<br/>TATA Box 啟動子"]
+    C1 --> C1b["Specific TF 特異性<br/>Enhancers 增強子"]
+    
+    D --> D1["POST-TRANSCRIPTION<br/>轉錄後"]
+    D1 --> D1a["RNA Processing 加工<br/>Alternative Splicing"]
+    D1 --> D1b["mRNA Stability 穩定性<br/>miRNA Control"]
+    D1 --> D1c["Protein Degradation<br/>蛋白質降解"]
+                    </div>
+                </div>
+
+                <div class="bilingual-container">
+                    <div class="lang-block english">
+                        <div class="lang-header">🎓 Three-Level Framework</div>
+                        <h3>Level 1: Chromatin Control (最前面的控制)</h3>
+                        <p>Before genes can be transcribed, the chromatin structure must be accessible. Histone acetylation opens chromatin (ON), while methylation closes it (OFF). This is the first gatekeeper.</p>
+                        <h3>Level 2: Transcription Control (中間的控制)</h3>
+                        <p>General transcription factors bind to TATA box. Specific transcription factors bind to enhancers and activate RNA polymerase II. This controls WHEN and HOW MUCH transcription occurs.</p>
+                        <h3>Level 3: Post-Transcriptional (最後面的控制)</h3>
+                        <p>RNA processing through alternative splicing creates protein diversity. mRNA stability is controlled by 3' UTR sequences and miRNAs. Protein degradation via ubiquitin-proteasome controls protein levels.</p>
+                    </div>
+                    <div class="lang-block">
+                        <div class="lang-header">🎓 三層級框架</div>
+                        <h3>第1級：核小體控制 (最前面的控制)</h3>
+                        <p>在基因轉錄前，核小體結構必須可接近。組蛋白乙醯化打開核小體(ON)，甲基化關閉它(OFF)。這是第一道守門員。</p>
+                        <h3>第2級：轉錄控制 (中間的控制)</h3>
+                        <p>通用轉錄因子結合TATA盒。特異性轉錄因子結合增強子並激活RNA聚合酶II。這控制何時和多少轉錄發生。</p>
+                        <h3>第3級：轉錄後 (最後面的控制)</h3>
+                        <p>通過選擇性剪接的RNA加工創造蛋白質多樣性。mRNA穩定性由3' UTR序列和miRNA控制。通過泛素-蛋白酶體的蛋白質降解控制蛋白質水平。</p>
+                    </div>
+                </div>
+
+                <button class="tts-btn" onclick="speak('The three-level framework shows how gene expression is controlled at multiple stages. Level one is Chromatin Control where histone acetylation opens chromatin to allow transcription while methylation closes it. Level two is Transcription Control where transcription factors bind to promoters and enhancers. Level three is Post-transcriptional Control involving RNA processing, mRNA stability, and protein degradation. Together these three levels provide comprehensive control of gene expression.')">
+                    🔊 Explain Framework (播放英文解釋)
+                </button>
+            </div>
+
+            <!-- OPERON SECTION -->
+            <div class="section" id="operon">
+                <h2>⚙️ Bacterial Operons - 細菌操作子</h2>
+
+                <div class="framework-grid">
+                    <div class="framework-card">
+                        <h3>🔴 TRP OPERON (可抑制)</h3>
+                        <div class="framework-item">
+                            <strong>Repressible</strong><br/>
+                            <em>可被抑制的</em>
+                        </div>
+                        <div class="framework-item">
+                            <strong>Default: ON</strong><br/>
+                            <em>默認：打開</em>
+                        </div>
+                        <div class="framework-item">
+                            <strong>Function: Synthesis</strong><br/>
+                            <em>功能：合成</em>
+                        </div>
+                        <div class="framework-item">
+                            <strong>Signal: Tryptophan</strong><br/>
+                            <em>信號：色氨酸</em>
+                        </div>
+                        <div class="framework-item">
+                            <strong>Action: TURN OFF</strong><br/>
+                            <em>動作：關閉</em>
+                        </div>
+                    </div>
+
+                    <div class="framework-card">
+                        <h3>🟢 LAC OPERON (可誘導)</h3>
+                        <div class="framework-item">
+                            <strong>Inducible</strong><br/>
+                            <em>可被誘導的</em>
+                        </div>
+                        <div class="framework-item">
+                            <strong>Default: OFF</strong><br/>
+                            <em>默認：關閉</em>
+                        </div>
+                        <div class="framework-item">
+                            <strong>Function: Breakdown</strong><br/>
+                            <em>功能：分解</em>
+                        </div>
+                        <div class="framework-item">
+                            <strong>Signal: Lactose</strong><br/>
+                            <em>信號：乳糖</em>
+                        </div>
+                        <div class="framework-item">
+                            <strong>Action: TURN ON</strong><br/>
+                            <em>動作：打開</em>
+                        </div>
+                    </div>
+
+                    <div class="framework-card">
+                        <h3>⭐ POSITIVE CONTROL</h3>
+                        <div class="framework-item">
+                            <strong>CRP-cAMP</strong><br/>
+                            <em>循環AMP受體蛋白</em>
+                        </div>
+                        <div class="framework-item">
+                            <strong>Signal: Low Glucose</strong><br/>
+                            <em>信號：葡萄糖低</em>
+                        </div>
+                        <div class="framework-item">
+                            <strong>Effect: ENHANCE</strong><br/>
+                            <em>效果：增強</em>
+                        </div>
+                        <div class="framework-item">
+                            <strong>Function: Optimization</strong><br/>
+                            <em>功能：最優化</em>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bilingual-container">
+                    <div class="lang-block english">
+                        <div class="lang-header">🧬 Operon Components & Mechanism</div>
+                        <h3>Three Essential Parts</h3>
+                        <p><strong>1. Promoter (啟動子):</strong> Where RNA polymerase begins transcription</p>
+                        <p><strong>2. Operator (操作子):</strong> The on-off switch where repressor protein binds</p>
+                        <p><strong>3. Structural Genes (結構基因):</strong> Genes that produce the enzymes</p>
+                        <h3>How It Works</h3>
+                        <p>A repressor protein is made from a regulatory gene. When the corepressor (like tryptophan) binds to this repressor, the repressor becomes active and blocks the operator. This prevents RNA polymerase from transcribing the genes.</p>
+                    </div>
+                    <div class="lang-block">
+                        <div class="lang-header">🧬 操作子組件與機制</div>
+                        <h3>三個必要部分</h3>
+                        <p><strong>1. 啟動子：</strong>RNA聚合酶開始轉錄的地方</p>
+                        <p><strong>2. 操作子：</strong>抑制子蛋白結合的開關</p>
+                        <p><strong>3. 結構基因：</strong>產生酵素的基因</p>
+                        <h3>工作原理</h3>
+                        <p>抑制子蛋白由調控基因製造。當輔助抑制子(如色氨酸)結合到抑制子時，抑制子變活躍並阻止操作子。這防止RNA聚合酶轉錄基因。</p>
+                    </div>
+                </div>
+
+                <button class="tts-btn" onclick="speak('Bacterial operons are clusters of genes controlled together. The trp operon is repressible and normally on, used for tryptophan synthesis. The lac operon is inducible and normally off, used for lactose breakdown. Each operon has three components: a promoter where transcription starts, an operator that acts as an on-off switch, and structural genes that code for enzymes. The trp operon also shows positive control through CRP-cAMP activation when glucose is scarce.')">
+                    🔊 Explain Operons (播放英文解釋)
+                </button>
+            </div>
+
+            <!-- EUKARYOTIC SECTION -->
+            <div class="section" id="eukaryotic">
+                <h2>🧫 Eukaryotic Regulation - 真核生物調控</h2>
+
+                <div class="bilingual-container">
+                    <div class="lang-block english">
+                        <div class="lang-header">📚 Six Levels of Eukaryotic Gene Regulation</div>
+                        <h3>1. Chromatin Modification 核小體修飾</h3>
+                        <p>Histone acetylation opens chromatin structure, allowing access for transcription factors. Histone methylation typically closes chromatin and silences genes. DNA methylation adds methyl groups to cytosine bases, usually repressing transcription.</p>
+                        <h3>2. Transcription Initiation 轉錄起始</h3>
+                        <p>General transcription factors recognize and bind the TATA box in the promoter. Specific transcription factors bind to enhancer sequences, which can be far from the promoter. DNA looping brings enhancers near the promoter through protein interactions.</p>
+                        <h3>3. RNA Processing RNA加工</h3>
+                        <p>Alternative RNA splicing allows one gene to produce multiple proteins by including or excluding different exons. The primary transcript is processed with 5' cap and 3' poly-A tail addition.</p>
+                        <h3>4. mRNA Stability mRNA穩定性</h3>
+                        <p>Sequences in the 3' UTR (untranslated region) affect how long the mRNA survives in the cytoplasm. microRNAs bind to mRNA and either cause degradation or block translation initiation.</p>
+                        <h3>5. Translation Control 翻譯控制</h3>
+                        <p>Regulatory proteins can block the initiation of translation by binding to specific sequences on the mRNA. The life span of mRNA molecules determines protein synthesis rates in cells.</p>
+                        <h3>6. Protein Degradation 蛋白質降解</h3>
+                        <p>Ubiquitin is attached to proteins to mark them for degradation by proteasomes. This selective degradation regulates protein levels in the cell.</p>
+                    </div>
+                    <div class="lang-block">
+                        <div class="lang-header">📚 真核生物基因調控六個層級</div>
+                        <h3>1. 核小體修飾</h3>
+                        <p>組蛋白乙醯化打開核小體結構，允許轉錄因子進入。組蛋白甲基化通常關閉核小體並沈默基因。DNA甲基化在胞嘧啶鹼基上添加甲基，通常抑制轉錄。</p>
+                        <h3>2. 轉錄起始</h3>
+                        <p>通用轉錄因子識別並結合啟動子中的TATA盒。特異性轉錄因子結合增強子序列，可能距離啟動子很遠。DNA環帶使增強子靠近啟動子。</p>
+                        <h3>3. RNA加工</h3>
+                        <p>選擇性RNA剪接允許一個基因產生多種蛋白質，通過包括或排除不同外顯子。主轉錄本被加工並添加5'帽和3'多聚A尾。</p>
+                        <h3>4. mRNA穩定性</h3>
+                        <p>3' UTR中的序列影響mRNA在細胞質中存活多長時間。微RNA與mRNA結合，導致降解或阻止翻譯起始。</p>
+                        <h3>5. 翻譯控制</h3>
+                        <p>調控蛋白可以通過結合mRNA上的特定序列來阻止翻譯起始。mRNA分子的壽命決定了細胞中的蛋白質合成速率。</p>
+                        <h3>6. 蛋白質降解</h3>
+                        <p>泛素附著到蛋白質上以標記它們被蛋白酶體降解。這種選擇性降解調節細胞中的蛋白質水平。</p>
+                    </div>
+                </div>
+
+                <button class="tts-btn" onclick="speak('Eukaryotic gene regulation occurs at six distinct levels. First, chromatin modification through histone acetylation or methylation controls DNA accessibility. Second, transcription initiation involving general and specific transcription factors binding to promoters and enhancers. Third, RNA processing including alternative splicing that creates multiple proteins from one gene. Fourth, mRNA stability controlled by three-prime UTR sequences and microRNAs. Fifth, translation control where regulatory proteins affect translation initiation. And sixth, protein degradation through ubiquitin marking and proteasome degradation. This multi-level control provides sophisticated regulation of gene expression.')">
+                    🔊 Explain Six Levels (播放英文解釋)
+                </button>
+            </div>
+
+            <!-- COMPARISON SECTION -->
+            <div class="section" id="comparison">
+                <h2>🔀 Key Comparisons - 關鍵比較</h2>
+
+                <div class="bilingual-container">
+                    <div class="lang-block english">
+                        <div class="lang-header">🔀 trp vs lac Operon</div>
+                        <h3>TRP OPERON</h3>
+                        <p><strong>Pathway:</strong> Anabolic (synthesis of amino acid)</p>
+                        <p><strong>Default State:</strong> ON (actively making tryptophan)</p>
+                        <p><strong>When to Turn OFF:</strong> When tryptophan is abundant (corepressor present)</p>
+                        <p><strong>Logic:</strong> "We have enough, STOP making"</p>
+                        <h3>LAC OPERON</h3>
+                        <p><strong>Pathway:</strong> Catabolic (breakdown of lactose)</p>
+                        <p><strong>Default State:</strong> OFF (not making digestive enzymes)</p>
+                        <p><strong>When to Turn ON:</strong> When lactose arrives (inducer present)</p>
+                        <p><strong>Logic:</strong> "Food arrived, START breaking it down"</p>
+                    </div>
+                    <div class="lang-block">
+                        <div class="lang-header">🔀 trp與lac操作子</div>
+                        <h3>TRP操作子</h3>
+                        <p><strong>途徑：</strong>合成代謝(合成氨基酸)</p>
+                        <p><strong>默認狀態：</strong>ON(積極製造色氨酸)</p>
+                        <p><strong>何時關閉：</strong>當色氨酸豐富時(輔助抑制子存在)</p>
+                        <p><strong>邏輯：</strong>"我們有足夠的，停止製造"</p>
+                        <h3>LAC操作子</h3>
+                        <p><strong>途徑：</strong>分解代謝(分解乳糖)</p>
+                        <p><strong>默認狀態：</strong>OFF(不製造消化酵素)</p>
+                        <p><strong>何時打開：</strong>當乳糖到達時(誘導子存在)</p>
+                        <p><strong>邏輯：</strong>"食物到了，開始分解它"</p>
+                    </div>
+                </div>
+
+                <h3 style="text-align: center; color: #0a7a72; margin-top: 30px; margin-bottom: 20px;">Detailed Comparison Table 詳細比較表</h3>
+
+                <table class="comparison-table">
+                    <tr>
+                        <th class="label">Characteristic<br/>特徵</th>
+                        <th style="background: #8B0000; color: white;">trp (Repressible)<br/>可抑制的</th>
+                        <th style="background: #006400; color: white;">lac (Inducible)<br/>可誘導的</th>
+                    </tr>
+                    <tr>
+                        <td class="label"><strong>Function<br/>功能</strong></td>
+                        <td>Tryptophan synthesis<br/>色氨酸合成</td>
+                        <td>Lactose degradation<br/>乳糖分解</td>
+                    </tr>
+                    <tr>
+                        <td class="label"><strong>Pathway Type<br/>途徑類型</strong></td>
+                        <td>Anabolic (Building up)<br/>合成代謝</td>
+                        <td>Catabolic (Breaking down)<br/>分解代謝</td>
+                    </tr>
+                    <tr>
+                        <td class="label"><strong>Normal State<br/>正常狀態</strong></td>
+                        <td>ON (Expressed)<br/>打開(表現)</td>
+                        <td>OFF (Repressed)<br/>關閉(抑制)</td>
+                    </tr>
+                    <tr>
+                        <td class="label"><strong>Regulatory Molecule<br/>調控分子</strong></td>
+                        <td>Tryptophan (corepressor)<br/>色氨酸(輔助抑制子)</td>
+                        <td>Allolactose (inducer)<br/>異乳糖(誘導子)</td>
+                    </tr>
+                    <tr>
+                        <td class="label"><strong>When Signal Present<br/>信號存在時</strong></td>
+                        <td>TURN OFF<br/>關閉</td>
+                        <td>TURN ON<br/>打開</td>
+                    </tr>
+                    <tr>
+                        <td class="label"><strong>Repressor Protein<br/>抑制子蛋白</strong></td>
+                        <td>Inactive alone<br/>單獨無活性<br/>Activated by corepressor<br/>被輔助抑制子激活</td>
+                        <td>Active alone<br/>單獨有活性<br/>Inactivated by inducer<br/>被誘導子失活</td>
+                    </tr>
+                </table>
+
+                <button class="tts-btn" onclick="speak('The key difference between trp and lac operons is their opposite behaviors. The trp operon is repressible and normally on because bacteria continuously make tryptophan. It turns off when tryptophan is abundant through negative feedback. In contrast, the lac operon is inducible and normally off because lactose is not always present. It turns on when lactose arrives and needs to be broken down. The trp operon is used in anabolic pathways for synthesis while the lac operon is used in catabolic pathways for breakdown.')">
+                    🔊 Explain Operons (播放英文解釋)
+                </button>
+            </div>
+
+            <!-- MEMORIZATION SECTION -->
+            <div class="section" id="memorization">
+                <h2>🧩 Memorization Framework - 背誦框架</h2>
+
+                <div class="memory-box">
+                    <h4>💡 Easy Memory Tricks - 簡單記憶技巧</h4>
+                    <div class="memory-item">
+                        <strong>TRP = Tryptophan (氨基酸) | Made (製造)</strong>
+                        <em>Think: Storage tank that FILLS UP with tryptophan<br/>→ When FULL (high tryptophan) → STOP making (turn OFF)</em>
+                    </div>
+                    <div class="memory-item">
+                        <strong>LAC = Lactose (食物) | Eat (吃)</strong>
+                        <em>Think: Factory that gets DELIVERY of lactose<br/>→ When DELIVERY arrives → START breaking down (turn ON)</em>
+                    </div>
+                    <div class="memory-item">
+                        <strong>REPRESSIBLE = REPRESS When FULL</strong>
+                        <em>Repress = suppress | Full = abundance | Like turning down heat when room is warm enough</em>
+                    </div>
+                    <div class="memory-item">
+                        <strong>INDUCIBLE = INDUCE When NEEDED</strong>
+                        <em>Induce = turn on | Needed = substrate present | Like turning on heat when room is cold</em>
+                    </div>
+                    <div class="memory-item">
+                        <strong>ACTIVATOR = A (Activation) | Turns ON</strong>
+                        <em>A = Activation | Adds energy to system | Like stepping on gas pedal</em>
+                    </div>
+                    <div class="memory-item">
+                        <strong>REPRESSOR = R (Repression) | Turns OFF</strong>
+                        <em>R = Repression | Takes energy away | Like stepping on brake pedal</em>
+                    </div>
+                </div>
+
+                <div class="bilingual-container">
+                    <div class="lang-block english">
+                        <div class="lang-header">🎓 CHAMP Framework for Eukaryotic Regulation</div>
+                        <h3>Remember the 6 Levels as CHAMP-TDP</h3>
+                        <p><strong>C</strong> = <strong>C</strong>hromatin (Histone mod, acetyl=ON, methyl=OFF)</p>
+                        <p><strong>H</strong> = (transcription factors work here)</p>
+                        <p><strong>A</strong> = Activa<strong>T</strong>ion/Repression (TF at enhancers)</p>
+                        <p><strong>M</strong> = mRNA Processing (Splicing creates diversity)</p>
+                        <p><strong>P</strong> = Post-transcription (miRNA, stability control)</p>
+                        <p><strong>T</strong> = <strong>T</strong>ranslation (miRNA blocks)</p>
+                        <p><strong>D</strong> = <strong>D</strong>egradation (Ubiquitin marks)</p>
+                        <p><strong>P</strong> = <strong>P</strong>rotein (Proteasome destroys)</p>
+                    </div>
+                    <div class="lang-block">
+                        <div class="lang-header">🎓 真核調控的CHAMP框架</div>
+                        <h3>記住6個級別為CHAMP-TDP</h3>
+                        <p><strong>C</strong> = <strong>C</strong>hromatin(核小體修飾，乙醯基=ON，甲基=OFF)</p>
+                        <p><strong>H</strong> = (轉錄因子在這裡工作)</p>
+                        <p><strong>A</strong> = 激活/抑制(增強子上的TF)</p>
+                        <p><strong>M</strong> = mRNA加工(剪接創造多樣性)</p>
+                        <p><strong>P</strong> = 轉錄後(miRNA，穩定性控制)</p>
+                        <p><strong>T</strong> = <strong>T</strong>ranslation翻譯(miRNA阻止)</p>
+                        <p><strong>D</strong> = <strong>D</strong>egradation降解(泛素標記)</p>
+                        <p><strong>P</strong> = <strong>P</strong>rotein蛋白質(蛋白酶體破壞)</p>
+                    </div>
+                </div>
+
+                <div class="key-points">
+                    <h4>⚡ Fast Recall Checklist - 快速回憶檢查清單</h4>
+                    <ul>
+                        <li><strong>Operons:</strong> Bacteria only | Coordinated genes | One promoter-operator</li>
+                        <li><strong>trp Operon:</strong> Repressible | ON-OFF | Synthesis | Signal = Tryptophan (MORE = OFF)</li>
+                        <li><strong>lac Operon:</strong> Inducible | OFF-ON | Breakdown | Signal = Lactose (PRESENT = ON)</li>
+                        <li><strong>CRP-cAMP:</strong> Positive control | Glucose scarce = activation | Enhances lac transcription</li>
+                        <li><strong>Heterochromatin:</strong> Tight | Silent | Can't transcribe | Methylated</li>
+                        <li><strong>Euchromatin:</strong> Loose | Active | Can transcribe | Acetylated</li>
+                        <li><strong>Enhancers:</strong> Can be far away | Work through DNA looping | Bind specific TF</li>
+                        <li><strong>miRNA:</strong> ~22 nucleotides | Bind mRNA | Degrade or block | Regulate ~50% of genes</li>
+                        <li><strong>Cancer:</strong> Multiple mutations | Oncogenes (ON switches) + Tumor suppressors (OFF switches) | p53 = guardian</li>
+                    </ul>
+                </div>
+
+                <button class="tts-btn" onclick="speak('Here are quick memory tips for Chapter 18. Think of trp operon like a storage tank that fills up with tryptophan. When it gets full, you stop making more. Think of lac operon like a factory that gets deliveries of lactose. When delivery arrives, you start production. Remember that repressible operons are like temperature control, turning down when hot. Inducible operons are like turning on heat when cold. For eukaryotes, remember CHAMP framework: Chromatin, transcription factors, mRNA processing, translation control, and protein degradation. All six levels work together to control gene expression.')">
+                    🔊 Memory Tips (播放英文解釋)
+                </button>
+            </div>
+
+            <!-- SUMMARY SECTION -->
+            <div class="section" id="summary">
+                <h2>📋 Final Summary - 最終總結</h2>
+
+                <div class="bilingual-container">
+                    <div class="lang-block english">
+                        <div class="lang-header">✅ Learning Checklist - Can You?</div>
+                        <h3>Prokaryotic Knowledge (原核知識)</h3>
+                        <ul>
+                            <li>Explain operon structure with promoter, operator, genes? ✓</li>
+                            <li>Describe trp operon as repressible (normally ON)? ✓</li>
+                            <li>Describe lac operon as inducible (normally OFF)? ✓</li>
+                            <li>Explain corepressor (trp) and inducer (allolactose)? ✓</li>
+                            <li>Understand CRP-cAMP positive control? ✓</li>
+                        </ul>
+                        <h3>Eukaryotic Knowledge (真核知識)</h3>
+                        <ul>
+                            <li>Name six levels of gene regulation? ✓</li>
+                            <li>Distinguish heterochromatin from euchromatin? ✓</li>
+                            <li>Explain histone acetylation and methylation? ✓</li>
+                            <li>Describe enhancers and transcription factors? ✓</li>
+                            <li>Understand alternative splicing? ✓</li>
+                        </ul>
+                        <h3>Modern Biology (現代生物)</h3>
+                        <ul>
+                            <li>Explain miRNA, piRNA, lncRNA functions? ✓</li>
+                            <li>Understand cell differentiation? ✓</li>
+                            <li>Know cancer as multiple mutations? ✓</li>
+                            <li>Recognize oncogenes vs tumor suppressors? ✓</li>
+                            <li>Understand p53 as genome guardian? ✓</li>
+                        </ul>
+                    </div>
+                    <div class="lang-block">
+                        <div class="lang-header">✅學習檢查清單 - 你能嗎?</div>
+                        <h3>原核知識</h3>
+                        <ul>
+                            <li>用啟動子、操作子、基因解釋操作子結構？✓</li>
+                            <li>描述trp操作子為可抑制(正常ON)？✓</li>
+                            <li>描述lac操作子為可誘導(正常OFF)？✓</li>
+                            <li>解釋輔助抑制子(trp)和誘導子(異乳糖)？✓</li>
+                            <li>理解CRP-cAMP正調控？✓</li>
+                        </ul>
+                        <h3>真核知識</h3>
+                        <ul>
+                            <li>命名基因調控的六個級別？✓</li>
+                            <li>區分異常核小體與常核小體？✓</li>
+                            <li>解釋組蛋白乙醯化和甲基化？✓</li>
+                            <li>描述增強子和轉錄因子？✓</li>
+                            <li>理解選擇性剪接？✓</li>
+                        </ul>
+                        <h3>現代生物</h3>
+                        <ul>
+                            <li>解釋miRNA、piRNA、lncRNA功能？✓</li>
+                            <li>理解細胞分化？✓</li>
+                            <li>知道癌症是多個突變？✓</li>
+                            <li>認識癌基因vs腫瘤抑制基因？✓</li>
+                            <li>理解p53作為基因組守護者？✓</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h3>🎯 Key Takeaways - 關鍵要點</h3>
+                    <div class="bilingual-container">
+                        <div class="lang-block english">
+                            <p><strong>1. Bacteria control genes quickly with operons</strong> - Coordinated control of multiple genes by one switch allows rapid response to environmental changes.</p>
+                            <p><strong>2. Eukaryotes control genes at multiple levels</strong> - From chromatin structure to protein degradation, providing sophisticated and flexible control.</p>
+                            <p><strong>3. Non-coding RNAs are major regulators</strong> - miRNA alone affects ~50% of human genes, showing regulation extends beyond coding genes.</p>
+                            <p><strong>4. Cell differentiation relies on differential gene expression</strong> - Same genome, different genes expressed, creates different cell types.</p>
+                            <p><strong>5. Cancer results from multiple genetic hits</strong> - Not one mutation, but accumulation of mutations in both oncogenes and tumor suppressors.</p>
+                        </div>
+                        <div class="lang-block">
+                            <p><strong>1. 細菌用操作子快速控制基因</strong> - 由一個開關協調多個基因的控制允許快速響應環境變化。</p>
+                            <p><strong>2. 真核生物在多個級別控制基因</strong> - 從核小體結構到蛋白質降解，提供精細且靈活的控制。</p>
+                            <p><strong>3. 非編碼RNA是主要調控器</strong> - miRNA單獨影響約50%的人類基因，表明調控超越編碼基因。</p>
+                            <p><strong>4. 細胞分化依賴於差異性基因表現</strong> - 相同的基因組，表現不同的基因，創造不同的細胞類型。</p>
+                            <p><strong>5. 癌症是多個遺傳命中的結果</strong> - 不是一個突變，而是癌基因和腫瘤抑制基因中多個突變的累積。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="tts-btn" onclick="speak('Here is the final summary of Chapter 18. First, bacteria control genes quickly using operons for coordinated regulation. Second, eukaryotes use multiple levels of control from chromatin to protein degradation. Third, non-coding RNAs like miRNA regulate approximately half of all human genes. Fourth, cell differentiation depends on differential gene expression where the same genome produces different cell types through selective gene expression. Fifth, cancer results from multiple genetic mutations accumulating over time in both proto-oncogenes and tumor-suppressor genes. Understanding gene expression control is fundamental to modern biology and medicine.')">
+                    🔊 Summary (播放英文解釋)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (e.target.dataset.section) {
+                    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                    
+                    e.target.classList.add('active');
+                    const sectionId = e.target.dataset.section;
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        section.classList.add('active');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
+        // Text-to-Speech Function
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.80;
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
+                
+                const btn = event.target;
+                utterance.onstart = () => {
+                    btn.classList.add('speaking');
+                };
+                utterance.onend = () => {
+                    btn.classList.remove('speaking');
+                };
+                utterance.onerror = () => {
+                    btn.classList.remove('speaking');
+                };
+                
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Text-to-speech not supported in your browser. Please use Chrome, Edge, or Safari.');
+            }
+        }
+
+        // Mermaid initialization
+        if (typeof mermaid !== 'undefined') {
+            mermaid.contentLoaded();
+        }
+    </script>
+</body>
+</html>
