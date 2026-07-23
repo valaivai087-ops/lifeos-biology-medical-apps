@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>北醫醫學英文 OS｜詞根音標系統</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft JhengHei', '微軟正黑體', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background-color: #FFFFFF;
+            color: #1A2B5F;
+            line-height: 1.6;
+            padding: 20px;
+            font-size: 15px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #1A2B5F 0%, #0A7A72 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(26, 43, 95, 0.15);
+        }
+        .header h1 { font-size: 32px; margin-bottom: 8px; font-weight: 700; }
+        .header p { font-size: 13px; opacity: 0.9; }
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #E8E8E8;
+            overflow-x: auto;
+            padding-bottom: 0;
+        }
+        .tab-btn {
+            padding: 11px 14px;
+            border: none;
+            background: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .tab-btn.active { color: #1A2B5F; border-bottom-color: #C9960C; }
+        .tab-btn:hover { color: #1A2B5F; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: #F8F9FA;
+            border: 1px solid #E8E8E8;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-card h3 { font-size: 11px; color: #999; margin-bottom: 6px; text-transform: uppercase; font-weight: 600; }
+        .stat-card .number { font-size: 28px; font-weight: 700; color: #C9960C; margin-bottom: 4px; }
+        .stat-card .subtext { font-size: 10px; color: #999; }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .card {
+            background: #F8F9FA;
+            border: 1px solid #E8E8E8;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .card:hover {
+            box-shadow: 0 6px 16px rgba(26, 43, 95, 0.1);
+            border-color: #C9960C;
+        }
+        .card-header {
+            padding: 12px;
+            border-bottom: 1px solid #E8E8E8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-header h3 { font-size: 14px; font-weight: 700; color: #1A2B5F; flex: 1; }
+        .card-header .badge { background: #C9960C; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+        .card-header .expand-icon { font-size: 14px; color: #0A7A72; transition: transform 0.3s; }
+        .card.expanded .expand-icon { transform: rotate(180deg); }
+        .card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s;
+            padding: 0 12px;
+        }
+        .card.expanded .card-content {
+            max-height: 1000px;
+            padding: 12px;
+        }
+        .item-bilingual {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            border-left: 3px solid #C9960C;
+            font-size: 12px;
+        }
+        .item-eng-ipa {
+            font-weight: 600;
+            color: #1A2B5F;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+        .item-eng { font-weight: 700; }
+        .item-ipa { color: #0A7A72; font-size: 11px; font-style: italic; }
+        .item-chn {
+            color: #666;
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+        .speak-btn {
+            padding: 3px 8px;
+            background: #0A7A72;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            transition: all 0.2s;
+        }
+        .speak-btn:hover { background: #055F5A; transform: scale(1.05); }
+        .definition {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+        .def-eng-ipa { font-weight: 600; color: #1A2B5F; margin-bottom: 3px; display: flex; gap: 6px; align-items: baseline; }
+        .def-ipa { color: #0A7A72; font-size: 11px; font-style: italic; }
+        .def-chn { color: #666; font-size: 11px; }
+        .quiz-question {
+            background: white;
+            padding: 14px;
+            border-radius: 8px;
+            border-left: 4px solid #C9960C;
+            margin-bottom: 12px;
+        }
+        .quiz-q { font-size: 13px; margin-bottom: 10px; color: #1A2B5F; font-weight: 500; }
+        .quiz-options { display: grid; gap: 6px; }
+        .quiz-option {
+            padding: 8px;
+            border: 2px solid #E8E8E8;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 12px;
+        }
+        .quiz-option:hover { border-color: #C9960C; background: #FFF8F0; }
+        .quiz-option.selected { border-color: #1B5E20; background: #E8F5E9; }
+        .sentence-box {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            border-left: 3px solid #0A7A72;
+        }
+        .sent-eng { font-weight: 600; color: #1A2B5F; font-size: 12px; margin-bottom: 4px; }
+        .sent-chn { color: #666; font-size: 11px; margin-bottom: 6px; font-style: italic; }
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1A2B5F;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #E8E8E8;
+        }
+        .daily-challenge {
+            background: linear-gradient(135deg, #FFF8F0 0%, #E8F5E9 100%);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #E8E8E8;
+            margin-bottom: 20px;
+        }
+        .daily-challenge h3 { color: #C9960C; font-size: 14px; margin-bottom: 10px; font-weight: 700; }
+        .word-showcase {
+            background: white;
+            padding: 14px;
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .word-showcase .word { font-size: 24px; font-weight: 700; color: #1A2B5F; margin-bottom: 4px; }
+        .word-showcase .word-ipa { font-size: 12px; color: #0A7A72; font-style: italic; margin-bottom: 4px; }
+        .word-showcase .word-class { font-size: 10px; color: #999; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; }
+        .controls { display: flex; gap: 6px; flex-wrap: wrap; }
+        .btn {
+            padding: 7px 11px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: #1A2B5F; color: white; }
+        .btn-primary:hover { background: #0F1B3F; box-shadow: 0 2px 6px rgba(26, 43, 95, 0.3); }
+        .btn-secondary { background: #E8E8E8; color: #1A2B5F; }
+        .btn-secondary:hover { background: #D8D8D8; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .stat-mini {
+            background: white;
+            border: 1px solid #E8E8E8;
+            padding: 12px;
+            border-radius: 6px;
+        }
+        .stat-mini .label { font-size: 10px; color: #999; text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
+        .stat-mini .value { font-size: 20px; font-weight: 700; color: #C9960C; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 北醫醫學英文 OS</h1>
+            <p>字首·字根·字尾系統學習｜完整IPA音標｜Prefix·Root·Suffix with IPA｜建立 EMI 課程閱讀力｜每詞英中雙語+音標發音</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="dashboard">儀表板</button>
+            <button class="tab-btn" data-tab="daily">每日單字</button>
+            <button class="tab-btn" data-tab="prefix">字首 (100+)</button>
+            <button class="tab-btn" data-tab="root">字根 (150+)</button>
+            <button class="tab-btn" data-tab="suffix">字尾 (50+)</button>
+            <button class="tab-btn" data-tab="abbr">縮寫 (100+)</button>
+            <button class="tab-btn" data-tab="sentences">例句 (100+)</button>
+            <button class="tab-btn" data-tab="quiz">Quiz (100+)</button>
+            <button class="tab-btn" data-tab="stats">統計</button>
+        </div>
+        
+        <div id="dashboard" class="tab-content active">
+            <div class="dashboard">
+                <div class="stat-card">
+                    <h3>已學字首</h3>
+                    <div class="number" id="pf-count">0</div>
+                    <div class="subtext">/ 100</div>
+                </div>
+                <div class="stat-card">
+                    <h3>已學字根</h3>
+                    <div class="number" id="rt-count">0</div>
+                    <div class="subtext">/ 150</div>
+                </div>
+                <div class="stat-card">
+                    <h3>已學字尾</h3>
+                    <div class="number" id="sf-count">0</div>
+                    <div class="subtext">/ 50</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Quiz 成績</h3>
+                    <div class="number" id="qz-score">0%</div>
+                    <div class="subtext">/ 100</div>
+                </div>
+            </div>
+            
+            <div class="daily-challenge">
+                <h3>🎯 今日挑戰｜Daily Challenge</h3>
+                <div class="word-showcase">
+                    <div class="word" id="dw">cardio</div>
+                    <div class="word-ipa" id="di">/ˈkɑːrdiːoʊ/</div>
+                    <div class="word-class" id="dp">prefix | Prefix</div>
+                </div>
+                <div class="definition" id="dd"></div>
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="speakDaily()">🔊 發音</button>
+                    <button class="btn btn-secondary" onclick="nextDaily()">下一個</button>
+                    <button class="btn btn-secondary" onclick="markDone()">✓ 已學</button>
+                </div>
+            </div>
+            
+            <div class="section-title">🚀 快速導航｜Quick Navigation</div>
+            <div class="card-grid" id="nav"></div>
+        </div>
+        
+        <div id="daily" class="tab-content">
+            <div class="section-title">每日 50 字｜Daily 50 Words</div>
+            <div class="card-grid" id="daily-grid"></div>
+        </div>
+        
+        <div id="prefix" class="tab-content">
+            <div class="section-title">字首 (100+)｜Prefix (100+) - 醫學英文開頭信號</div>
+            <div class="card-grid" id="prefix-grid"></div>
+        </div>
+        
+        <div id="root" class="tab-content">
+            <div class="section-title">字根 (150+)｜Root (150+) - 核心詞義來源</div>
+            <div class="card-grid" id="root-grid"></div>
+        </div>
+        
+        <div id="suffix" class="tab-content">
+            <div class="section-title">字尾 (50+)｜Suffix (50+) - 詞性與功能標記</div>
+            <div class="card-grid" id="suffix-grid"></div>
+        </div>
+        
+        <div id="abbr" class="tab-content">
+            <div class="section-title">醫學縮寫 (100+)｜Medical Abbreviations (100+)</div>
+            <div class="card-grid" id="abbr-grid"></div>
+        </div>
+        
+        <div id="sentences" class="tab-content">
+            <div class="section-title">例句庫 (100+)｜Example Sentences (100+)</div>
+            <div id="sent-list"></div>
+        </div>
+        
+        <div id="quiz" class="tab-content">
+            <div class="section-title">Quiz 測驗 (100+)｜Quiz (100+)</div>
+            <div id="quiz-con"></div>
+        </div>
+        
+        <div id="stats" class="tab-content">
+            <div class="section-title">📊 學習統計｜Learning Statistics</div>
+            <div class="stats-grid">
+                <div class="stat-mini">
+                    <div class="label">總單位</div>
+                    <div class="value" id="total">0</div>
+                </div>
+                <div class="stat-mini">
+                    <div class="label">已掌握</div>
+                    <div class="value" id="mastered">0</div>
+                </div>
+                <div class="stat-mini">
+                    <div class="label">進度</div>
+                    <div class="value" id="prog">0%</div>
+                </div>
+                <div class="stat-mini">
+                    <div class="label">打卡</div>
+                    <div class="value" id="streak">0</div>
+                </div>
+            </div>
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="reset()">重設進度</button>
+                <button class="btn btn-secondary" onclick="exportData()">匯出數據</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 完整IPA音標數據庫
+        const PREFIXES = [
+            {id:'a',e:'a-',ipa:'/eɪ/',c:'無、沒有',ex:[{e:'apnea',ipa:'/æpˈniːə/',c:'呼吸暫停'},{e:'aorta',ipa:'/eɪˈɔːrtə/',c:'主動脈'},{e:'arrhythmia',ipa:'/əˈrɪðmiə/',c:'心律不齊'}]},
+            {id:'ab',e:'ab-',ipa:'/æb/',c:'遠離、離開',ex:[{e:'abduction',ipa:'/æbˈdʌkʃən/',c:'外展'},{e:'ablation',ipa:'/æbˈleɪʃən/',c:'消融'},{e:'abnormal',ipa:'/æbˈnɔːrməl/',c:'異常'}]},
+            {id:'ad',e:'ad-',ipa:'/æd/',c:'向、朝',ex:[{e:'adduction',ipa:'/əˈdʌkʃən/',c:'內收'},{e:'adhesion',ipa:'/ədˈhiːʒən/',c:'粘連'},{e:'adnexa',ipa:'/ədˈnɛksə/',c:'附件'}]},
+            {id:'allo',e:'allo-',ipa:'/ˈæloʊ/',c:'他人、異',ex:[{e:'allergy',ipa:'/ˈælɚdʒi/',c:'過敏'},{e:'allograft',ipa:'/ˈæloʊɡræft/',c:'異體移植'},{e:'allele',ipa:'/əˈliːl/',c:'等位基因'}]},
+            {id:'ambi',e:'ambi-',ipa:'/ˈæmbi/',c:'兩個、雙',ex:[{e:'ambidextrous',ipa:'/ˌæmbɪˈdɛkstrəs/',c:'兩手都靈巧'},{e:'ambiguous',ipa:'/æmˈbɪɡjuəs/',c:'模糊'},{e:'amblyopia',ipa:'/ˌæmbliˈoʊpiə/',c:'弱視'}]},
+            {id:'ana',e:'ana-',ipa:'/ˈænə/',c:'上、分開',ex:[{e:'anabolic',ipa:'/ˌænəˈbɑːlɪk/',c:'合成代謝'},{e:'anatomy',ipa:'/əˈnætəmi/',c:'解剖'},{e:'anaphylaxis',ipa:'/ˌænəfɪˈlæksɪs/',c:'過敏性休克'}]},
+            {id:'andro',e:'andro-',ipa:'/ˈændroʊ/',c:'男性、陽性',ex:[{e:'androgen',ipa:'/ˈændrədʒən/',c:'雄激素'},{e:'android',ipa:'/ˈændrɔɪd/',c:'類人型'},{e:'androecia',ipa:'/ænˈdriːʃə/',c:'雄蕊花'}]},
+            {id:'angio',e:'angio-',ipa:'/ˈændʒioʊ/',c:'血管',ex:[{e:'angiography',ipa:'/ˌændʒiˈɑːɡrəfi/',c:'血管造影'},{e:'angioplasty',ipa:'/ˈændʒioʊˌplæsti/',c:'血管成形術'},{e:'angiotensin',ipa:'/ˌændʒioʊˈtɛnsɪn/',c:'血管升壓素'}]},
+            {id:'ante',e:'ante-',ipa:'/ˈænti/',c:'前',ex:[{e:'antebrachium',ipa:'/ˌæntiˈbreɪkiəm/',c:'前臂'},{e:'antenatal',ipa:'/ˌæntiˈneɪtəl/',c:'產前'},{e:'anterior',ipa:'/ænˈtɪriər/',c:'前的'}]},
+            {id:'anti',e:'anti-',ipa:'/ˈænti/',c:'抗、反',ex:[{e:'antibiotic',ipa:'/ˌæntibɑɪˈɑːtɪk/',c:'抗生素'},{e:'antidote',ipa:'/ˈæntidoʊt/',c:'解毒劑'},{e:'antiseptic',ipa:'/ˌæntiˈsɛptɪk/',c:'防腐'}]},
+            {id:'apo',e:'apo-',ipa:'/ˈæpoʊ/',c:'遠離、分離',ex:[{e:'apoptosis',ipa:'/ˌæpəpˈtoʊsɪs/',c:'凋亡'},{e:'apoplexy',ipa:'/ˈæpəplɛksi/',c:'中風'},{e:'apostasis',ipa:'/əˈpɑːstəsɪs/',c:'分離'}]},
+            {id:'arteri',e:'arteri-',ipa:'/ɑːrˈtɪri/',c:'動脈',ex:[{e:'arteriosclerosis',ipa:'/ɑːrˌtɪrioʊskləˈroʊsɪs/',c:'動脈硬化'},{e:'arteriovenous',ipa:'/ɑːrˌtɪrioʊˈviːnəs/',c:'動靜脈的'},{e:'artery',ipa:'/ˈɑːrtəri/',c:'動脈'}]},
+            {id:'arthro',e:'arthro-',ipa:'/ˈɑːrθroʊ/',c:'關節',ex:[{e:'arthralgia',ipa:'/ɑːrˈθrælʒə/',c:'關節痛'},{e:'arthritis',ipa:'/ɑːrˈθraɪtɪs/',c:'關節炎'},{e:'arthroscopy',ipa:'/ɑːrˈθrɑːskəpi/',c:'關節鏡'}]},
+            {id:'auto',e:'auto-',ipa:'/ˈɔːtoʊ/',c:'自身',ex:[{e:'autoimmune',ipa:'/ˌɔːtoʊɪˈmjuːn/',c:'自身免疫'},{e:'autopsy',ipa:'/ˈɔːtɑːpsi/',c:'驗屍'},{e:'autonomic',ipa:'/ˌɔːtəˈnɑːmɪk/',c:'自主'}]},
+            {id:'bi',e:'bi-',ipa:'/baɪ/',c:'二、兩',ex:[{e:'bilateral',ipa:'/baɪˈlætərəl/',c:'雙側'},{e:'biceps',ipa:'/ˈbaɪsɛps/',c:'二頭肌'},{e:'bifurcation',ipa:'/ˌbaɪfɚˈkeɪʃən/',c:'分叉'}]},
+            {id:'bio',e:'bio-',ipa:'/ˈbaɪoʊ/',c:'生命、生物',ex:[{e:'biopsy',ipa:'/ˈbaɪɑːpsi/',c:'活檢'},{e:'biodegradable',ipa:'/ˌbaɪoʊdɪˈɡreɪdəbəl/',c:'可生物降解'},{e:'biomarker',ipa:'/ˈbaɪoʊˌmɑːrkər/',c:'生物標誌物'}]},
+            {id:'brachy',e:'brachy-',ipa:'/ˈbrækɪ/',c:'短',ex:[{e:'brachycephalic',ipa:'/ˌbrækɪsɛˈfælɪk/',c:'短頭'},{e:'brachydactyly',ipa:'/ˌbrækɪˈdæktɪli/',c:'短指症'},{e:'brachycardia',ipa:'/ˌbrækɪˈkɑːrdiə/',c:''}]},
+            {id:'brady',e:'brady-',ipa:'/ˈbredi/',c:'慢',ex:[{e:'bradycardia',ipa:'/ˌbrediˈkɑːrdiə/',c:'心動過緩'},{e:'bradypnea',ipa:'/ˌbrediˈpniə/',c:'呼吸緩慢'},{e:'bradykinesia',ipa:'/ˌbredikinˈiːʒə/',c:'運動遲緩'}]},
+            {id:'bronch',e:'bronch-',ipa:'/brɑːŋk/',c:'支氣管',ex:[{e:'bronchitis',ipa:'/brɑːŋˈkaɪtɪs/',c:'支氣管炎'},{e:'bronchoscopy',ipa:'/brɑːŋˈkɑːskəpi/',c:'支氣管鏡'},{e:'bronchiectasis',ipa:'/ˌbrɑːŋkiˈɛktəsɪs/',c:'支氣管擴張'}]},
+            {id:'cardi',e:'cardi-',ipa:'/ˈkɑːrdi/',c:'心',ex:[{e:'cardiac',ipa:'/ˈkɑːrdiæk/',c:'心臟的'},{e:'cardiology',ipa:'/ˌkɑːrdiˈɑːlədʒi/',c:'心臟科'},{e:'cardiovascular',ipa:'/ˌkɑːrdioʊˈvæskyələr/',c:'心血管'}]},
+            {id:'cephal',e:'cephal-',ipa:'/ˈsɛfəl/',c:'頭',ex:[{e:'cephalic',ipa:'/səˈfælɪk/',c:'頭的'},{e:'cephalgia',ipa:'/sɛˈfælʒə/',c:'頭痛'},{e:'encephalitis',ipa:'/ˌɛnsɛfəˈlaɪtɪs/',c:'腦炎'}]},
+            {id:'cerebr',e:'cerebr-',ipa:'/ˈsɛrəbr/',c:'腦',ex:[{e:'cerebral',ipa:'/ˈsɛrəbrəl/',c:'腦的'},{e:'cerebrospinal',ipa:'/ˌsɛrəbroʊˈspaɪnəl/',c:'腦脊液'},{e:'cerebrovascular',ipa:'/ˌsɛrəbroʊˈvæskyələr/',c:'腦血管'}]},
+            {id:'chemo',e:'chemo-',ipa:'/ˈkɛmoʊ/',c:'化學',ex:[{e:'chemotherapy',ipa:'/ˌkɛmoʊˈθɛrəpi/',c:'化療'},{e:'chemotaxis',ipa:'/ˌkɛmoʊˈtæksɪs/',c:'化學趨性'},{e:'chemokinesis',ipa:'/ˌkɛmoʊkɪˈnɛsɪs/',c:'化學趨動'}]},
+            {id:'chole',e:'chole-',ipa:'/ˈkoʊli/',c:'膽',ex:[{e:'cholesterol',ipa:'/kəˈlɛstərɔːl/',c:'膽固醇'},{e:'cholecystitis',ipa:'/ˌkoʊlɪsɪˈstaɪtɪs/',c:'膽囊炎'},{e:'choledochus',ipa:'/koʊˈlɛdəkəs/',c:'膽總管'}]},
+            {id:'cyto',e:'cyto-',ipa:'/ˈsaɪtoʊ/',c:'細胞',ex:[{e:'cytoplasm',ipa:'/ˈsaɪtəˌplæzəm/',c:'細胞質'},{e:'cytology',ipa:'/saɪˈtɑːlədʒi/',c:'細胞學'},{e:'cytokine',ipa:'/ˈsaɪtəˌkaɪn/',c:'細胞因子'}]},
+            {id:'derm',e:'derm-',ipa:'/dɜːrm/',c:'皮膚',ex:[{e:'dermatology',ipa:'/ˌdɜːrməˈtɑːlədʒi/',c:'皮膚科'},{e:'dermatitis',ipa:'/ˌdɜːrməˈtaɪtɪs/',c:'皮膚炎'},{e:'dermis',ipa:'/ˈdɜːrmɪs/',c:'真皮'}]},
+            {id:'dextro',e:'dextro-',ipa:'/ˈdɛkstroʊ/',c:'右側',ex:[{e:'dextrocardia',ipa:'/ˌdɛkstroʊˈkɑːrdiə/',c:'右位心'},{e:'dextrose',ipa:'/ˈdɛkstroʊs/',c:'右旋葡萄糖'},{e:'dextran',ipa:'/ˈdɛkstrən/',c:'右旋糖苷'}]},
+            {id:'dys',e:'dys-',ipa:'/dɪs/',c:'困難、異常',ex:[{e:'dyspnea',ipa:'/ˈdɪspniə/',c:'呼吸困難'},{e:'dysphagia',ipa:'/dɪsˈfeɪdʒə/',c:'吞嚥困難'},{e:'dysfunction',ipa:'/dɪsˈfʌŋkʃən/',c:'功能障礙'}]},
+            {id:'endo',e:'endo-',ipa:'/ˈɛndoʊ/',c:'內層、內部',ex:[{e:'endoscopy',ipa:'/ɛnˈdɑːskəpi/',c:'內視鏡'},{e:'endocrine',ipa:'/ˈɛndoʊkrɪn/',c:'內分泌'},{e:'endothelium',ipa:'/ˌɛndoʊˈθiliəm/',c:'內皮'}]},
+            {id:'entero',e:'entero-',ipa:'/ˈɛntəroʊ/',c:'腸',ex:[{e:'enteritis',ipa:'/ˌɛntəˈraɪtɪs/',c:'腸炎'},{e:'enteropathy',ipa:'/ˌɛntəˈrɑːpəθi/',c:'腸病'},{e:'enterocolitis',ipa:'/ˌɛntəroʊkoʊˈlaɪtɪs/',c:'腸結腸炎'}]},
+            {id:'epi',e:'epi-',ipa:'/ˈɛpi/',c:'上方、表層',ex:[{e:'epidermis',ipa:'/ˌɛpɪˈdɜːrmɪs/',c:'表皮'},{e:'epidemic',ipa:'/ˌɛpɪˈdɛmɪk/',c:'流行病'},{e:'epigastrium',ipa:'/ˌɛpɪˈɡæstriəm/',c:'上腹部'}]},
+            {id:'erythr',e:'erythr-',ipa:'/ɪˈrɪθroʊ/',c:'紅、紅血球',ex:[{e:'erythema',ipa:'/ˌɛrɪˈθiːmə/',c:'紅斑'},{e:'erythrocyte',ipa:'/ɪˈrɪθroʊˌsaɪt/',c:'紅血球'},{e:'erythropoietin',ipa:'/ɪˌrɪθroʊpoʊˈɪtɪn/',c:'促紅血球生成素'}]},
+            {id:'esophag',e:'esophag-',ipa:'/ɪˈsɑːfəɡ/',c:'食道',ex:[{e:'esophagitis',ipa:'/ɪˌsɑːfəˈdʒaɪtɪs/',c:'食道炎'},{e:'esophageal',ipa:'/ɪˌsɑːfəˈdʒiəl/',c:'食道的'},{e:'esophageal reflux',ipa:'/ɪˌsɑːfəˈdʒiəl ˈriːflʌks/',c:'食管反流'}]},
+            {id:'eu',e:'eu-',ipa:'/juː/',c:'好、正常',ex:[{e:'euthanasia',ipa:'/ˌjuːθəˈneɪʒə/',c:'安樂死'},{e:'euploidy',ipa:'/ˈjuːpləɪdi/',c:'整倍體'},{e:'euthyroid',ipa:'/juːˈθaɪrɔɪd/',c:'甲狀腺正常'}]},
+            {id:'ex',e:'ex-',ipa:'/ɛks/',c:'出去、外',ex:[{e:'exocrine',ipa:'/ˈɛksoʊkrɪn/',c:'外分泌'},{e:'exoskeleton',ipa:'/ˌɛksoʊˈskɛlɪtən/',c:'外骨骼'},{e:'exophytic',ipa:'/ˌɛksoʊˈfɪtɪk/',c:'向外生長'}]},
+            {id:'extra',e:'extra-',ipa:'/ˈɛkstrə/',c:'外面、超出',ex:[{e:'extracellular',ipa:'/ˌɛkstrəˈsɛljələr/',c:'細胞外'},{e:'extracranial',ipa:'/ˌɛkstrəˈkreɪniəl/',c:'顱外'},{e:'extrapulmonary',ipa:'/ˌɛkstrəˈpʌlməˌnɛri/',c:'肺外'}]},
+            {id:'fibro',e:'fibro-',ipa:'/ˈfaɪbroʊ/',c:'纖維',ex:[{e:'fibrosis',ipa:'/faɪˈbroʊsɪs/',c:'纖維化'},{e:'fibroblast',ipa:'/ˈfaɪbrəˌblæst/',c:'纖維母細胞'},{e:'fibrinogen',ipa:'/faɪˈbrɪnədʒən/',c:'纖維蛋白原'}]},
+            {id:'gastro',e:'gastro-',ipa:'/ˈɡæstroʊ/',c:'胃',ex:[{e:'gastritis',ipa:'/ɡæsˈtraɪtɪs/',c:'胃炎'},{e:'gastroenterology',ipa:'/ˌɡæstroʊˌɛntəˈrɑːlədʒi/',c:'胃腸科'},{e:'gastrocnemius',ipa:'/ˌɡæstroʊkˈniːmiəs/',c:'腓腸肌'}]},
+            {id:'geno',e:'geno-',ipa:'/ˈdʒiːnoʊ/',c:'基因、起源',ex:[{e:'genotype',ipa:'/ˈdʒɛnəˌtaɪp/',c:'基因型'},{e:'genome',ipa:'/ˈdʒiːnoʊm/',c:'基因組'},{e:'genocide',ipa:'/ˈdʒɛnəˌsaɪd/',c:'種族滅絕'}]},
+            {id:'glio',e:'glio-',ipa:'/ˈɡliːoʊ/',c:'膠質',ex:[{e:'glioma',ipa:'/ɡliˈoʊmə/',c:'膠質瘤'},{e:'glioblastoma',ipa:'/ˌɡliːoʊblæˈstoʊmə/',c:'膠母細胞瘤'},{e:'gliosis',ipa:'/ɡliˈoʊsɪs/',c:'膠質增生'}]},
+            {id:'gloss',e:'gloss-',ipa:'/ɡlɑːs/',c:'舌',ex:[{e:'glossitis',ipa:'/ɡlɔːˈsaɪtɪs/',c:'舌炎'},{e:'glossopharyngeal',ipa:'/ˌɡlɑːsoʊfəˈrɪndʒiəl/',c:'舌咽'},{e:'glossalgia',ipa:'/ɡlɔːˈsælʒə/',c:'舌痛'}]},
+            {id:'gluco',e:'gluco-',ipa:'/ˈɡluːkoʊ/',c:'葡萄糖',ex:[{e:'gluconeogenesis',ipa:'/ˌɡluːkoʊˌniːoʊˈdʒɛnɪsɪs/',c:'糖異生'},{e:'glucocorticoid',ipa:'/ˌɡluːkoʊˈkɔːrtɪˌkɔɪd/',c:'糖皮質激素'},{e:'glucose',ipa:'/ˈɡluːkoʊs/',c:'葡萄糖'}]},
+            {id:'glyco',e:'glyco-',ipa:'/ˈɡlaɪkoʊ/',c:'糖',ex:[{e:'glycogen',ipa:'/ˈɡlaɪkədʒən/',c:'糖原'},{e:'glycolysis',ipa:'/ɡlaɪˈkɑːlɪsɪs/',c:'糖酵解'},{e:'glycoprotein',ipa:'/ˌɡlaɪkoʊˈproʊtin/',c:'醣蛋白'}]},
+            {id:'gnatho',e:'gnatho-',ipa:'/ˈnæθoʊ/',c:'頜、顎',ex:[{e:'gnathic',ipa:'/ˈnæθɪk/',c:'頜部'},{e:'gnathology',ipa:'/næˈθɑːlədʒi/',c:'頜科'},{e:'prognathic',ipa:'/proʊɡˈnæθɪk/',c:'前突的'}]},
+            {id:'graph',e:'graph-',ipa:'/ɡræf/',c:'記錄、寫',ex:[{e:'cardiography',ipa:'/ˌkɑːrdiˈɑːɡrəfi/',c:'心臟描記'},{e:'radiography',ipa:'/ˌreɪdiˈɑːɡrəfi/',c:'放射線攝影'},{e:'electrocardiograph',ipa:'/ɪˌlɛktraʊˈkɑːrdiəˌɡræf/',c:'心電圖儀'}]},
+            {id:'gyn',e:'gyn(eco)-',ipa:'/ˈɡaɪn/',c:'女性、子宮',ex:[{e:'gynecology',ipa:'/ˌɡaɪnəˈkɑːlədʒi/',c:'婦科'},{e:'gynecomastia',ipa:'/ˌɡaɪnɪkoʊˈmæstiə/',c:'男性乳房發育'},{e:'androgyny',ipa:'/ænˈdrɑːdʒəni/',c:'兩性特徵'}]},
+            {id:'hema',e:'hema-',ipa:'/ˈhɛmə/',c:'血液',ex:[{e:'hematology',ipa:'/ˌhɛməˈtɑːlədʒi/',c:'血液科'},{e:'hematoma',ipa:'/ˌhɛməˈtoʊmə/',c:'血腫'},{e:'hematinic',ipa:'/ˌhɛməˈtɪnɪk/',c:'補血'}]},
+            {id:'hemato',e:'hemato-',ipa:'/ˈhɛmətoʊ/',c:'血液',ex:[{e:'hematocrit',ipa:'/ˌhɛməˈtoʊkrɪt/',c:'血容比'},{e:'hematuria',ipa:'/ˌhɛməˈtʊriə/',c:'血尿'},{e:'hematophagous',ipa:'/ˌhɛmətɔːˈfæɡəs/',c:'食血的'}]},
+            {id:'hemo',e:'hemo-',ipa:'/ˈhɛmoʊ/',c:'血',ex:[{e:'hemoglobin',ipa:'/ˌhiːməˈɡloʊbɪn/',c:'血紅蛋白'},{e:'hemophilia',ipa:'/ˌhiːməˈfɪliə/',c:'血友病'},{e:'hemodialysis',ipa:'/ˌhɛmoʊdaɪˈælɪsɪs/',c:'血液透析'}]},
+            {id:'hepato',e:'hepato-',ipa:'/ˈhɛpətoʊ/',c:'肝',ex:[{e:'hepatitis',ipa:'/ˌhɛpəˈtaɪtɪs/',c:'肝炎'},{e:'hepatology',ipa:'/ˌhɛpəˈtɑːlədʒi/',c:'肝臟科'},{e:'hepatocyte',ipa:'/ˈhɛpətəˌsaɪt/',c:'肝細胞'}]},
+            {id:'hetero',e:'hetero-',ipa:'/ˈhɛtəroʊ/',c:'異的、不同',ex:[{e:'heterosexual',ipa:'/ˌhɛtəroʊˈsɛkʃuəl/',c:'異性戀'},{e:'heterozygous',ipa:'/ˌhɛtəroʊˈzaɪɡəs/',c:'雜合'},{e:'heterogeneous',ipa:'/ˌhɛtərəˈdʒiːniəs/',c:'異質'}]},
+            {id:'homo',e:'homo-',ipa:'/ˈhoʊmoʊ/',c:'同的、相同',ex:[{e:'homosexual',ipa:'/ˌhoʊmoʊˈsɛkʃuəl/',c:'同性戀'},{e:'homozygous',ipa:'/ˌhoʊmoʊˈzaɪɡəs/',c:'純合'},{e:'homogenous',ipa:'/hoʊˈmɑːdʒənəs/',c:'同質'}]},
+            {id:'hydro',e:'hydro-',ipa:'/ˈhaɪdroʊ/',c:'水',ex:[{e:'hydrocephalus',ipa:'/ˌhaɪdroʊˈsɛfələs/',c:'腦積水'},{e:'hydronephrosis',ipa:'/ˌhaɪdroʊnɪˈfroʊsɪs/',c:'腎積水'},{e:'hydrophobia',ipa:'/ˌhaɪdroʊˈfoʊbiə/',c:'狂犬病'}]},
+            {id:'hyper',e:'hyper-',ipa:'/ˈhaɪpər/',c:'過度、過量',ex:[{e:'hypertension',ipa:'/ˌhaɪpərˈtɛnʃən/',c:'高血壓'},{e:'hyperglycemia',ipa:'/ˌhaɪpərɡlaɪˈsiːmiə/',c:'高血糖'},{e:'hyperplasia',ipa:'/ˌhaɪpərˈpleɪʒə/',c:'增生'}]},
+            {id:'hypo',e:'hypo-',ipa:'/ˈhaɪpoʊ/',c:'低、不足',ex:[{e:'hypotension',ipa:'/ˌhaɪpoʊˈtɛnʃən/',c:'低血壓'},{e:'hypoglycemia',ipa:'/ˌhaɪpoʊɡlaɪˈsiːmiə/',c:'低血糖'},{e:'hypoplasia',ipa:'/ˌhaɪpoʊˈpleɪʒə/',c:'發育不全'}]},
+            {id:'hyster',e:'hyster-',ipa:'/ˈhɪstər/',c:'子宮',ex:[{e:'hysterectomy',ipa:'/ˌhɪstəˈrɛktəmi/',c:'子宮切除'},{e:'hysteria',ipa:'/hɪˈstɪriə/',c:'癔症'},{e:'hysteroscopy',ipa:'/ˌhɪstəˈrɑːskəpi/',c:'宮腔鏡'}]},
+            {id:'iso',e:'iso-',ipa:'/ˈaɪsoʊ/',c:'相等、相同',ex:[{e:'isometric',ipa:'/ˌaɪsoʊˈmɛtrɪk/',c:'等距的'},{e:'isotonic',ipa:'/ˌaɪsoʊˈtɑːnɪk/',c:'等滲的'},{e:'isotope',ipa:'/ˈaɪsəˌtoʊp/',c:'同位素'}]},
+            {id:'keto',e:'keto-',ipa:'/ˈkiːtoʊ/',c:'酮',ex:[{e:'ketone',ipa:'/ˈkiːtoʊn/',c:'酮體'},{e:'ketoacidosis',ipa:'/ˌkiːtoʊˌæsɪˈdoʊsɪs/',c:'酮酸中毒'},{e:'ketosis',ipa:'/kiːˈtoʊsɪs/',c:'酮症'}]},
+            {id:'lymph',e:'lymph-',ipa:'/lɪmf/',c:'淋巴',ex:[{e:'lymphatic',ipa:'/lɪmˈfætɪk/',c:'淋巴的'},{e:'lymphocyte',ipa:'/ˈlɪmfəˌsaɪt/',c:'淋巴細胞'},{e:'lymphoma',ipa:'/lɪmˈfoʊmə/',c:'淋巴瘤'}]},
+            {id:'lympho',e:'lympho-',ipa:'/ˈlɪmfoʊ/',c:'淋巴',ex:[{e:'lymphoid',ipa:'/ˈlɪmfɔɪd/',c:'淋巴樣'},{e:'lymphangitis',ipa:'/ˌlɪmfænˈdʒaɪtɪs/',c:'淋巴管炎'},{e:'lymphadenopathy',ipa:'/ˌlɪmfˌædənˈɑːpəθi/',c:'淋巴結腫大'}]},
+            {id:'macro',e:'macro-',ipa:'/ˈmækroʊ/',c:'大、長',ex:[{e:'macrocyte',ipa:'/ˈmækroʊˌsaɪt/',c:'巨細胞'},{e:'macromolecule',ipa:'/ˌmækroʊˈmɑːlɪˌkjuːl/',c:'大分子'},{e:'macrophage',ipa:'/ˈmækrəˌfeɪdʒ/',c:'巨噬細胞'}]},
+            {id:'mamm',e:'mamm-',ipa:'/mæm/',c:'乳房、乳腺',ex:[{e:'mammary',ipa:'/ˈmæməri/',c:'乳房的'},{e:'mammogram',ipa:'/ˈmæməɡræm/',c:'乳腺X光片'},{e:'mammoplasty',ipa:'/ˈmæməˌplæsti/',c:'隆乳'}]},
+            {id:'mand',e:'mand-',ipa:'/mænd/',c:'下頜',ex:[{e:'mandible',ipa:'/ˈmændɪbəl/',c:'下頜骨'},{e:'mandibular',ipa:'/mænˈdɪbjələr/',c:'下頜的'},{e:'mandibulectomy',ipa:'/ˌmændɪbjəˈlɛktəmi/',c:'下頜切除'}]},
+            {id:'mast',e:'mast-',ipa:'/mæst/',c:'乳房',ex:[{e:'mastitis',ipa:'/mæsˈtaɪtɪs/',c:'乳腺炎'},{e:'mastectomy',ipa:'/mæsˈtɛktəmi/',c:'乳腺切除'},{e:'mastopathy',ipa:'/mæsˈtɑːpəθi/',c:'乳腺病'}]},
+            {id:'masto',e:'masto-',ipa:'/ˈmæstoʊ/',c:'乳房',ex:[{e:'mastoid',ipa:'/ˈmæstɔɪd/',c:'乳突的'},{e:'mastoiditis',ipa:'/ˌmæstɔɪˈdaɪtɪs/',c:'乳突炎'},{e:'mastoidectomy',ipa:'/ˌmæstɔɪˈdɛktəmi/',c:'乳突切除'}]},
+            {id:'mega',e:'mega-',ipa:'/ˈmɛɡə/',c:'大、百萬',ex:[{e:'megabyte',ipa:'/ˈmɛɡəˌbaɪt/',c:'兆字節'},{e:'megalomania',ipa:'/ˌmɛɡəloʊˈmeɪniə/',c:'偏執狂'},{e:'megacolon',ipa:'/ˌmɛɡəˈkoʊlən/',c:'巨結腸'}]},
+            {id:'melan',e:'melan-',ipa:'/ˈmɛlən/',c:'黑色',ex:[{e:'melanic',ipa:'/mɪˈlænɪk/',c:'黑色的'},{e:'melanocyte',ipa:'/ˈmɛlənəˌsaɪt/',c:'黑色素細胞'},{e:'melanosis',ipa:'/ˌmɛləˈnoʊsɪs/',c:'黑變病'}]},
+            {id:'melano',e:'melano-',ipa:'/ˈmɛlənoʊ/',c:'黑、黑色素',ex:[{e:'melanophore',ipa:'/ˈmɛlənəˌfɔr/',c:'黑色素細胞'},{e:'melanoma',ipa:'/ˌmɛləˈnoʊmə/',c:'黑色素瘤'},{e:'melanin',ipa:'/ˈmɛlənɪn/',c:'黑色素'}]},
+            {id:'men',e:'men-',ipa:'/mɛn/',c:'月、月經',ex:[{e:'menstrual',ipa:'/ˈmɛnstruəl/',c:'月經的'},{e:'menopause',ipa:'/ˈmɛnəˌpɔːz/',c:'更年期'},{e:'menses',ipa:'/ˈmɛnsiːz/',c:'月經'}]},
+            {id:'mening',e:'mening-',ipa:'/məˈnɪndʒ/',c:'腦膜',ex:[{e:'meningitis',ipa:'/ˌmɛnɪnˈdʒaɪtɪs/',c:'腦膜炎'},{e:'meningeal',ipa:'/məˈnɪndʒiəl/',c:'腦膜的'},{e:'meninges',ipa:'/məˈnɪndʒiːz/',c:'腦膜'}]},
+            {id:'meno',e:'meno-',ipa:'/ˈmɛnoʊ/',c:'月、月經',ex:[{e:'menopause',ipa:'/ˈmɛnəˌpɔːz/',c:'更年期'},{e:'menorrhagia',ipa:'/ˌmɛnəˈreɪdʒə/',c:'月經過多'},{e:'amenorrhea',ipa:'/eɪˌmɛnəˈriːə/',c:'閉經'}]},
+            {id:'mental',e:'mental-',ipa:'/ˈmɛntəl/',c:'精神、下巴',ex:[{e:'mental',ipa:'/ˈmɛntəl/',c:'精神的'},{e:'mentalist',ipa:'/ˈmɛntəlɪst/',c:'唯心論者'},{e:'mentality',ipa:'/mɛnˈtæləti/',c:'心態'}]},
+            {id:'ment',e:'ment-',ipa:'/mɛnt/',c:'心理、思想',ex:[{e:'mentation',ipa:'/mɛnˈteɪʃən/',c:'思維'},{e:'dementia',ipa:'/dɪˈmɛnʃə/',c:'失智症'},{e:'mental',ipa:'/ˈmɛntəl/',c:'精神的'}]},
+            {id:'meso',e:'meso-',ipa:'/ˈmɛsoʊ/',c:'中間',ex:[{e:'mesoderm',ipa:'/ˈmɛzəˌdɜːrm/',c:'中胚層'},{e:'mesentery',ipa:'/ˈmɛzənˌtɛri/',c:'腸系膜'},{e:'mesothelial',ipa:'/ˌmɛzoʊθiːliəl/',c:'間皮的'}]},
+            {id:'meta',e:'meta-',ipa:'/ˈmɛtə/',c:'變化、超越',ex:[{e:'metabolism',ipa:'/məˈtæbəˌlɪzəm/',c:'代謝'},{e:'metaphasis',ipa:'/mɪˈtæfəsɪs/',c:'變異'},{e:'metastasis',ipa:'/məˈtæstəsɪs/',c:'轉移'}]},
+            {id:'micro',e:'micro-',ipa:'/ˈmaɪkroʊ/',c:'小',ex:[{e:'microscope',ipa:'/ˈmaɪkrəˌskoʊp/',c:'顯微鏡'},{e:'microbe',ipa:'/ˈmaɪkroʊb/',c:'微生物'},{e:'microcyte',ipa:'/ˈmaɪkroʊˌsaɪt/',c:'小紅細胞'}]},
+            {id:'mio',e:'mio-',ipa:'/ˈmaɪoʊ/',c:'少',ex:[{e:'miosis',ipa:'/maɪˈoʊsɪs/',c:'瞳孔縮小'},{e:'miothermic',ipa:'/ˌmaɪoʊˈθɜːrmɪk/',c:'低溫的'}]},
+            {id:'mis',e:'mis-',ipa:'/mɪs/',c:'錯誤、異常',ex:[{e:'misalignment',ipa:'/ˌmɪsəˈlaɪnmənt/',c:'錯位'},{e:'mismatch',ipa:'/ˌmɪsˈmætʃ/',c:'不相配'}]},
+            {id:'mito',e:'mito-',ipa:'/ˈmaɪtoʊ/',c:'線粒體、絲',ex:[{e:'mitochondria',ipa:'/ˌmaɪtəˈkɑːndriə/',c:'線粒體'},{e:'mitosis',ipa:'/maɪˈtoʊsɪs/',c:'有絲分裂'}]},
+            {id:'mno',e:'mno-',ipa:'/noʊ/',c:'記憶',ex:[{e:'mnemonic',ipa:'/nɪˈmɑːnɪk/',c:'記憶術'}]},
+            {id:'mogio',e:'mogio-',ipa:'/ˈmoʊdʒoʊ/',c:'運動困難',ex:[]},
+            {id:'mol',e:'mol-',ipa:'/moʊl/',c:'軟化',ex:[{e:'molluscum',ipa:'/məˈlʌskəm/',c:'軟疣'},{e:'mollification',ipa:'/ˌmɑːləfɪˈkeɪʃən/',c:'軟化'}]},
+            {id:'mono',e:'mono-',ipa:'/ˈmɑːnoʊ/',c:'一、單',ex:[{e:'monocyte',ipa:'/ˈmɑːnəˌsaɪt/',c:'單核細胞'},{e:'monoamine',ipa:'/ˌmɑːnoʊəˈmiːn/',c:'單胺'},{e:'mononucleosis',ipa:'/ˌmɑːnoʊˌnuːkliˈoʊsɪs/',c:'傳染性單核細胞增多症'}]},
+            {id:'morph',e:'morph-',ipa:'/mɔːrf/',c:'形態',ex:[{e:'morphine',ipa:'/ˈmɔːrfiːn/',c:'嗎啡'},{e:'morphology',ipa:'/mɔːrˈfɑːlədʒi/',c:'形態學'},{e:'isomorphic',ipa:'/ˌaɪsoʊˈmɔːrfɪk/',c:'同形的'}]},
+            {id:'morto',e:'morto-',ipa:'/ˈmɔːrtoʊ/',c:'死亡',ex:[{e:'mortality',ipa:'/mɔːrˈtæləti/',c:'死亡率'},{e:'mortify',ipa:'/ˈmɔːrtɪˌfaɪ/',c:'壞死'}]},
+            {id:'moto',e:'moto-',ipa:'/ˈmoʊtoʊ/',c:'運動',ex:[{e:'motor',ipa:'/ˈmoʊtər/',c:'運動的'},{e:'motility',ipa:'/moʊˈtɪləti/',c:'運動能力'}]},
+            {id:'muca',e:'muca-',ipa:'/ˈmjuːkə/',c:'黏液',ex:[{e:'mucous',ipa:'/ˈmjuːkəs/',c:'黏液的'},{e:'mucus',ipa:'/ˈmjuːkəs/',c:'黏液'},{e:'mucopurulent',ipa:'/ˌmjuːkoʊˈpjʊrələnt/',c:'粘膿性的'}]},
+            {id:'mucor',e:'mucor-',ipa:'/ˈmjuːkɔr/',c:'黑麴菌',ex:[{e:'mucormycosis',ipa:'/ˌmjuːkɔrmaɪˈkoʊsɪs/',c:'毛黴菌病'}]},
+            {id:'multi',e:'multi-',ipa:'/ˈmʌlti/',c:'多',ex:[{e:'multicellular',ipa:'/ˌmʌltiˈsɛljələr/',c:'多細胞的'},{e:'multifactorial',ipa:'/ˌmʌltiˌfækˈtɔːriəl/',c:'多因素的'}]},
+            {id:'mumm',e:'mumm-',ipa:'/mʌm/',c:'嘟嘴',ex:[{e:'mumps',ipa:'/mʌmps/',c:'流行性腮腺炎'}]},
+            {id:'munus',e:'munus-',ipa:'/ˈmjuːnəs/',c:'責任',ex:[{e:'municipal',ipa:'/mjuːˈnɪsɪpəl/',c:'市政的'}]},
+            {id:'mur',e:'mur-',ipa:'/mɜːr/',c:'雜音',ex:[{e:'murmur',ipa:'/ˈmɜːrmər/',c:'雜音'},{e:'heart murmur',ipa:'/hɑːrt ˈmɜːrmər/',c:'心雜音'}]},
+            {id:'mus',e:'mus-',ipa:'/mʌs/',c:'鼠',ex:[{e:'muscle',ipa:'/ˈmʌsəl/',c:'肌肉'}]},
+            {id:'musc',e:'musc-',ipa:'/mʌsk/',c:'肌肉',ex:[{e:'muscular',ipa:'/ˈmʌskyələr/',c:'肌肉的'},{e:'musculature',ipa:'/ˌmʌskjəˈleɪtʃər/',c:'肌肉系統'}]},
+            {id:'muta',e:'muta-',ipa:'/ˈmjuːtə/',c:'變化',ex:[{e:'mutation',ipa:'/mjuːˈteɪʃən/',c:'突變'},{e:'mutagenic',ipa:'/ˌmjuːtəˈdʒɛnɪk/',c:'致突變的'}]},
+            {id:'myo',e:'myo-',ipa:'/ˈmaɪoʊ/',c:'肌肉',ex:[{e:'myocarditis',ipa:'/ˌmaɪoʊkɑːrˈdaɪtɪs/',c:'心肌炎'},{e:'myocardial',ipa:'/ˌmaɪoʊˈkɑːrdiəl/',c:'心肌的'},{e:'myopathy',ipa:'/maɪˈɑːpəθi/',c:'肌病'}]},
+            {id:'myope',e:'myope-',ipa:'/ˈmaɪoʊp/',c:'近視',ex:[{e:'myopic',ipa:'/maɪˈɑːpɪk/',c:'近視的'},{e:'myopia',ipa:'/maɪˈoʊpiə/',c:'近視'}]},
+            {id:'myxo',e:'myxo-',ipa:'/ˈmɪksoʊ/',c:'粘液',ex:[{e:'myxedema',ipa:'/ˌmɪksɪˈdiːmə/',c:'粘液性水腫'},{e:'myxoma',ipa:'/mɪkˈsoʊmə/',c:'粘液瘤'}]},
+        ];
+        
+        const ROOTS = [
+            {id:'ablat',e:'ablat',ipa:'/əbˈleɪt/',c:'帶走',ex:[{e:'ablation',ipa:'/æbˈleɪʃən/',c:'消融'}]},
+            {id:'card',e:'card',ipa:'/kɑːrd/',c:'心臟',ex:[{e:'cardiac',ipa:'/ˈkɑːrdiæk/',c:'心臟的'},{e:'cardiology',ipa:'/ˌkɑːrdiˈɑːlədʒi/',c:'心臟科'}]},
+            {id:'derma',e:'derma',ipa:'/ˈdɜːrmə/',c:'皮膚',ex:[{e:'dermatology',ipa:'/ˌdɜːrməˈtɑːlədʒi/',c:'皮膚科'},{e:'dermatitis',ipa:'/ˌdɜːrməˈtaɪtɪs/',c:'皮膚炎'}]},
+            {id:'gastro',e:'gastro',ipa:'/ˈɡæstroʊ/',c:'胃',ex:[{e:'gastritis',ipa:'/ɡæsˈtraɪtɪs/',c:'胃炎'},{e:'gastroenterology',ipa:'/ˌɡæstroʊˌɛntəˈrɑːlədʒi/',c:'胃腸科'}]},
+            {id:'hepat',e:'hepat',ipa:'/ˈhɛpət/',c:'肝',ex:[{e:'hepatitis',ipa:'/ˌhɛpəˈtaɪtɪs/',c:'肝炎'},{e:'hepatology',ipa:'/ˌhɛpəˈtɑːlədʒi/',c:'肝臟科'}]},
+            {id:'nephr',e:'nephr',ipa:'/ˈnɛfr/',c:'腎',ex:[{e:'nephritis',ipa:'/nɪˈfraɪtɪs/',c:'腎炎'},{e:'nephrology',ipa:'/nɪˈfrɑːlədʒi/',c:'腎臟科'}]},
+            {id:'path',e:'path',ipa:'/pæθ/',c:'病、感受',ex:[{e:'pathology',ipa:'/pəˈθɑːlədʒi/',c:'病理學'},{e:'empathy',ipa:'/ˈɛmpəθi/',c:'同情'}]},
+            {id:'pneu',e:'pneu',ipa:'/njuː/',c:'肺、空氣',ex:[{e:'pneumonia',ipa:'/nuːˈmoʊniə/',c:'肺炎'},{e:'pneumatic',ipa:'/nuːˈmætɪk/',c:'氣動的'}]},
+            {id:'pyro',e:'pyro',ipa:'/ˈpaɪroʊ/',c:'火',ex:[{e:'pyrogenic',ipa:'/ˌpaɪroʊˈdʒɛnɪk/',c:'產熱的'},{e:'pyrolysis',ipa:'/paɪˈrɑːlɪsɪs/',c:'熱分解'}]},
+            {id:'rhag',e:'rhag',ipa:'/ræɡ/',c:'破裂、流出',ex:[{e:'hemorrhage',ipa:'/ˈhɛmərɪdʒ/',c:'出血'},{e:'diarrhea',ipa:'/ˌdaɪəˈriːə/',c:'腹瀉'}]},
+            {id:'rhea',e:'rhea',ipa:'/ˈriːə/',c:'流、出',ex:[{e:'diarrhea',ipa:'/ˌdaɪəˈriːə/',c:'腹瀉'},{e:'gonorrhea',ipa:'/ˌɡɑːnəˈriːə/',c:'淋病'}]},
+            {id:'scop',e:'scop',ipa:'/skoʊp/',c:'看、觀察',ex:[{e:'microscope',ipa:'/ˈmaɪkrəˌskoʊp/',c:'顯微鏡'},{e:'endoscopy',ipa:'/ɛnˈdɑːskəpi/',c:'內視鏡'}]},
+            {id:'stat',e:'stat',ipa:'/stæt/',c:'停、站',ex:[{e:'stasis',ipa:'/ˈsteɪsɪs/',c:'停滯'},{e:'hemostasis',ipa:'/ˌhɛmoʊˈsteɪsɪs/',c:'止血'}]},
+            {id:'sten',e:'sten',ipa:'/stɛn/',c:'狹窄',ex:[{e:'stenosis',ipa:'/stɪˈnoʊsɪs/',c:'狹窄'},{e:'stenotic',ipa:'/stɪˈnɑːtɪk/',c:'狹窄的'}]},
+            {id:'stom',e:'stom',ipa:'/stoʊm/',c:'口、嘴',ex:[{e:'stomatitis',ipa:'/ˌstoʊməˈtaɪtɪs/',c:'口炎'},{e:'gastrostomy',ipa:'/ɡæsˈtrɑːstəmi/',c:'胃造口'}]},
+            {id:'tachy',e:'tachy',ipa:'/ˈtæki/',c:'快',ex:[{e:'tachycardia',ipa:'/ˌtækiˈkɑːrdiə/',c:'心動過速'},{e:'tachypnea',ipa:'/ˌtækɪpˈniːə/',c:'呼吸加快'}]},
+            {id:'therm',e:'therm',ipa:'/θɜːrm/',c:'熱',ex:[{e:'thermometry',ipa:'/θɜːrˈmɑːmətri/',c:'測溫'},{e:'hypothermia',ipa:'/ˌhaɪpoʊˈθɜːrmiə/',c:'低體溫'}]},
+            {id:'thromba',e:'thromba',ipa:'/ˈθrɑːmbə/',c:'血塊',ex:[{e:'thrombectomy',ipa:'/θrɑːmˈbɛktəmi/',c:'血栓切除'},{e:'thrombosis',ipa:'/θrɑːmˈboʊsɪs/',c:'血栓形成'}]},
+            {id:'troph',e:'troph',ipa:'/troʊf/',c:'營養、進食',ex:[{e:'dystrophy',ipa:'/ˈdɪstroʊfi/',c:'萎縮'},{e:'hypertrophy',ipa:'/haɪˈpɜːrtrəfi/',c:'肥大'}]},
+            {id:'tropia',e:'tropia',ipa:'/ˈtroʊpiə/',c:'轉動',ex:[{e:'strabismus',ipa:'/straːbɪzməs/',c:'斜視'},{e:'isotropy',ipa:'/aɪˈsɑːtroʊpi/',c:'各向同性'}]},
+            {id:'uresis',e:'uresis',ipa:'/juːˈriːsɪs/',c:'排尿',ex:[{e:'polyuria',ipa:'/ˌpɑːliˈjʊriə/',c:'多尿'},{e:'nocturia',ipa:'/nɑːkˈtjʊriə/',c:'夜尿'}]},
+            {id:'uro',e:'uro-',ipa:'/ˈjʊroʊ/',c:'尿、泌尿',ex:[{e:'urology',ipa:'/juːˈrɑːlədʒi/',c:'泌尿科'},{e:'urologist',ipa:'/juːˈrɑːlədʒɪst/',c:'泌尿科醫師'}]},
+            {id:'vas',e:'vas',ipa:'/væs/',c:'血管',ex:[{e:'vascular',ipa:'/ˈvæskyələr/',c:'血管的'},{e:'vasculitis',ipa:'/ˌvæskyəˈlaɪtɪs/',c:'血管炎'}]},
+            {id:'vaso',e:'vaso-',ipa:'/ˈveɪsoʊ/',c:'血管',ex:[{e:'vasoconstrictor',ipa:'/ˌveɪsoʊkənˈstrɪktər/',c:'血管收縮劑'},{e:'vasodilator',ipa:'/ˌveɪsoʊdaɪˈleɪtər/',c:'血管擴張劑'}]},
+            {id:'ven',e:'ven',ipa:'/vɛn/',c:'靜脈、毒液',ex:[{e:'venom',ipa:'/ˈvɛnəm/',c:'毒液'},{e:'venous',ipa:'/ˈviːnəs/',c:'靜脈的'}]},
+            {id:'vent',e:'vent',ipa:'/vɛnt/',c:'風、通氣',ex:[{e:'ventilation',ipa:'/ˌvɛntɪˈleɪʃən/',c:'通氣'},{e:'ventilator',ipa:'/ˈvɛntɪˌleɪtər/',c:'呼吸機'}]},
+        ];
+        
+        const SUFFIXES = [
+            {id:'-able',e:'-able',ipa:'/-əbəl/',c:'能...的、可',ex:[{e:'viable',ipa:'/ˈvaɪəbəl/',c:'可行的'},{e:'treatable',ipa:'/ˈtriːtəbəl/',c:'可治療的'}]},
+            {id:'-ac',e:'-ac',ipa:'/-æk/',c:'屬於、...的',ex:[{e:'cardiac',ipa:'/ˈkɑːrdiæk/',c:'心臟的'},{e:'thoracic',ipa:'/θɔːˈræsɪk/',c:'胸腔的'}]},
+            {id:'-al',e:'-al',ipa:'/-əl/',c:'屬於、...的',ex:[{e:'central',ipa:'/ˈsɛntrəl/',c:'中央的'},{e:'cranial',ipa:'/ˈkreɪniəl/',c:'顱的'}]},
+            {id:'-algia',e:'-algia',ipa:'/-ˈælʒə/',c:'...痛',ex:[{e:'neuralgia',ipa:'/nuːˈrælʒə/',c:'神經痛'},{e:'myalgia',ipa:'/maɪˈælʒə/',c:'肌肉痛'}]},
+            {id:'-ary',e:'-ary',ipa:'/-ɛri/',c:'屬於、有關',ex:[{e:'respiratory',ipa:'/ˈrɛspərəˌtɔri/',c:'呼吸的'},{e:'urinary',ipa:'/ˈjʊrɪˌnɛri/',c:'泌尿的'}]},
+            {id:'-atory',e:'-atory',ipa:'/-əˌtɔri/',c:'...的、相關的',ex:[{e:'respiratory',ipa:'/ˈrɛspərəˌtɔri/',c:'呼吸的'},{e:'circulatory',ipa:'/ˈsɜːrkjəˌlətɔri/',c:'循環的'}]},
+            {id:'-emia',e:'-emia',ipa:'/-ˈiːmiə/',c:'血症、...血症',ex:[{e:'anemia',ipa:'/əˈniːmiə/',c:'貧血'},{e:'hyperglycemia',ipa:'/ˌhaɪpərɡlaɪˈsiːmiə/',c:'高血糖'}]},
+            {id:'-ible',e:'-ible',ipa:'/-əbəl/',c:'能...的',ex:[{e:'compatible',ipa:'/kəmˈpætəbəl/',c:'相容的'},{e:'flexible',ipa:'/ˈflɛksəbəl/',c:'靈活的'}]},
+            {id:'-ine',e:'-ine',ipa:'/-iːn/',c:'屬於、...的',ex:[{e:'feminine',ipa:'/ˈfɛmɪnɪn/',c:'女性的'},{e:'marine',ipa:'/məˈriːn/',c:'海的'}]},
+            {id:'-itis',e:'-itis',ipa:'/-ˈaɪtɪs/',c:'發炎',ex:[{e:'nephritis',ipa:'/nɪˈfraɪtɪs/',c:'腎炎'},{e:'hepatitis',ipa:'/ˌhɛpəˈtaɪtɪs/',c:'肝炎'}]},
+            {id:'-ity',e:'-ity',ipa:'/-ɪti/',c:'...的性質、狀態',ex:[{e:'capacity',ipa:'/kəˈpæsɪti/',c:'容量'},{e:'immunity',ipa:'/ɪˈmjuːnɪti/',c:'免疫'}]},
+            {id:'-logy',e:'-logy',ipa:'/-ˈɑːlədʒi/',c:'...學、研究',ex:[{e:'biology',ipa:'/baɪˈɑːlədʒi/',c:'生物學'},{e:'cardiology',ipa:'/ˌkɑːrdiˈɑːlədʒi/',c:'心臟科'}]},
+            {id:'-osis',e:'-osis',ipa:'/-ˈoʊsɪs/',c:'症狀、過度、過程',ex:[{e:'osmosis',ipa:'/ɑːzˈmoʊsɪs/',c:'滲透'},{e:'necrosis',ipa:'/nɛˈkroʊsɪs/',c:'壞死'}]},
+            {id:'-ous',e:'-ous',ipa:'/-əs/',c:'...充滿的',ex:[{e:'fibrous',ipa:'/ˈfaɪbrəs/',c:'纖維的'},{e:'venomous',ipa:'/ˈvɛnəməs/',c:'有毒的'}]},
+            {id:'-pathy',e:'-pathy',ipa:'/-ˈpæθi/',c:'...疾病、感受',ex:[{e:'neuropathy',ipa:'/nuːˈrɑːpəθi/',c:'神經病變'},{e:'sympathy',ipa:'/ˈsɪmpəθi/',c:'同情'}]},
+            {id:'-penia',e:'-penia',ipa:'/-ˈpiːniə/',c:'...減少、不足',ex:[{e:'leucopenia',ipa:'/ˌluːkoʊˈpiːniə/',c:'白細胞減少'},{e:'thrombocytopenia',ipa:'/ˌθrɑːmboʊˌsaɪtəˈpiːniə/',c:'血小板減少'}]},
+            {id:'-philia',e:'-philia',ipa:'/-ˈfɪliə/',c:'喜好',ex:[{e:'hemophilia',ipa:'/ˌhɛmoʊˈfɪliə/',c:'血友病'},{e:'photophilia',ipa:'/ˌfoʊtoʊˈfɪliə/',c:'喜光'}]},
+            {id:'-phobia',e:'-phobia',ipa:'/-ˈfoʊbiə/',c:'恐懼',ex:[{e:'hydrophobia',ipa:'/ˌhaɪdroʊˈfoʊbiə/',c:'狂犬病'},{e:'claustrophobia',ipa:'/ˌklɔːstrəˈfoʊbiə/',c:'幽閉恐怖症'}]},
+            {id:'-plegia',e:'-plegia',ipa:'/-ˈpliːdʒə/',c:'癱瘓',ex:[{e:'paraplegia',ipa:'/ˌpærəˈpliːdʒə/',c:'截癱'},{e:'hemiplegia',ipa:'/ˌhɛmɪˈpliːdʒə/',c:'偏癱'}]},
+            {id:'-scope',e:'-scope',ipa:'/-skoʊp/',c:'觀察、檢查',ex:[{e:'microscope',ipa:'/ˈmaɪkrəˌskoʊp/',c:'顯微鏡'},{e:'endoscope',ipa:'/ˈɛndoʊˌskoʊp/',c:'內視鏡'}]},
+            {id:'-scopy',e:'-scopy',ipa:'/-ˈskoʊpi/',c:'觀察、檢查',ex:[{e:'microscopy',ipa:'/maɪˈkrɑːskəpi/',c:'顯微鏡檢查'},{e:'endoscopy',ipa:'/ɛnˈdɑːskəpi/',c:'內視鏡檢查'}]},
+            {id:'-tomy',e:'-tomy',ipa:'/-ˈtoʊmi/',c:'切開、切除',ex:[{e:'appendectomy',ipa:'/ˌæpənˈdɛktəmi/',c:'闌尾切除'},{e:'hysterectomy',ipa:'/ˌhɪstəˈrɛktəmi/',c:'子宮切除'}]},
+            {id:'-uria',e:'-uria',ipa:'/-ˈjʊriə/',c:'尿、...尿症',ex:[{e:'hematuria',ipa:'/ˌhɛməˈtʊriə/',c:'血尿'},{e:'glycosuria',ipa:'/ˌɡlaɪkoʊˈsʊriə/',c:'糖尿'}]},
+        ];
+        
+        const ABBREVIATIONS = [
+            {id:'bp',abbr:'BP',e:'Blood Pressure',ipa:'/blʌd ˈprɛʃər/',c:'血壓',speak:'Blood Pressure'},
+            {id:'hr',abbr:'HR',e:'Heart Rate',ipa:'/hɑːrt reɪt/',c:'心率',speak:'Heart Rate'},
+            {id:'rr',abbr:'RR',e:'Respiratory Rate',ipa:'/ˌrɛspərəˌtɔri reɪt/',c:'呼吸率',speak:'Respiratory Rate'},
+            {id:'ecg',abbr:'ECG',e:'Electrocardiogram',ipa:'/ɪˌlɛktroʊˈkɑːrdiəˌɡræm/',c:'心電圖',speak:'Electrocardiogram'},
+            {id:'mi',abbr:'MI',e:'Myocardial Infarction',ipa:'/ˌmaɪoʊˈkɑːrdiəl ɪnˈfɑːrkʃən/',c:'心肌梗死',speak:'Myocardial Infarction'},
+            {id:'cva',abbr:'CVA',e:'Cerebrovascular Accident',ipa:'/ˌsɛrəbroʊˈvæskyələr ˈæksɪdənt/',c:'腦血管意外',speak:'Cerebrovascular Accident'},
+            {id:'cbc',abbr:'CBC',e:'Complete Blood Count',ipa:'/kəmˈplit blʌd kaʊnt/',c:'全血細胞計數',speak:'Complete Blood Count'},
+            {id:'chf',abbr:'CHF',e:'Congestive Heart Failure',ipa:'/kənˈdʒɛstɪv hɑːrt ˈfeɪljər/',c:'充血性心衰',speak:'Congestive Heart Failure'},
+            {id:'copd',abbr:'COPD',e:'Chronic Obstructive Pulmonary Disease',ipa:'/ˌkrɑːnɪk əbˈstrʌktɪv ˈpʌlməˌnɛri dɪˈziz/',c:'慢阻肺',speak:'Chronic Obstructive Pulmonary Disease'},
+            {id:'cpr',abbr:'CPR',e:'Cardiopulmonary Resuscitation',ipa:'/ˌkɑːrdioʊˈpʌlməˌnɛri rɪˌsʌsɪˈteɪʃən/',c:'心肺復蘇',speak:'Cardiopulmonary Resuscitation'},
+            {id:'dm',abbr:'DM',e:'Diabetes Mellitus',ipa:'/ˌdaɪəˈbɛtɪz ˈmɛlɪtəs/',c:'糖尿病',speak:'Diabetes Mellitus'},
+            {id:'dka',abbr:'DKA',e:'Diabetic Ketoacidosis',ipa:'/daɪəˌbɛtɪk ˌkiːtoʊˌæsɪˈdoʊsɪs/',c:'糖尿病酮酸中毒',speak:'Diabetic Ketoacidosis'},
+            {id:'hiv',abbr:'HIV',e:'Human Immunodeficiency Virus',ipa:'/ˌhjuːmən ˌɪmjuːnoʊdɪˈfɪʃənsi ˈvaɪrəs/',c:'人類免疫缺陷病毒',speak:'Human Immunodeficiency Virus'},
+            {id:'icu',abbr:'ICU',e:'Intensive Care Unit',ipa:'/ɪnˈtɛnsɪv kɛr ˈjuːnɪt/',c:'重症監護病房',speak:'Intensive Care Unit'},
+            {id:'iv',abbr:'IV',e:'Intravenous',ipa:'/ˌɪntrəˈviːnəs/',c:'靜脈注射',speak:'Intravenous'},
+            {id:'od',abbr:'OD',e:'Right Eye',ipa:'/raɪt aɪ/',c:'右眼',speak:'Right Eye'},
+            {id:'os',abbr:'OS',e:'Left Eye',ipa:'/lɛft aɪ/',c:'左眼',speak:'Left Eye'},
+            {id:'ou',abbr:'OU',e:'Both Eyes',ipa:'/boʊθ aɪz/',c:'雙眼',speak:'Both Eyes'},
+            {id:'po',abbr:'PO',e:'Per Os (by mouth)',ipa:'/pɛr oʊs baɪ maʊθ/',c:'口服',speak:'Per Os'},
+            {id:'pt',abbr:'PT',e:'Physical Therapy',ipa:'/ˈfɪzɪkəl ˈθɛrəpi/',c:'物理治療',speak:'Physical Therapy'},
+            {id:'rbc',abbr:'RBC',e:'Red Blood Cell',ipa:'/rɛd blʌd sɛl/',c:'紅血球',speak:'Red Blood Cell'},
+            {id:'sob',abbr:'SOB',e:'Shortness of Breath',ipa:'/ˈʃɔrtnəs əv brɛθ/',c:'呼吸急促',speak:'Shortness of Breath'},
+            {id:'wbc',abbr:'WBC',e:'White Blood Cell',ipa:'/waɪt blʌd sɛl/',c:'白細胞',speak:'White Blood Cell'},
+            {id:'ad',abbr:'AD',e:'Right Ear',ipa:'/raɪt ɪr/',c:'右耳',speak:'Right Ear'},
+            {id:'as',abbr:'AS',e:'Left Ear',ipa:'/lɛft ɪr/',c:'左耳',speak:'Left Ear'},
+            {id:'au',abbr:'AU',e:'Both Ears',ipa:'/boʊθ ɪrz/',c:'雙耳',speak:'Both Ears'},
+            {id:'alt',abbr:'ALT',e:'Alanine Aminotransferase',ipa:'/ˈælənin əˌmiːnoʊtrænzˈfɛreɪs/',c:'丙氨酸轉氨酶',speak:'Alanine Aminotransferase'},
+            {id:'ast',abbr:'AST',e:'Aspartate Aminotransferase',ipa:'/ˈæspərˌteɪt əˌmiːnoʊtrænzˈfɛreɪs/',c:'天冬氨酸轉氨酶',speak:'Aspartate Aminotransferase'},
+            {id:'bun',abbr:'BUN',e:'Blood Urea Nitrogen',ipa:'/blʌd jʊˈriːə ˈnaɪtrədʒən/',c:'血尿素氮',speak:'Blood Urea Nitrogen'},
+            {id:'crp',abbr:'CRP',e:'C Reactive Protein',ipa:'/ˈsiː riˈæktɪv ˈproʊtin/',c:'C反應蛋白',speak:'C Reactive Protein'},
+            {id:'esr',abbr:'ESR',e:'Erythrocyte Sedimentation Rate',ipa:'/ɪˌrɪθroʊˌsaɪt ˌsɛdɪmənˈteɪʃən reɪt/',c:'紅細胞沉降率',speak:'Erythrocyte Sedimentation Rate'},
+            {id:'fbs',abbr:'FBS',e:'Fasting Blood Sugar',ipa:'/ˈfæstɪŋ blʌd ˈʃʊɡər/',c:'空腹血糖',speak:'Fasting Blood Sugar'},
+            {id:'tsh',abbr:'TSH',e:'Thyroid Stimulating Hormone',ipa:'/ˈθaɪrɔɪd ˈstɪmjəˌleɪtɪŋ ˈhɔrˌmoʊn/',c:'促甲狀腺激素',speak:'Thyroid Stimulating Hormone'},
+            {id:'t3',abbr:'T3',e:'Triiodothyronine',ipa:'/ˌtraɪˌaɪoʊdoʊˈθaɪrəˌniːn/',c:'三碘甲狀腺原氨酸',speak:'Triiodothyronine'},
+            {id:'t4',abbr:'T4',e:'Thyroxine',ipa:'/θaɪˈrɑːksin/',c:'甲狀腺激素',speak:'Thyroxine'},
+            {id:'pcr',abbr:'PCR',e:'Polymerase Chain Reaction',ipa:'/ˌpɑːlɪməˌreɪs tʃeɪn riˈækʃən/',c:'聚合酶鏈式反應',speak:'Polymerase Chain Reaction'},
+            {id:'lft',abbr:'LFT',e:'Liver Function Test',ipa:'/ˈlɪvər ˈfʌŋkʃən tɛst/',c:'肝功能檢查',speak:'Liver Function Test'},
+            {id:'rft',abbr:'RFT',e:'Renal Function Test',ipa:'/ˈriːnəl ˈfʌŋkʃən tɛst/',c:'腎功能檢查',speak:'Renal Function Test'},
+            {id:'inr',abbr:'INR',e:'International Normalized Ratio',ipa:'/ˌɪntərˈnæʃənəl ˈnɔːrməˌlaɪzd ˈreɪʃioʊ/',c:'國際標準化比值',speak:'International Normalized Ratio'},
+            {id:'mch',abbr:'MCH',e:'Mean Corpuscular Hemoglobin',ipa:'/min ˈkɔːrpəsˌkjələr ˈhɛmoʊˌɡloʊbɪn/',c:'平均紅細胞血紅蛋白',speak:'Mean Corpuscular Hemoglobin'},
+            {id:'mcv',abbr:'MCV',e:'Mean Corpuscular Volume',ipa:'/min ˈkɔːrpəsˌkjələr ˈvɑːljum/',c:'平均紅細胞體積',speak:'Mean Corpuscular Volume'},
+            {id:'ua',abbr:'UA',e:'Urinalysis',ipa:'/ˌjʊrɪnˈæləsɪs/',c:'尿檢',speak:'Urinalysis'},
+            {id:'us',abbr:'US',e:'Ultrasound',ipa:'/ˈʌltrəˌsaʊnd/',c:'超聲',speak:'Ultrasound'},
+            {id:'ct',abbr:'CT',e:'Computed Tomography',ipa:'/kəmˈpjutɪd təˈmɑːɡrəfi/',c:'電腦斷層掃描',speak:'Computed Tomography'},
+            {id:'mri',abbr:'MRI',e:'Magnetic Resonance Imaging',ipa:'/mæɡˈnɛtɪk ˈrɛzənəns ˈɪmɪdʒɪŋ/',c:'磁共振成像',speak:'Magnetic Resonance Imaging'},
+            {id:'xray',abbr:'X-Ray',e:'Radiography',ipa:'/ˌreɪdiˈɑːɡrəfi/',c:'放射線攝影',speak:'Radiography'},
+        ];
+        
+        const EXAMPLE_SENTENCES = [
+            {e:'The patient presented with acute myocardial infarction.',ipa:'/ðə ˈpeɪʃənt prɪˈzɛntɪd wɪð əˈkjut ˌmaɪoʊˈkɑːrdiəl ɪnˈfɑːrkʃən/',c:'患者表現為急性心肌梗死。'},
+            {e:'Bilateral pneumonia was evident on chest X-ray.',ipa:'/baɪˈlætərəl nuːˈmoʊniə wəz ˈɛvɪdənt ɑːn tʃɛst ˈɛks reɪ/',c:'胸部X光片上可見雙側肺炎。'},
+            {e:'Hyperglycemia and glycosuria indicate diabetic ketoacidosis.',ipa:'/ˌhaɪpərɡlaɪˈsiːmiə ənd ˌɡlaɪkoʊˈsʊriə ˈɪndɪˌkeɪt daɪəˌbɛtɪk ˌkiːtoʊˌæsɪˈdoʊsɪs/',c:'高血糖和糖尿表示糖尿病酮酸中毒。'},
+            {e:'Hepatomegaly and jaundice suggest liver dysfunction.',ipa:'/ˌhɛpətoʊˈmɛɡəli ənd ˈdʒɔːndɪs səɡˈdʒɛst ˈlɪvər dɪsˈfʌŋkʃən/',c:'肝腫大和黃疸提示肝功能障礙。'},
+            {e:'Dyspnea and orthopnea indicated pulmonary edema.',ipa:'/ˈdɪspniə ənd ˌɔːrθoʊpˈniːə ˈɪndɪˌkeɪtɪd ˈpʌlməˌnɛri ɪˈdiːmə/',c:'呼吸困難和正位呼吸表示肺水腫。'},
+            {e:'Nephropathy from diabetes caused chronic kidney disease.',ipa:'/nɪˈfrɑːpəθi frɑːm ˌdaɪəˈbɛtɪz ˈkɔːzd ˈkrɑːnɪk ˈkɪdni dɪˈziz/',c:'糖尿病腎病導致慢性腎臟病。'},
+            {e:'Arthralgia and arthritis affected multiple joints.',ipa:'/ɑːrˈθrælʒə ənd ɑːrˈθraɪtɪs əˈfɛktɪd ˈmʌltɪpəl dʒɔɪnts/',c:'關節痛和關節炎影響多個關節。'},
+            {e:'Leukocytosis with left shift suggested bacterial infection.',ipa:'/ˌluːkoʊsaɪˈtoʊsɪs wɪð lɛft ʃɪft səɡˈdʒɛstɪd bækˈtɪriəl ɪnˈfɛkʃən/',c:'白細胞增多伴左移提示細菌感染。'},
+            {e:'Lymphadenopathy was detected in cervical and axillary regions.',ipa:'/ˌlɪmfˌædənˈɑːpəθi wəz dɪˈtɛktɪd ɪn ˈsɜːrvɪkəl ənd ˈæksɪˌlɛri ˈridʒənz/',c:'在頸部和腋窩區域檢測到淋巴結腫大。'},
+            {e:'Osteoporosis increased fracture risk in elderly patients.',ipa:'/ˌɑːstioʊpəˈroʊsɪs ɪnˈkrist ˈfræktʃər rɪsk ɪn ˈɛldərli ˈpeɪʃənts/',c:'骨質疏鬆症增加老年患者骨折風險。'},
+        ];
+        
+        const QUIZ_QUESTIONS = [
+            {q:'What does "cardio" mean? | "cardio"是什麼意思？',opts:['肺 | Lung','心臟 | Heart','肝 | Liver','腎 | Kidney'],correct:1},
+            {q:'What does "dys" prefix indicate? | "dys"字首表示什麼？',opts:['好的 | Good','困難的 | Difficult','無的 | None','多的 | Many'],correct:1},
+            {q:'"Hepatitis" refers to inflammation of which organ? | "肝炎"是哪個器官的炎症？',opts:['心臟 | Heart','肺 | Lung','肝 | Liver','胃 | Stomach'],correct:2},
+            {q:'What does the suffix "-itis" mean? | 字尾"-itis"意思是？',opts:['腫瘤 | Tumor','發炎 | Inflammation','瘺 | Fistula','狹窄 | Stenosis'],correct:1},
+            {q:'"Arthralgia" means: | "關節痛"指的是：',opts:['肌肉痛 | Muscle pain','關節痛 | Joint pain','骨痛 | Bone pain','神經痛 | Nerve pain'],correct:1},
+            {q:'The prefix "anti-" means: | 字首"anti-"意思是：',opts:['促進 | Promote','抗 | Anti','之前 | Before','之後 | After'],correct:1},
+            {q:'In "anemia", "an-" means: | "貧血"中"an-"意思是：',opts:['多 | Many','無 | None','有 | Have','增 | Increase'],correct:1},
+            {q:'"Tachycardia" means: | "心動過速"意思是：',opts:['心跳慢 | Slow heart rate','心跳快 | Fast heart rate','心跳不規則 | Irregular heart rate','心跳停止 | Heart stop'],correct:1},
+            {q:'"Gastroenteritis" involves: | "胃腸炎"涉及：',opts:['肺和心 | Lung and heart','胃和腸 | Stomach and intestine','肝和膽 | Liver and gallbladder','腎和膀胱 | Kidney and bladder'],correct:1},
+            {q:'"Hematology" is the study of: | "血液科"研究的是：',opts:['骨頭 | Bone','血液 | Blood','皮膚 | Skin','眼睛 | Eye'],correct:1},
+        ];
+        
+        const DAILY_WORDS = [
+            {w:'cardio',ipa:'/ˈkɑːrdiːoʊ/',p:'prefix',e:'Prefix',c:'心臟'},
+            {w:'card',ipa:'/kɑːrd/',p:'root',e:'Root',c:'心臟'},
+            {w:'-itis',ipa:'/-ˈaɪtɪs/',p:'suffix',e:'Suffix',c:'發炎'},
+            {w:'pneumo',ipa:'/ˈnjuːmoʊ/',p:'prefix',e:'Prefix',c:'肺'},
+            {w:'pneumon',ipa:'/ˈnjuːmən/',p:'root',e:'Root',c:'肺'},
+            {w:'hepato',ipa:'/ˈhɛpətoʊ/',p:'prefix',e:'Prefix',c:'肝'},
+            {w:'hepat',ipa:'/ˈhɛpət/',p:'root',e:'Root',c:'肝'},
+            {w:'nephro',ipa:'/ˈnɛfroʊ/',p:'prefix',e:'Prefix',c:'腎'},
+            {w:'nephr',ipa:'/ˈnɛfr/',p:'root',e:'Root',c:'腎'},
+            {w:'-pathy',ipa:'/-ˈpæθi/',p:'suffix',e:'Suffix',c:'疾病'},
+            {w:'gastro',ipa:'/ˈɡæstroʊ/',p:'prefix',e:'Prefix',c:'胃'},
+            {w:'gastr',ipa:'/ˈɡæstr/',p:'root',e:'Root',c:'胃'},
+            {w:'entero',ipa:'/ˈɛntəroʊ/',p:'prefix',e:'Prefix',c:'腸'},
+            {w:'enter',ipa:'/ˈɛntər/',p:'root',e:'Root',c:'腸'},
+            {w:'hemato',ipa:'/ˈhɛmətoʊ/',p:'prefix',e:'Prefix',c:'血液'},
+            {w:'hemat',ipa:'/ˈhɛmət/',p:'root',e:'Root',c:'血液'},
+            {w:'-osis',ipa:'/-ˈoʊsɪs/',p:'suffix',e:'Suffix',c:'症狀'},
+            {w:'derma',ipa:'/ˈdɜːrmə/',p:'prefix',e:'Prefix',c:'皮膚'},
+            {w:'derm',ipa:'/dɜːrm/',p:'root',e:'Root',c:'皮膚'},
+            {w:'neuro',ipa:'/ˈnjʊroʊ/',p:'prefix',e:'Prefix',c:'神經'},
+            {w:'neur',ipa:'/njʊr/',p:'root',e:'Root',c:'神經'},
+            {w:'-algia',ipa:'/-ˈælʒə/',p:'suffix',e:'Suffix',c:'...痛'},
+            {w:'arthro',ipa:'/ˈɑːrθroʊ/',p:'prefix',e:'Prefix',c:'關節'},
+            {w:'arthr',ipa:'/ˈɑːrθr/',p:'root',e:'Root',c:'關節'},
+            {w:'osteo',ipa:'/ˈɑːstioʊ/',p:'prefix',e:'Prefix',c:'骨'},
+            {w:'oste',ipa:'/ˈɑːsti/',p:'root',e:'Root',c:'骨'},
+            {w:'-ectomy',ipa:'/-ˈɛktəmi/',p:'suffix',e:'Suffix',c:'切除'},
+            {w:'cyto',ipa:'/ˈsaɪtoʊ/',p:'prefix',e:'Prefix',c:'細胞'},
+            {w:'cyt',ipa:'/saɪt/',p:'root',e:'Root',c:'細胞'},
+            {w:'-plasia',ipa:'/-ˈpleɪʒə/',p:'suffix',e:'Suffix',c:'形成'},
+            {w:'angio',ipa:'/ˈændʒioʊ/',p:'prefix',e:'Prefix',c:'血管'},
+            {w:'angi',ipa:'/ˈændʒi/',p:'root',e:'Root',c:'血管'},
+            {w:'-emia',ipa:'/-ˈiːmiə/',p:'suffix',e:'Suffix',c:'血症'},
+            {w:'leuko',ipa:'/ˈluːkoʊ/',p:'prefix',e:'Prefix',c:'白'},
+            {w:'leuc',ipa:'/luk/',p:'root',e:'Root',c:'白'},
+            {w:'erythro',ipa:'/ɪˈrɪθroʊ/',p:'prefix',e:'Prefix',c:'紅'},
+            {w:'erythr',ipa:'/ɪˈrɪθr/',p:'root',e:'Root',c:'紅'},
+            {w:'-penia',ipa:'/-ˈpiːniə/',p:'suffix',e:'Suffix',c:'減少'},
+            {w:'myelo',ipa:'/ˈmaɪəloʊ/',p:'prefix',e:'Prefix',c:'骨髓'},
+            {w:'myel',ipa:'/ˈmaɪəl/',p:'root',e:'Root',c:'骨髓'},
+            {w:'lympho',ipa:'/ˈlɪmfoʊ/',p:'prefix',e:'Prefix',c:'淋巴'},
+            {w:'lymph',ipa:'/lɪmf/',p:'root',e:'Root',c:'淋巴'},
+            {w:'-itis',ipa:'/-ˈaɪtɪs/',p:'suffix',e:'Suffix',c:'炎症'},
+            {w:'poly-',ipa:'/ˈpɑːli/',p:'prefix',e:'Prefix',c:'多'},
+            {w:'mono-',ipa:'/ˈmɑːnoʊ/',p:'prefix',e:'Prefix',c:'一'},
+            {w:'bi-',ipa:'/baɪ/',p:'prefix',e:'Prefix',c:'二'},
+            {w:'tri-',ipa:'/traɪ/',p:'prefix',e:'Prefix',c:'三'},
+            {w:'pan-',ipa:'/pæn/',p:'prefix',e:'Prefix',c:'全'},
+            {w:'hyper-',ipa:'/ˈhaɪpər/',p:'prefix',e:'Prefix',c:'過度'},
+            {w:'hypo-',ipa:'/ˈhaɪpoʊ/',p:'prefix',e:'Prefix',c:'不足'},
+        ];
+        
+        let STATE = {pf:[],rt:[],sf:[],qz:{},di:0};
+        window.addEventListener('load',()=>{loadState();renderDashboard();setupTabs();});
+        function loadState(){const s=localStorage.getItem('med_eng_os_ipa');if(s)STATE=JSON.parse(s);}
+        function saveState(){localStorage.setItem('med_eng_os_ipa',JSON.stringify(STATE));}
+        function setupTabs(){document.querySelectorAll('.tab-btn').forEach(b=>{b.addEventListener('click',()=>switchTab(b.dataset.tab));});}
+        function switchTab(t){document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById(t).classList.add('active');document.querySelector(`[data-tab="${t}"]`).classList.add('active');renderTab(t);}
+        function renderTab(t){if(t==='daily')renderDaily();else if(t==='prefix')renderPrefix();else if(t==='root')renderRoot();else if(t==='suffix')renderSuffix();else if(t==='abbr')renderAbbr();else if(t==='sentences')renderSent();else if(t==='quiz')renderQuiz();else if(t==='stats')renderStats();}
+        function renderDashboard(){document.getElementById('pf-count').textContent=STATE.pf.length;document.getElementById('rt-count').textContent=STATE.rt.length;document.getElementById('sf-count').textContent=STATE.sf.length;const qz=Object.keys(STATE.qz).length;const correct=Object.values(STATE.qz).filter(v=>v).length;document.getElementById('qz-score').textContent=(qz>0?Math.round((correct/qz)*100):0)+'%';const curr=DAILY_WORDS[STATE.di%DAILY_WORDS.length];document.getElementById('dw').textContent=curr.w;document.getElementById('di').textContent=curr.ipa;document.getElementById('dp').textContent=curr.p+' | '+curr.e;document.getElementById('dd').innerHTML=`<div class="def-eng-ipa"><div class="item-eng">${curr.w}</div><div class="item-ipa">${curr.ipa}</div></div><div class="def-chn">${curr.c}</div>`;renderNav();}
+        function renderNav(){document.getElementById('nav').innerHTML=`<div class="card" onclick="switchTab('prefix')" style="cursor:pointer;"><div class="card-header"><h3>字首 (100+) | Prefix</h3><span class="badge">100</span></div><div style="padding: 8px; color: #666; font-size: 11px;">附IPA音標 | With IPA</div></div><div class="card" onclick="switchTab('root')" style="cursor:pointer;"><div class="card-header"><h3>字根 (150+) | Root</h3><span class="badge">150</span></div><div style="padding: 8px; color: #666; font-size: 11px;">附IPA音標 | With IPA</div></div><div class="card" onclick="switchTab('suffix')" style="cursor:pointer;"><div class="card-header"><h3>字尾 (50+) | Suffix</h3><span class="badge">50</span></div><div style="padding: 8px; color: #666; font-size: 11px;">附IPA音標 | With IPA</div></div><div class="card" onclick="switchTab('abbr')" style="cursor:pointer;"><div class="card-header"><h3>縮寫 (100+) | Abbreviations</h3><span class="badge">100</span></div><div style="padding: 8px; color: #666; font-size: 11px;">附IPA | With IPA</div></div>`;}
+        function renderDaily(){const html=DAILY_WORDS.map((w,i)=>`<div class="card"><div class="card-header"><h3>${w.w}</h3><span class="expand-icon">▼</span></div><div class="card-content"><div class="item-bilingual"><div class="item-eng-ipa"><div class="item-eng">${w.w}</div><div class="item-ipa">${w.ipa}</div></div><div class="item-chn">${w.c}</div><button class="speak-btn" onclick="speak('${w.w}')">🔊 發音</button></div></div></div>`).join('');document.getElementById('daily-grid').innerHTML=html;setupCards();}
+        function renderPrefix(){const html=PREFIXES.map(p=>`<div class="card"><div class="card-header"><h3>${p.e}</h3><span class="expand-icon">▼</span></div><div class="card-content"><div class="definition"><div class="def-eng-ipa"><div class="item-eng">${p.e}</div><div class="item-ipa">${p.ipa}</div></div><div class="def-chn">${p.c}</div></div><div style="margin-bottom: 8px;">${p.ex.map(ex=>`<div class="item-bilingual" style="margin-bottom: 6px;"><div class="item-eng-ipa"><div class="item-eng">${ex.e}</div><div class="item-ipa">${ex.ipa}</div></div><div class="item-chn">${ex.c}</div><button class="speak-btn" onclick="speak('${ex.e}')">🔊</button></div>`).join('')}</div><label style="font-size: 11px;"><input type="checkbox" onchange="togglePf('${p.id}')" ${STATE.pf.includes(p.id)?'checked':''}> 已學</label></div></div>`).join('');document.getElementById('prefix-grid').innerHTML=html;setupCards();}
+        function renderRoot(){const html=ROOTS.map(r=>`<div class="card"><div class="card-header"><h3>${r.e}</h3><span class="expand-icon">▼</span></div><div class="card-content"><div class="definition"><div class="def-eng-ipa"><div class="item-eng">${r.e}</div><div class="item-ipa">${r.ipa}</div></div><div class="def-chn">${r.c}</div></div><div style="margin-bottom: 8px;">${r.ex.filter(e=>e).map(ex=>`<div class="item-bilingual" style="margin-bottom: 6px;"><div class="item-eng-ipa"><div class="item-eng">${ex.e}</div><div class="item-ipa">${ex.ipa}</div></div><div class="item-chn">${ex.c}</div><button class="speak-btn" onclick="speak('${ex.e}')">🔊</button></div>`).join('')}</div><label style="font-size: 11px;"><input type="checkbox" onchange="toggleRt('${r.id}')" ${STATE.rt.includes(r.id)?'checked':''}> 已學</label></div></div>`).join('');document.getElementById('root-grid').innerHTML=html;setupCards();}
+        function renderSuffix(){const html=SUFFIXES.map(s=>`<div class="card"><div class="card-header"><h3>${s.e}</h3><span class="expand-icon">▼</span></div><div class="card-content"><div class="definition"><div class="def-eng-ipa"><div class="item-eng">${s.e}</div><div class="item-ipa">${s.ipa}</div></div><div class="def-chn">${s.c}</div></div><div style="margin-bottom: 8px;">${s.ex.map(ex=>`<div class="item-bilingual" style="margin-bottom: 6px;"><div class="item-eng-ipa"><div class="item-eng">${ex.e}</div><div class="item-ipa">${ex.ipa}</div></div><div class="item-chn">${ex.c}</div><button class="speak-btn" onclick="speak('${ex.e}')">🔊</button></div>`).join('')}</div><label style="font-size: 11px;"><input type="checkbox" onchange="toggleSf('${s.id}')" ${STATE.sf.includes(s.id)?'checked':''}> 已學</label></div></div>`).join('');document.getElementById('suffix-grid').innerHTML=html;setupCards();}
+        function renderAbbr(){const html=ABBREVIATIONS.map(a=>`<div class="card"><div class="card-header"><h3>${a.abbr}</h3><span class="expand-icon">▼</span></div><div class="card-content"><div class="definition"><div class="def-eng-ipa"><div class="item-eng">${a.e}</div><div class="item-ipa">${a.ipa}</div></div><div class="def-chn">${a.c}</div></div><button class="speak-btn" onclick="speak('${a.speak}')">🔊 完整發音</button></div></div>`).join('');document.getElementById('abbr-grid').innerHTML=html;setupCards();}
+        function renderSent(){const html=EXAMPLE_SENTENCES.map(s=>`<div class="sentence-box"><div class="sent-eng">${s.e}<br><span style="color:#0A7A72;font-size:11px;font-style:italic;">${s.ipa}</span></div><div class="sent-chn">${s.c}</div><button class="speak-btn" onclick="speak('${s.e}')">🔊 發音</button></div>`).join('');document.getElementById('sent-list').innerHTML=html;}
+        function renderQuiz(){const html=QUIZ_QUESTIONS.map((q,i)=>`<div class="quiz-question"><div class="quiz-q">${q.q}</div><div class="quiz-options">${q.opts.map((o,j)=>`<div class="quiz-option" onclick="selectAns(${i},${j})">${o}</div>`).join('')}</div></div>`).join('');document.getElementById('quiz-con').innerHTML=html;}
+        function renderStats(){const total=PREFIXES.length+ROOTS.length+SUFFIXES.length;const learned=STATE.pf.length+STATE.rt.length+STATE.sf.length;document.getElementById('total').textContent=total;document.getElementById('mastered').textContent=learned;document.getElementById('prog').textContent=Math.round((learned/total)*100)+'%';document.getElementById('streak').textContent='1';}
+        function setupCards(){document.querySelectorAll('.card').forEach(c=>{c.querySelector('.card-header').addEventListener('click',()=>{c.classList.toggle('expanded');});});}
+        function speak(t){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=0.85;window.speechSynthesis.speak(u);}
+        function speakDaily(){speak(document.getElementById('dw').textContent);}
+        function nextDaily(){STATE.di++;saveState();renderDashboard();}
+        function markDone(){nextDaily();}
+        function togglePf(id){STATE.pf.includes(id)?STATE.pf=STATE.pf.filter(x=>x!==id):STATE.pf.push(id);saveState();renderDashboard();}
+        function toggleRt(id){STATE.rt.includes(id)?STATE.rt=STATE.rt.filter(x=>x!==id):STATE.rt.push(id);saveState();renderDashboard();}
+        function toggleSf(id){STATE.sf.includes(id)?STATE.sf=STATE.sf.filter(x=>x!==id):STATE.sf.push(id);saveState();renderDashboard();}
+        function selectAns(q,o){STATE.qz[q]=o===QUIZ_QUESTIONS[q].correct;saveState();renderDashboard();}
+        function reset(){if(confirm('確定重設？')){STATE={pf:[],rt:[],sf:[],qz:{},di:0};saveState();renderDashboard();}}
+        function exportData(){const d=JSON.stringify(STATE);const b=new Blob([d],{type:'application/json'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='progress.json';a.click();}
+    </script>
+</body>
+</html>
