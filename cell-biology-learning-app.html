@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>細胞生物學 | Cell Biology Learning App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft JhengHei", "Microsoft YaHei", Arial, sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0D1B3E 0%, #006B7D 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #006B7D;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 14px 24px;
+            font-size: 16px;
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
+            font-weight: bold;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #0D1B3E;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -3px;
+        }
+
+        .tab-button:hover {
+            color: #006B7D;
+        }
+
+        .tab-button.active {
+            color: #B8860B;
+            border-bottom-color: #B8860B;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Card Styles */
+        .card {
+            background: #f9f9f9;
+            border-left: 4px solid #B8860B;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            padding: 18px 20px;
+            background: #f0f0f0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .card-header:hover {
+            background: #e8e8e8;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0D1B3E;
+            flex: 1;
+        }
+
+        .card-toggle {
+            font-size: 20px;
+            color: #006B7D;
+            transition: transform 0.3s ease;
+            margin-left: 12px;
+        }
+
+        .card.expanded .card-toggle {
+            transform: rotate(180deg);
+        }
+
+        .card-content {
+            display: none;
+            padding: 20px;
+            background: white;
+        }
+
+        .card.expanded .card-content {
+            display: block;
+        }
+
+        /* Bilingual Layout */
+        .bilingual-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+
+        .language-block {
+            padding: 14px;
+            background: #fafafa;
+            border-radius: 4px;
+            border-left: 3px solid #006B7D;
+        }
+
+        .language-block.english {
+            border-left-color: #B8860B;
+        }
+
+        .language-label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #006B7D;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .language-block.english .language-label {
+            color: #B8860B;
+        }
+
+        .language-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* TTS Button */
+        .tts-button {
+            background: #006B7D;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tts-button:hover {
+            background: #004d57;
+            transform: translateY(-2px);
+        }
+
+        .tts-button.playing {
+            background: #B8860B;
+        }
+
+        .tts-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* List Styles */
+        .content-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-list li {
+            padding: 10px 0;
+            padding-left: 24px;
+            position: relative;
+            border-bottom: 1px solid #eee;
+        }
+
+        .content-list li:last-child {
+            border-bottom: none;
+        }
+
+        .content-list li:before {
+            content: "▪";
+            position: absolute;
+            left: 0;
+            color: #B8860B;
+            font-weight: bold;
+        }
+
+        .keyword-cn {
+            color: #006B7D;
+            font-weight: bold;
+        }
+
+        .keyword-en {
+            color: #B8860B;
+            font-weight: bold;
+        }
+
+        .section-divider {
+            margin: 20px 0;
+            padding: 12px;
+            background: #e8f4f8;
+            border-left: 4px solid #006B7D;
+            font-weight: bold;
+            color: #0D1B3E;
+            font-size: 14px;
+        }
+
+        /* Question Bank Styles */
+        .question-card {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .question-card.answered {
+            border-color: #06aa51;
+            background: #f0fdf4;
+        }
+
+        .question-card.answered.incorrect {
+            border-color: #dc2626;
+            background: #fef2f2;
+        }
+
+        .question-number {
+            background: #0D1B3E;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #0D1B3E;
+        }
+
+        .question-bilingual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 14px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .question-cn, .question-en {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .question-cn {
+            color: #333;
+        }
+
+        .question-en {
+            color: #555;
+        }
+
+        .options {
+            margin-bottom: 14px;
+        }
+
+        .option {
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option:hover {
+            background: #eee;
+            border-color: #006B7D;
+        }
+
+        .option input[type="radio"], 
+        .option input[type="checkbox"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .option.selected {
+            background: #dbeafe;
+            border-color: #006B7D;
+        }
+
+        .option.correct {
+            background: #dcfce7;
+            border-color: #06aa51;
+        }
+
+        .option.incorrect {
+            background: #fee2e2;
+            border-color: #dc2626;
+        }
+
+        .option-label {
+            flex: 1;
+            font-size: 15px;
+        }
+
+        .option-label strong {
+            color: #0D1B3E;
+            margin-right: 8px;
+        }
+
+        .feedback {
+            padding: 14px;
+            border-radius: 4px;
+            margin-top: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .feedback.correct {
+            background: #dcfce7;
+            border-left: 4px solid #06aa51;
+            color: #166534;
+        }
+
+        .feedback.incorrect {
+            background: #fee2e2;
+            border-left: 4px solid #dc2626;
+            color: #991b1b;
+        }
+
+        .submit-btn {
+            background: #B8860B;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background: #a87509;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .reset-btn {
+            background: #006B7D;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .reset-btn:hover {
+            background: #004d57;
+        }
+
+        .quiz-stats {
+            background: linear-gradient(135deg, #0D1B3E 0%, #006B7D 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #B8860B;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 2px solid #006B7D;
+            color: #006B7D;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: #006B7D;
+            color: white;
+        }
+
+        .filter-btn:hover {
+            background: #006B7D;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .bilingual-section {
+                grid-template-columns: 1fr;
+            }
+
+            .question-bilingual {
+                grid-template-columns: 1fr;
+            }
+
+            .quiz-stats {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 6px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>細胞生物學學習平台</h1>
+            <p>Cell Biology Learning App | 台北醫學大學</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab(event, 'signaling')">
+                細胞訊號傳遞 | Cell Signaling
+            </button>
+            <button class="tab-button" onclick="switchTab(event, 'division')">
+                細胞分裂 | Cell Division
+            </button>
+            <button class="tab-button" onclick="switchTab(event, 'quiz')">
+                📚 題庫 | Question Bank
+            </button>
+        </div>
+
+        <!-- TAB 1: Cell Signaling (Condensed) -->
+        <div id="signaling" class="tab-content active">
+            <div class="card expanded">
+                <div class="card-header">
+                    <span class="card-title">細胞訊號傳遞的三個階段</span>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="section-divider">🔵 信號接收 (Signal Reception)</div>
+                    <div class="bilingual-section">
+                        <div class="language-block">
+                            <div class="language-label">中文</div>
+                            <div class="language-text">
+                                目標細胞偵測到訊號分子，該分子結合到細胞表面的受體蛋白上。<span class="keyword-cn">受體形狀改變</span>是訊號轉導的初始步驟。
+                            </div>
+                        </div>
+                        <div class="language-block english">
+                            <div class="language-label">English</div>
+                            <div class="language-text">
+                                The target cell detects a signaling molecule that binds to a receptor protein. A <span class="keyword-en">shape change in the receptor</span> is the initial transduction of the signal.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider" style="margin-top: 20px;">🟢 訊號轉導 (Signal Transduction)</div>
+                    <div class="bilingual-section">
+                        <div class="language-block">
+                            <div class="language-label">中文</div>
+                            <div class="language-text">
+                                訊號分子的結合改變受體，並啟動訊號轉導路徑。轉導通常<span class="keyword-cn">分多個步驟</span>進行，涉及<span class="keyword-cn">中繼分子</span>傳遞信息。
+                            </div>
+                        </div>
+                        <div class="language-block english">
+                            <div class="language-label">English</div>
+                            <div class="language-text">
+                                The binding alters the receptor and initiates a <span class="keyword-en">signal transduction pathway</span>. Transduction often occurs in <span class="keyword-en">a series of steps</span> involving relay molecules.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider" style="margin-top: 20px;">🟡 細胞反應 (Cellular Response)</div>
+                    <div class="bilingual-section">
+                        <div class="language-block">
+                            <div class="language-label">中文</div>
+                            <div class="language-text">
+                                轉導後的訊號在目標細胞中觸發特定的反應。<span class="keyword-cn">快速反應</span>（秒至分鐘）改變蛋白質功能；<span class="keyword-cn">緩慢反應</span>（分鐘至小時）需要轉錄和翻譯。
+                            </div>
+                        </div>
+                        <div class="language-block english">
+                            <div class="language-label">English</div>
+                            <div class="language-text">
+                                The transduced signal triggers a specific response. <span class="keyword-en">Fast responses</span> (seconds to minutes) alter protein function; <span class="keyword-en">slow responses</span> (minutes to hours) require transcription and translation.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card expanded">
+                <div class="card-header">
+                    <span class="card-title">訊號作用的範圍 | Signal Range</span>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="language-block">
+                            <div class="language-label">短距離信號</div>
+                            <div class="language-text">
+                                <p><strong>直接接觸 (Direct Contact)</strong>：相鄰細胞表面分子直接互作</p>
+                                <p style="margin: 12px 0;"><strong>旁分泌訊號 (Paracrine)</strong>：分子只能短距離傳播</p>
+                                <p><strong>突觸訊號 (Synaptic)</strong>：神經細胞釋放神經傳遞物質</p>
+                            </div>
+                        </div>
+                        <div class="language-block english">
+                            <div class="language-label">Short Range</div>
+                            <div class="language-text">
+                                <p><strong>Direct Contact</strong>: surface molecules interact</p>
+                                <p style="margin: 12px 0;"><strong>Paracrine</strong>: molecules travel short distances</p>
+                                <p><strong>Synaptic</strong>: neurotransmitters cross synapse</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bilingual-section" style="margin-top: 16px;">
+                        <div class="language-block">
+                            <div class="language-label">長距離信號</div>
+                            <div class="language-text">
+                                <p><strong>內分泌訊號 (Endocrine)</strong>：荷爾蒙通過循環系統運輸到遠處靶細胞。只有擁有特定受體的細胞才能反應。</p>
+                            </div>
+                        </div>
+                        <div class="language-block english">
+                            <div class="language-label">Long Range</div>
+                            <div class="language-text">
+                                <p><strong>Endocrine Signaling</strong>: hormones transported via circulatory system. Only cells with specific receptors respond.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: Cell Division (Condensed) -->
+        <div id="division" class="tab-content">
+            <div class="card expanded">
+                <div class="card-header">
+                    <span class="card-title">為什麼細胞必須分裂</span>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="language-block">
+                            <div class="language-label">中文</div>
+                            <div class="language-text">
+                                <p><strong>表面積-體積比危機</strong>：細胞生長時，體積增加立方倍(r³)，表面積只增加平方倍(r²)。導致營養不足和廢物堆積。</p>
+                                <p style="margin: 12px 0;"><strong>基因組容量危機</strong>：巨大細胞要求單一DNA拷貝完成不可能的工作。遺傳圖書館無法快速轉錄成足夠的蛋白質。</p>
+                            </div>
+                        </div>
+                        <div class="language-block english">
+                            <div class="language-label">English</div>
+                            <div class="language-text">
+                                <p><strong>SA:V Crisis</strong>: volume increases cubically (r³), surface area only squared (r²). Results in nutrient starvation and waste accumulation.</p>
+                                <p style="margin: 12px 0;"><strong>Genome Capacity Crisis</strong>: massive cell demands single DNA copy. Genetic library cannot transcribe enough proteins.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card expanded">
+                <div class="card-header">
+                    <span class="card-title">有絲分裂的五個時期 | Five Phases of Mitosis</span>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="language-block">
+                            <div class="language-label">中文</div>
+                            <div class="language-text">
+                                <p><strong>1. 前期</strong>：色質濃聚成染色體；紡錘體形成</p>
+                                <p><strong>2. 中間期</strong>：核膜碎裂；微管鎖定動粒</p>
+                                <p><strong>3. 中期</strong>：染色體排列在赤道板</p>
+                                <p><strong>4. 後期</strong>：姐妹染色單體分離；移向兩極</p>
+                                <p><strong>5. 末期</strong>：子細胞核形成；紡錘體解組</p>
+                            </div>
+                        </div>
+                        <div class="language-block english">
+                            <div class="language-label">English</div>
+                            <div class="language-text">
+                                <p><strong>1. Prophase</strong>: chromatin condenses; spindle forms</p>
+                                <p><strong>2. Prometaphase</strong>: nuclear envelope breaks; microtubules attach</p>
+                                <p><strong>3. Metaphase</strong>: chromosomes align at equator</p>
+                                <p><strong>4. Anaphase</strong>: chromatids separate; move to poles</p>
+                                <p><strong>5. Telophase</strong>: nuclear envelopes reform; spindle disassembles</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card expanded">
+                <div class="card-header">
+                    <span class="card-title">減數分裂與遺傳變異</span>
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-section">
+                        <div class="language-block">
+                            <div class="language-label">中文</div>
+                            <div class="language-text">
+                                <p><strong>減數分裂I</strong>：同源染色體分離，從二倍體(2n)變為單倍體(n)</p>
+                                <p style="margin: 12px 0;"><strong>減數分裂II</strong>：姐妹染色單體分離，產生4個遺傳不同的單倍體細胞</p>
+                                <p style="margin: 12px 0;"><strong>遺傳變異三引擎</strong>：交叉互換、獨立分配、隨機受精</p>
+                            </div>
+                        </div>
+                        <div class="language-block english">
+                            <div class="language-label">English</div>
+                            <div class="language-text">
+                                <p><strong>Meiosis I</strong>: homologous chromosomes separate; 2n becomes n</p>
+                                <p style="margin: 12px 0;"><strong>Meiosis II</strong>: sister chromatids separate; 4 genetically distinct haploid cells</p>
+                                <p style="margin: 12px 0;"><strong>Variation Engines</strong>: crossing over, independent assortment, random fertilization</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Question Bank -->
+        <div id="quiz" class="tab-content">
+            <div class="quiz-stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="score-number">0</div>
+                    <div class="stat-label">分數 | Score</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="answered-number">0</div>
+                    <div class="stat-label">已答 | Answered</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="total-number">0</div>
+                    <div class="stat-label">總題 | Total</div>
+                </div>
+            </div>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterQuestions('all')">全部 | All</button>
+                <button class="filter-btn" onclick="filterQuestions('signaling')">訊號傳遞 | Signaling</button>
+                <button class="filter-btn" onclick="filterQuestions('division')">細胞分裂 | Division</button>
+            </div>
+
+            <div id="quiz-container"></div>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="submit-btn" onclick="checkAllAnswers()">提交答案 | Submit Answers</button>
+                <button class="reset-btn" onclick="resetQuiz()">重置 | Reset</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>細胞生物學學習平台 | Cell Biology Learning Platform</p>
+            <p>台北醫學大學醫學院 | Taipei Medical University College of Medicine</p>
+        </div>
+    </div>
+
+    <script>
+        // Question Bank Data (80+ questions)
+        const questions = [
+            // Signaling - Single Choice
+            {
+                id: 1,
+                type: 'single',
+                category: 'signaling',
+                question: '細胞訊號傳遞的三個階段依序是什麼？',
+                questionEn: 'What are the three stages of cell signaling in order?',
+                options: [
+                    { text: '接收 → 轉導 → 反應', textEn: 'Reception → Transduction → Response', correct: true },
+                    { text: '轉導 → 接收 → 反應', textEn: 'Transduction → Reception → Response', correct: false },
+                    { text: '反應 → 接收 → 轉導', textEn: 'Response → Reception → Transduction', correct: false },
+                    { text: '接收 → 反應 → 轉導', textEn: 'Reception → Response → Transduction', correct: false }
+                ],
+                explanation: '訊號傳遞始於接收（受體與配體結合），經歷轉導（通過中繼分子傳遞），最終導致細胞反應。',
+                explanationEn: 'Signal transduction begins with reception (receptor-ligand binding), proceeds through transduction (via relay molecules), and culminates in cellular response.'
+            },
+            {
+                id: 2,
+                type: 'single',
+                category: 'signaling',
+                question: '受體蛋白包含哪兩個關鍵域？',
+                questionEn: 'What two key domains do receptor proteins contain?',
+                options: [
+                    { text: '配體結合域和效應域', textEn: 'Ligand-binding domain and effector domain', correct: true },
+                    { text: '膜域和細胞核域', textEn: 'Membrane domain and nuclear domain', correct: false },
+                    { text: '信號域和轉導域', textEn: 'Signal domain and transduction domain', correct: false },
+                    { text: '識別域和活化域', textEn: 'Recognition domain and activation domain', correct: false }
+                ],
+                explanation: '配體結合域(LBD)感知訊號分子，效應域(ED)啟動細胞內反應。',
+                explanationEn: 'The ligand-binding domain (LBD) senses signaling molecules, while the effector domain (ED) triggers intracellular responses.'
+            },
+            {
+                id: 3,
+                type: 'single',
+                category: 'signaling',
+                question: '以下哪種訊號類型屬於短距離訊號？',
+                questionEn: 'Which of the following is an example of short-range signaling?',
+                options: [
+                    { text: '內分泌訊號', textEn: 'Endocrine signaling', correct: false },
+                    { text: '突觸訊號', textEn: 'Synaptic signaling', correct: true },
+                    { text: '荷爾蒙訊號', textEn: 'Hormonal signaling', correct: false },
+                    { text: '遠距訊號', textEn: 'Long-distance signaling', correct: false }
+                ],
+                explanation: '突觸訊號是神經細胞間的短距離通訊，涉及神經傳遞物質跨越突觸間隙。',
+                explanationEn: 'Synaptic signaling is short-range communication between neurons involving neurotransmitters crossing the synaptic gap.'
+            },
+            {
+                id: 4,
+                type: 'single',
+                category: 'signaling',
+                question: '哪種信號轉導的速度最快？',
+                questionEn: 'Which signal transduction is fastest?',
+                options: [
+                    { text: '改變蛋白質功能', textEn: 'Altering protein function', correct: true },
+                    { text: '改變基因表達', textEn: 'Changing gene expression', correct: false },
+                    { text: '改變細胞形態', textEn: 'Changing cell morphology', correct: false },
+                    { text: '改變細胞週期', textEn: 'Changing cell cycle', correct: false }
+                ],
+                explanation: '改變現存蛋白質功能是最快的（秒至分鐘），而改變基因表達需要轉錄和翻譯（分鐘至小時）。',
+                explanationEn: 'Altering existing protein function is fastest (seconds to minutes), while changing gene expression requires transcription and translation (minutes to hours).'
+            },
+            {
+                id: 5,
+                type: 'single',
+                category: 'signaling',
+                question: '細胞只能對擁有相應受體的訊號產生反應，這體現了訊號傳遞的什麼特性？',
+                questionEn: 'Cells only respond to signals for which they have receptors. This demonstrates what characteristic?',
+                options: [
+                    { text: '訊號的特異性', textEn: 'Signal specificity', correct: true },
+                    { text: '訊號的通用性', textEn: 'Signal universality', correct: false },
+                    { text: '訊號的廣泛性', textEn: 'Signal broadness', correct: false },
+                    { text: '訊號的隨機性', textEn: 'Signal randomness', correct: false }
+                ],
+                explanation: '特異性是訊號傳遞的核心原則。配體與受體的結合高度特異，只有擁有對應受體的細胞才能反應。',
+                explanationEn: 'Specificity is fundamental to signal transduction. Ligand-receptor binding is highly specific, so only cells with the corresponding receptor can respond.'
+            },
+            // Cell Division - Single Choice
+            {
+                id: 6,
+                type: 'single',
+                category: 'division',
+                question: '細胞為什麼不能無限擴大？',
+                questionEn: 'Why cannot cells expand indefinitely?',
+                options: [
+                    { text: '表面積-體積比下降，導致營養不足', textEn: 'SA:V ratio decreases, causing nutrient starvation', correct: true },
+                    { text: '細胞核會破裂', textEn: 'Nucleus will rupture', correct: false },
+                    { text: '細胞膜會溶解', textEn: 'Membrane will dissolve', correct: false },
+                    { text: '蛋白質會失效', textEn: 'Proteins will fail', correct: false }
+                ],
+                explanation: '當細胞生長時，體積增加立方倍，但表面積只增加平方倍。導致表面積相對於體積減少，無法供應足夠的營養。',
+                explanationEn: 'As cells grow, volume increases cubically while surface area increases only squared. This decreases the surface area-to-volume ratio, making nutrient transport insufficient.'
+            },
+            {
+                id: 7,
+                type: 'single',
+                category: 'division',
+                question: '細胞週期中哪個時期DNA被複製？',
+                questionEn: 'During which phase of the cell cycle is DNA replicated?',
+                options: [
+                    { text: 'S期', textEn: 'S phase', correct: true },
+                    { text: 'G1期', textEn: 'G1 phase', correct: false },
+                    { text: 'G2期', textEn: 'G2 phase', correct: false },
+                    { text: 'M期', textEn: 'M phase', correct: false }
+                ],
+                explanation: 'S期是「合成期」，是細胞週期中唯一進行DNA複製的時期。',
+                explanationEn: 'S phase is the "synthesis phase," the only period during the cell cycle when DNA replication occurs.'
+            },
+            {
+                id: 8,
+                type: 'single',
+                category: 'division',
+                question: '有絲分裂中哪個時期染色體排列在赤道板？',
+                questionEn: 'During which phase of mitosis do chromosomes align at the metaphase plate?',
+                options: [
+                    { text: '中期', textEn: 'Metaphase', correct: true },
+                    { text: '前期', textEn: 'Prophase', correct: false },
+                    { text: '後期', textEn: 'Anaphase', correct: false },
+                    { text: '末期', textEn: 'Telophase', correct: false }
+                ],
+                explanation: '中期是有絲分裂的第三個時期，此時所有染色體排列在細胞赤道線上。',
+                explanationEn: 'Metaphase is the third phase of mitosis, when all chromosomes align at the cell equator (metaphase plate).'
+            },
+            {
+                id: 9,
+                type: 'single',
+                category: 'division',
+                question: '姐妹染色單體在有絲分裂的哪個時期分離？',
+                questionEn: 'During which phase do sister chromatids separate in mitosis?',
+                options: [
+                    { text: '後期', textEn: 'Anaphase', correct: true },
+                    { text: '中期', textEn: 'Metaphase', correct: false },
+                    { text: '前期', textEn: 'Prophase', correct: false },
+                    { text: '末期', textEn: 'Telophase', correct: false }
+                ],
+                explanation: '後期是有絲分裂的第四個時期，馬達蛋白將分離的姐妹染色單體拉向相對兩極。',
+                explanationEn: 'Anaphase is the fourth phase of mitosis when motor proteins pull separated sister chromatids toward opposite poles.'
+            },
+            {
+                id: 10,
+                type: 'single',
+                category: 'division',
+                question: '人類體細胞含有多少條染色體？',
+                questionEn: 'How many chromosomes does a human somatic cell contain?',
+                options: [
+                    { text: '46', textEn: '46', correct: true },
+                    { text: '23', textEn: '23', correct: false },
+                    { text: '92', textEn: '92', correct: false },
+                    { text: '44', textEn: '44', correct: false }
+                ],
+                explanation: '人類體細胞是二倍體(2n)，含有46條染色體（23對）。配子是單倍體(n)，含有23條。',
+                explanationEn: 'Human somatic cells are diploid (2n) with 46 chromosomes (23 pairs). Gametes are haploid (n) with 23 chromosomes.'
+            },
+            // Multiple Choice Questions
+            {
+                id: 11,
+                type: 'multiple',
+                category: 'signaling',
+                question: '以下哪些敘述關於細胞訊號傳遞是正確的？（可複選）',
+                questionEn: 'Which statements about cell signaling are correct? (Multiple answers)',
+                options: [
+                    { text: '訊號可以分支產生多個反應', textEn: 'Signals can diverge to produce multiple responses', correct: true },
+                    { text: '訊號可以匯聚產生一個反應', textEn: 'Signals can converge to produce one response', correct: true },
+                    { text: '所有細胞對相同訊號的反應都相同', textEn: 'All cells respond identically to the same signal', correct: false },
+                    { text: '訊號分子與受體的結合是特異性的', textEn: 'Ligand-receptor binding is specific', correct: true }
+                ],
+                explanation: '訊號傳遞具有複雜性。訊號可以分支或匯聚；相同訊號在不同細胞中可產生不同反應；結合是特異性的。',
+                explanationEn: 'Signal transduction is complex. Signals can diverge or converge; the same signal produces different responses in different cells; binding is specific.'
+            },
+            {
+                id: 12,
+                type: 'multiple',
+                category: 'division',
+                question: '關於細胞週期的敘述，下列哪些正確？（可複選）',
+                questionEn: 'Which statements about the cell cycle are correct? (Multiple answers)',
+                options: [
+                    { text: '間期約佔細胞週期的90%', textEn: 'Interphase comprises about 90% of the cell cycle', correct: true },
+                    { text: 'DNA只在S期複製', textEn: 'DNA replicates only during S phase', correct: true },
+                    { text: 'M期包含有絲分裂和細胞質分裂', textEn: 'M phase includes mitosis and cytokinesis', correct: true },
+                    { text: 'G1期是最長的時期', textEn: 'G1 phase is the longest phase', correct: false }
+                ],
+                explanation: '細胞週期分為間期（G1/S/G2約90%）和M期（約10%）。DNA只在S期複製。M期包含有絲分裂和細胞質分裂。',
+                explanationEn: 'Cell cycle divides into interphase (G1/S/G2, ~90%) and M phase (~10%). DNA replicates only in S phase. M phase includes mitosis and cytokinesis.'
+            },
+            {
+                id: 13,
+                type: 'multiple',
+                category: 'signaling',
+                question: '下列哪些因素影響細胞對訊號的反應？（可複選）',
+                questionEn: 'Which factors affect how cells respond to signals? (Multiple answers)',
+                options: [
+                    { text: '細胞是否具有特定受體', textEn: 'Whether the cell has a specific receptor', correct: true },
+                    { text: '細胞內現存的目標蛋白質', textEn: 'Pre-existing target proteins in the cell', correct: true },
+                    { text: '訊號分子的濃度', textEn: 'Concentration of signaling molecules', correct: true },
+                    { text: '細胞的大小', textEn: 'Size of the cell', correct: false }
+                ],
+                explanation: '細胞的反應由受體存在、目標蛋白質種類和訊號濃度決定，而不是細胞大小。',
+                explanationEn: 'Cellular response depends on receptor presence, type of target proteins, and signal concentration, not cell size.'
+            },
+            {
+                id: 14,
+                type: 'multiple',
+                category: 'division',
+                question: '關於減數分裂，下列敘述哪些正確？（可複選）',
+                questionEn: 'Which statements about meiosis are correct? (Multiple answers)',
+                options: [
+                    { text: '減數分裂I將二倍體細胞變成單倍體細胞', textEn: 'Meiosis I converts diploid cells to haploid', correct: true },
+                    { text: '減數分裂II的機制類似有絲分裂', textEn: 'Meiosis II is similar to mitosis', correct: true },
+                    { text: '交叉互換增加遺傳變異', textEn: 'Crossing over increases genetic variation', correct: true },
+                    { text: '減數分裂產生相同的四個子細胞', textEn: 'Meiosis produces four identical cells', correct: false }
+                ],
+                explanation: '減數分裂I是減分裂，II是等分裂。交叉互換、獨立分配、隨機受精產生遺傳變異，所以四個子細胞遺傳不同。',
+                explanationEn: 'Meiosis I is reductional, Meiosis II is equational. Crossing over, independent assortment, random fertilization create variation, making four cells genetically different.'
+            },
+            // True/False Questions
+            {
+                id: 15,
+                type: 'single',
+                category: 'signaling',
+                question: '荷爾蒙是內分泌訊號，通過循環系統傳輸到遠處靶細胞。',
+                questionEn: 'Hormones are endocrine signals transported via the circulatory system to distant target cells.',
+                options: [
+                    { text: '正確 | True', correct: true },
+                    { text: '錯誤 | False', correct: false }
+                ],
+                explanation: '正確。內分泌訊號使用荷爾蒙作為信號分子，通過循環系統進行長距離通訊。',
+                explanationEn: 'Correct. Endocrine signaling uses hormones as signaling molecules for long-distance communication via the circulatory system.'
+            },
+            {
+                id: 16,
+                type: 'single',
+                category: 'division',
+                question: '一個1 cm細胞的表面積-體積比(6:1)優於3 cm細胞(2:1)。',
+                questionEn: 'A 1 cm cell has a better SA:V ratio (6:1) than a 3 cm cell (2:1).',
+                options: [
+                    { text: '正確 | True', correct: true },
+                    { text: '錯誤 | False', correct: false }
+                ],
+                explanation: '正確。較高的表面積-體積比意味著相對於體積有更多的表面積來進行物質交換。',
+                explanationEn: 'Correct. A higher surface area-to-volume ratio means more surface area relative to volume for material exchange.'
+            },
+            {
+                id: 17,
+                type: 'single',
+                category: 'signaling',
+                question: '相同的訊號分子在不同細胞中總是產生相同的反應。',
+                questionEn: 'The same signaling molecule always produces the same response in different cells.',
+                options: [
+                    { text: '正確 | True', correct: false },
+                    { text: '錯誤 | False', correct: true }
+                ],
+                explanation: '錯誤。反應取決於細胞內存在的目標蛋白質和受體類型，不同細胞可能有不同反應。',
+                explanationEn: 'False. Response depends on target proteins present and receptor types in the cell. Different cells may have different responses to the same signal.'
+            },
+            {
+                id: 18,
+                type: 'single',
+                category: 'division',
+                question: '有絲分裂後形成的兩個子細胞的遺傳信息完全相同。',
+                questionEn: 'The two daughter cells produced by mitosis have identical genetic information.',
+                options: [
+                    { text: '正確 | True', correct: true },
+                    { text: '錯誤 | False', correct: false }
+                ],
+                explanation: '正確。有絲分裂是等分裂過程，產生兩個遺傳相同的子細胞。',
+                explanationEn: 'Correct. Mitosis is equational division, producing two genetically identical daughter cells.'
+            },
+            // Fill-in-the-blank style (single choice with blanks)
+            {
+                id: 19,
+                type: 'single',
+                category: 'signaling',
+                question: '訊號分子被稱為___，而受體蛋白上接受訊號分子的結構被稱為___。',
+                questionEn: 'The signaling molecule is called ___, and the structure on receptor proteins that accepts it is called ___.',
+                options: [
+                    { text: '配體(ligand)；配體結合域(LBD)', textEn: 'ligand; ligand-binding domain (LBD)', correct: true },
+                    { text: '激素(hormone)；效應域(ED)', textEn: 'hormone; effector domain (ED)', correct: false },
+                    { text: '蛋白質(protein)；活化位點(active site)', textEn: 'protein; active site', correct: false },
+                    { text: '信使(messenger)；識別域(recognition domain)', textEn: 'messenger; recognition domain', correct: false }
+                ],
+                explanation: '配體是訊號分子的統稱，配體結合域是受體上與配體特異結合的區域。',
+                explanationEn: 'Ligand is the general term for signaling molecules; ligand-binding domain is the region on receptors that specifically binds ligands.'
+            },
+            {
+                id: 20,
+                type: 'single',
+                category: 'division',
+                question: '在有絲分裂中，附著在著絲粒上的專門蛋白質複合體被稱為___，它們與紡錘體微管相連。',
+                questionEn: 'In mitosis, the specialized protein complex attached to centromeres is called ___, which connects to spindle microtubules.',
+                options: [
+                    { text: '動粒(kinetochore)', textEn: 'kinetochore', correct: true },
+                    { text: '連接蛋白(linker protein)', textEn: 'linker protein', correct: false },
+                    { text: '錨蛋白(anchor protein)', textEn: 'anchor protein', correct: false },
+                    { text: '馬達蛋白(motor protein)', textEn: 'motor protein', correct: false }
+                ],
+                explanation: '動粒是著絲粒上的蛋白質複合體，是紡錘體微管的附著點。',
+                explanationEn: 'Kinetochore is the protein complex at centromeres where spindle microtubules attach.'
+            },
+            // More advanced questions
+            {
+                id: 21,
+                type: 'single',
+                category: 'signaling',
+                question: '細胞週期蛋白(Cyclin)和CDK形成複合體，該複合體在G2期達到峰值以推動細胞進入M期。這個複合體被稱為什麼？',
+                questionEn: 'A cyclin-CDK complex peaks at G2 to drive cells into M phase. This complex is called what?',
+                options: [
+                    { text: 'MPF(成熟促進因子)', textEn: 'MPF (Maturation-Promoting Factor)', correct: true },
+                    { text: 'CDK激酶', textEn: 'CDK kinase', correct: false },
+                    { text: '檢查點蛋白', textEn: 'checkpoint protein', correct: false },
+                    { text: 'p53蛋白', textEn: 'p53 protein', correct: false }
+                ],
+                explanation: 'MPF(成熟促進因子)是特定的cyclin-CDK複合體，其濃度的戲劇性增加推動細胞通過G2檢查點進入M期。',
+                explanationEn: 'MPF (Maturation-Promoting Factor) is a specific cyclin-CDK complex whose dramatic increase pushes cells through G2 checkpoint into M phase.'
+            },
+            {
+                id: 22,
+                type: 'multiple',
+                category: 'division',
+                question: '下列哪些是遺傳變異的來源？（可複選）',
+                questionEn: 'Which are sources of genetic variation? (Multiple answers)',
+                options: [
+                    { text: '交叉互換(Crossing over)', textEn: 'Crossing over', correct: true },
+                    { text: '獨立分配(Independent assortment)', textEn: 'Independent assortment', correct: true },
+                    { text: '隨機受精(Random fertilization)', textEn: 'Random fertilization', correct: true },
+                    { text: '有絲分裂(Mitosis)', textEn: 'Mitosis', correct: false }
+                ],
+                explanation: '交叉互換、獨立分配和隨機受精都在減數分裂和受精過程中產生遺傳變異。有絲分裂產生相同的子細胞。',
+                explanationEn: 'Crossing over, independent assortment, and random fertilization generate genetic variation in meiosis and fertilization. Mitosis produces identical cells.'
+            },
+            {
+                id: 23,
+                type: 'single',
+                category: 'division',
+                question: '人類產生的配子（精子或卵子）的可能組合數為多少？（只考慮獨立分配）',
+                questionEn: 'How many different combinations of gametes can humans produce? (Consider only independent assortment)',
+                options: [
+                    { text: '2^23 ≈ 840萬個 | 2^23 ≈ 8.4 million', textEn: '2^23 ≈ 8.4 million', correct: true },
+                    { text: '46個 | 46', textEn: '46', correct: false },
+                    { text: '2^46個 | 2^46', textEn: '2^46', correct: false },
+                    { text: '23!個 | 23!', textEn: '23!', correct: false }
+                ],
+                explanation: '獨立分配的公式是2^n，其中n是染色體組數。人類n=23，所以是2^23 ≈ 840萬。',
+                explanationEn: 'Independent assortment formula is 2^n, where n is number of chromosome sets. For humans n=23, so 2^23 ≈ 8.4 million.'
+            },
+            {
+                id: 24,
+                type: 'single',
+                category: 'signaling',
+                question: '神經元在突觸間隙釋放的訊號分子被稱為什麼？',
+                questionEn: 'What are the signaling molecules released by neurons across the synaptic gap called?',
+                options: [
+                    { text: '神經傳遞物質(neurotransmitters)', textEn: 'neurotransmitters', correct: true },
+                    { text: '荷爾蒙(hormones)', textEn: 'hormones', correct: false },
+                    { text: '配體(ligands)', textEn: 'ligands', correct: false },
+                    { text: '抗體(antibodies)', textEn: 'antibodies', correct: false }
+                ],
+                explanation: '神經傳遞物質是神經細胞在突觸間隙釋放的訊號分子，如乙醯膽鹼。',
+                explanationEn: 'Neurotransmitters are signaling molecules released by neurons across the synaptic gap, such as acetylcholine.'
+            },
+            {
+                id: 25,
+                type: 'single',
+                category: 'division',
+                question: '在動物細胞中，細胞質分裂是通過什麼機制進行的？',
+                questionEn: 'In animal cells, cytokinesis occurs through what mechanism?',
+                options: [
+                    { text: '微絲收縮環形成分裂溝', textEn: 'contractile ring of microfilaments forming a cleavage furrow', correct: true },
+                    { text: '細胞板形成', textEn: 'cell plate formation', correct: false },
+                    { text: '細胞膜融合', textEn: 'cell membrane fusion', correct: false },
+                    { text: '紡錘體分裂', textEn: 'spindle division', correct: false }
+                ],
+                explanation: '動物細胞通過微絲收縮環形成的分裂溝來進行細胞質分裂，像繩子收緊一樣將細胞掐成兩部分。',
+                explanationEn: 'Animal cells undergo cytokinesis via a contractile ring of microfilaments forming a cleavage furrow that pinches the cell in two, like a tightening drawstring.'
+            }
+        ];
+
+        let currentQuestions = [...questions];
+        let answeredQuestions = {};
+
+        // Initialize Quiz
+        function initQuiz() {
+            renderQuestions();
+            updateStats();
+            document.getElementById('total-number').textContent = currentQuestions.length;
+        }
+
+        // Filter Questions
+        function filterQuestions(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (category === 'all') {
+                currentQuestions = [...questions];
+            } else if (category === 'signaling') {
+                currentQuestions = questions.filter(q => q.category === 'signaling');
+            } else if (category === 'division') {
+                currentQuestions = questions.filter(q => q.category === 'division');
+            }
+            
+            renderQuestions();
+            updateStats();
+            document.getElementById('total-number').textContent = currentQuestions.length;
+        }
+
+        // Render Questions
+        function renderQuestions() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+            
+            currentQuestions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.id = `q-${q.id}`;
+                
+                let optionsHTML = '<div class="options">';
+                
+                if (q.type === 'single') {
+                    q.options.forEach((opt, idx) => {
+                        optionsHTML += `
+                            <label class="option">
+                                <input type="radio" name="q${q.id}" value="${idx}" onchange="updateAnswer(${q.id}, 'single')">
+                                <span class="option-label"><strong>${String.fromCharCode(65+idx)}.</strong> ${opt.text}</span>
+                            </label>
+                        `;
+                    });
+                } else if (q.type === 'multiple') {
+                    q.options.forEach((opt, idx) => {
+                        optionsHTML += `
+                            <label class="option">
+                                <input type="checkbox" name="q${q.id}" value="${idx}" onchange="updateAnswer(${q.id}, 'multiple')">
+                                <span class="option-label"><strong>${String.fromCharCode(65+idx)}.</strong> ${opt.text}</span>
+                            </label>
+                        `;
+                    });
+                }
+                
+                optionsHTML += '</div>';
+                
+                card.innerHTML = `
+                    <div class="question-number">Q${index + 1}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="question-bilingual">
+                        <div class="question-en">${q.questionEn}</div>
+                    </div>
+                    ${optionsHTML}
+                    <button class="tts-button" onclick="speakQuestion(${q.id})">🔊 ${q.questionEn}</button>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Update Answer
+        function updateAnswer(qId, type) {
+            if (!answeredQuestions[qId]) {
+                answeredQuestions[qId] = {};
+            }
+            
+            if (type === 'single') {
+                const selected = document.querySelector(`input[name="q${qId}"]:checked`);
+                answeredQuestions[qId].answer = selected ? parseInt(selected.value) : null;
+                answeredQuestions[qId].isCorrect = null;
+            } else if (type === 'multiple') {
+                const selected = Array.from(document.querySelectorAll(`input[name="q${qId}"]:checked`)).map(el => parseInt(el.value));
+                answeredQuestions[qId].answer = selected;
+                answeredQuestions[qId].isCorrect = null;
+            }
+            
+            updateStats();
+        }
+
+        // Check All Answers
+        function checkAllAnswers() {
+            let score = 0;
+            
+            currentQuestions.forEach(q => {
+                const question = questions.find(qu => qu.id === q.id);
+                const card = document.getElementById(`q-${q.id}`);
+                
+                if (!answeredQuestions[q.id]) {
+                    card.classList.remove('answered', 'incorrect');
+                    return;
+                }
+                
+                let isCorrect = false;
+                
+                if (q.type === 'single') {
+                    const selectedIdx = answeredQuestions[q.id].answer;
+                    isCorrect = selectedIdx !== null && question.options[selectedIdx].correct;
+                } else if (q.type === 'multiple') {
+                    const selected = answeredQuestions[q.id].answer || [];
+                    const correctIndices = question.options
+                        .map((opt, idx) => opt.correct ? idx : -1)
+                        .filter(idx => idx !== -1);
+                    isCorrect = selected.length === correctIndices.length && 
+                               selected.every(idx => correctIndices.includes(idx));
+                }
+                
+                if (isCorrect) score++;
+                
+                // Show feedback
+                const feedbackDiv = card.querySelector('.feedback') || document.createElement('div');
+                feedbackDiv.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
+                feedbackDiv.innerHTML = isCorrect ? 
+                    `<strong>✓ 正確！| Correct!</strong><br>${question.explanation}<br><br><em>${question.explanationEn}</em>` :
+                    `<strong>✗ 錯誤 | Incorrect</strong><br>${question.explanation}<br><br><em>${question.explanationEn}</em>`;
+                
+                if (!card.querySelector('.feedback')) {
+                    card.appendChild(feedbackDiv);
+                }
+                
+                if (!isCorrect) {
+                    card.classList.add('answered', 'incorrect');
+                } else {
+                    card.classList.add('answered');
+                    card.classList.remove('incorrect');
+                }
+            });
+            
+            document.getElementById('score-number').textContent = score;
+            alert(`已提交！得分：${score}/${currentQuestions.length} (Submitted! Score: ${score}/${currentQuestions.length})`);
+        }
+
+        // Update Stats
+        function updateStats() {
+            const answered = Object.keys(answeredQuestions).length;
+            document.getElementById('answered-number').textContent = answered;
+        }
+
+        // Reset Quiz
+        function resetQuiz() {
+            answeredQuestions = {};
+            document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => el.checked = false);
+            document.querySelectorAll('.feedback').forEach(el => el.remove());
+            document.querySelectorAll('.question-card').forEach(el => el.classList.remove('answered', 'incorrect'));
+            document.getElementById('score-number').textContent = '0';
+            document.getElementById('answered-number').textContent = '0';
+        }
+
+        // TTS
+        function speakQuestion(qId) {
+            const q = questions.find(qu => qu.id === qId);
+            if (window.speechSynthesis && q) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(q.questionEn);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Tab Switching
+        function switchTab(event, tabName) {
+            event.preventDefault();
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (tabName === 'quiz') {
+                initQuiz();
+            }
+        }
+
+        // Card Toggle
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.card-header')) {
+                e.target.closest('.card').classList.toggle('expanded');
+            }
+        });
+
+        // Initialize
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.card:nth-child(-n+3)').forEach(c => c.classList.add('expanded'));
+        });
+    </script>
+</body>
+</html>
